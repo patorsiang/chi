@@ -72,3 +72,9 @@ exports.getUser = functions.https.onCall(UserModule.handler)
 
 const metadataPhotoModule = require('./api/metadata')
 exports.getMetadata = functions.https.onCall(metadataPhotoModule.handler)
+
+const allBookPostModule = require('./api/allBookPost')
+exports.getAllBookPost = functions.https.onCall(allBookPostModule.handler)
+
+const allPostByWritertModule = require('./api/allPostByWriter')
+exports.getAllPostByWriter = functions.https.onCall(allPostByWritertModule.handler)

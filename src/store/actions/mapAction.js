@@ -11,8 +11,8 @@ export const changeState = (S) => {
         const firebase = getFirebase();
         const firestore = getFirestore();
 
-        const Chi = firebase.functions().httpsCallable('getMetadata')
-        Chi({ id: 'rLSKX6kYF3bGHwm17h8P2Cw0V3X2', file: 'bangkok.jpeg' }).then(result => {
+        const Chi = firebase.functions().httpsCallable('getAllBookPost')
+        Chi({ id: 'tMx0iOpL7GSYz0pJCkr4dyeooEO2', file: 'bangkok.jpeg' }).then(result => {
             console.log(result.data);
         })
             .catch(error => console.log(error))
