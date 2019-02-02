@@ -38,6 +38,7 @@ class Detail extends Component {
     handleClick(s) {
         this.props.changeState(s);
     }
+    
     render() {
         const { classes, valueState, post } = this.props;
 

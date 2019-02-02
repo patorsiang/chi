@@ -6,7 +6,7 @@ const initState = {
 const diaryReducer = (state, action) => {
     switch (action.type) {
         case 'POSTING_ERROR':
-            state = { err: action.er.message ,success: null }
+            state = { err: action.err.message ,success: null }
             break;
         case 'POSTING_SUCCESS':
             state = { err: null ,success: "success" }

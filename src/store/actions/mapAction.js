@@ -8,7 +8,14 @@ function compare(a, b) {
 
 export const changeState = (S) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
         const firestore = getFirestore();
+
+        const Chi = firebase.functions().httpsCallable('getMetadata')
+        Chi({ id: 'rLSKX6kYF3bGHwm17h8P2Cw0V3X2', file: 'bangkok.jpeg' }).then(result => {
+            console.log(result.data);
+        })
+            .catch(error => console.log(error))
 
         firestore.collection('diary').get().then(snapshot => {
             const result = []
@@ -22,6 +29,7 @@ export const changeState = (S) => {
                             dispatch({ type: 'CHANGE_STATE', S, result })
                         })
                     : null)
+            dispatch({ type: 'CHANGE_STATE', S, result })
         })
     }
 }

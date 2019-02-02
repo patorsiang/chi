@@ -9,7 +9,7 @@ import { connect } from 'react-redux'
 import { changeState } from '../../store/actions/mapAction'
 import { Element, scroller } from 'react-scroll'
 import Result from '../../components/map/searchResult'
-import Firebase from '../../configs/fbConfig'
+
 const styles = {
     map:{
         width: '100%',
@@ -35,11 +35,6 @@ class Map extends Component {
 
     componentWillMount(){
         this.props.changeState(['Andaman and Nicobar Islands']);
-        const Chi = Firebase.functions().httpsCallable('Chi')
-        Chi().then(result => {
-                console.log(result.data);
-            })
-            .catch(error => console.log(error))
     }
 
     handleClick(s) {
