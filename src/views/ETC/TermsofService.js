@@ -9,7 +9,7 @@ import Card from '@material-ui/core/Card';
 const styles = theme => ({
     root: {
       flexGrow: 1,
-      marginTop: 'auto',
+      marginTop: '5%',
     },
     card: {
         marginTop:'10%',

@@ -6,7 +6,7 @@ import 'fullcalendar/dist/fullcalendar.js';
 
 const styles = theme => ({
   App: {
-    backgroundColor: '#FFFFCC',
+    backgroundColor: '#FFFFFF',
     color: '#000000',
     fontSize: '14px'
     
