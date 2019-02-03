@@ -78,3 +78,27 @@ exports.getAllBookPost = functions.https.onCall(allBookPostModule.handler)
 
 const allPostByWritertModule = require('./api/allPostByWriter')
 exports.getAllPostByWriter = functions.https.onCall(allPostByWritertModule.handler)
+
+const userIDByNameModule = require('./api/userIDByName')
+exports.searchUserByName = functions.https.onCall(userIDByNameModule.handler)
+
+const searchPostByThemeModule = require('./api/searchPostByTheme')
+exports.searchPostByTheme = functions.https.onCall(searchPostByThemeModule.handler)
+
+const searchPostByTagModule = require('./api/searchPostByTag')
+exports.searchPostByTag = functions.https.onCall(searchPostByTagModule.handler)
+
+const searchPostByStateModule = require('./api/searchPostByState')
+exports.searchPostByState = functions.https.onCall(searchPostByStateModule.handler)
+
+const searchPostByTitleModule = require('./api/searchPostByTitle')
+exports.searchPostByTitle = functions.https.onCall(searchPostByTitleModule.handler)
+
+const searchPostByNoteModule = require('./api/searchPostByNote')
+exports.searchPostByNote = functions.https.onCall(searchPostByNoteModule.handler)
+
+const searchPhotoByThemeModule = require('./api/searchPhotoByTheme')
+exports.searchPhotoByTheme = functions.https.onCall(searchPhotoByThemeModule.handler)
+
+const searchPhotoByTagModule = require('./api/searchPhotoByTag')
+exports.searchPhotoByTag = functions.https.onCall(searchPhotoByTagModule.handler)

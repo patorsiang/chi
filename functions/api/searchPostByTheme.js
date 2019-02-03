@@ -10,7 +10,11 @@ exports.handler = (data, context) => {
                     if (!doc.data().public) {
                         return false
                     }
-                    if (doc.data().writer !== data.id) {
+                    if (doc.data().theme) {
+                        if (!doc.data().theme.toUpperCase().includes(data.keyword.toUpperCase())) {
+                            return false
+                        }
+                    } else {
                         return false
                     }
                     return true
@@ -34,7 +38,11 @@ exports.handler = (data, context) => {
                         return false
                     }
                 }
-                if (doc.data().writer !== data.id) {
+                if (doc.data().theme) {
+                    if (!doc.data().theme.toUpperCase().includes(data.keyword.toUpperCase())) {
+                        return false
+                    }
+                } else {
                     return false
                 }
                 return true

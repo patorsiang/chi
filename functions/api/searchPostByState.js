@@ -10,7 +10,7 @@ exports.handler = (data, context) => {
                     if (!doc.data().public) {
                         return false
                     }
-                    if (doc.data().writer !== data.id) {
+                    if (doc.data().state !== data.state) {
                         return false
                     }
                     return true
@@ -34,7 +34,7 @@ exports.handler = (data, context) => {
                         return false
                     }
                 }
-                if (doc.data().writer !== data.id) {
+                if (doc.data().state !== data.state) {
                     return false
                 }
                 return true

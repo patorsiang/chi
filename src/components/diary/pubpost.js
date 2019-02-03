@@ -100,13 +100,13 @@ class PubPost extends Component {
 
   next() {
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === this.props.post.data.photo.length - 1 ? 0 : this.state.activeIndex + 1;
+    const nextIndex = this.state.activeIndex === this.props.post.photo.length - 1 ? 0 : this.state.activeIndex + 1;
     this.setState({ activeIndex: nextIndex });
   }
 
   previous() {
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === 0 ? this.props.post.data.photo.length - 1 : this.state.activeIndex - 1;
+    const nextIndex = this.state.activeIndex === 0 ? this.props.post.photo.length - 1 : this.state.activeIndex - 1;
     this.setState({ activeIndex: nextIndex });
   }
 
@@ -125,8 +125,10 @@ class PubPost extends Component {
 
   render() {
     const { activeIndex } = this.state;
-    const { classes, sz, post, auth } = this.props
-    const slides = post.data.photo.map((item, i) => {
+    const { classes, sz, post, auth, no } = this.props
+    console.log(no);
+    
+    const slides = post.photo.map((item, i) => {
       return (
         <CarouselItem
           onExiting={this.onExiting}
@@ -138,8 +140,8 @@ class PubPost extends Component {
       );
     });
     return (
-      <Grid item xs={sz} className={classes.root} key={post.id}>
-        <Card className={classes.card} >
+      <Grid item xs={sz} className={classes.root} key={no}>
+        <Card key={no} className={classes.card} >
           <CardHeader
             avatar={
               <Fragment>
@@ -151,8 +153,8 @@ class PubPost extends Component {
                 <ReportIcon onClick={this.handleClickOpen} />
               </IconButton>
             }
-            title={post.data.title}
-            subheader={post.data.date}
+            title={post.title}
+            subheader={post.date}
           />
           <Dialog
             open={this.state.open}
@@ -175,8 +177,8 @@ class PubPost extends Component {
             </Button>
             </DialogActions>
           </Dialog>
-          <Carousel activeIndex={activeIndex} next={this.next} previous={this.previous}>
-            <CarouselIndicators key={post.id} items={post.data.photo} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
+          <Carousel key={no} activeIndex={activeIndex} next={this.next} previous={this.previous}>
+            <CarouselIndicators key={no} items={post.photo} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
             {slides}
             <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
             <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
@@ -185,10 +187,10 @@ class PubPost extends Component {
             {auth.uid ?
               <Fragment>
                 <IconButton onClick={() => { this.like(post.id, auth.uid) }}>
-                  {post.data.like ? post.data.like.includes(auth.uid) ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" /> : <FavIcon color="secondary" />}
+                  {post.like ? post.like.includes(auth.uid) ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" /> : <FavIcon color="secondary" />}
                 </IconButton>
                 <IconButton onClick={() => { this.book(post.id, auth.uid) }}>
-                  {post.data.book ? post.data.book.includes(auth.uid) ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
+                  {post.book ? post.book.includes(auth.uid) ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
                 </IconButton>
               </Fragment> : null}
               
@@ -200,9 +202,9 @@ class PubPost extends Component {
               />
           </CardActions>
           <CardContent>
-            <Typography component="p" align="left">{post.data.note}</Typography>
-            <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
-            <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
+            <Typography component="p" align="left">{post.note}</Typography>
+            <Typography variant="caption" align="right">  <Location /> {post.state} </Typography>
+            <Typography variant="caption" align="right">  {post.tag.map(tag => ' #' + tag)} </Typography>
             <Chip label="PERSON" className={classes.chip} align= "left"/>
             <Chip label="LOCATION" className={classes.chip} align="left" />
             <Chip label="ART" className={classes.chip} align="left" />

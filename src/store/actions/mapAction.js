@@ -1,7 +1,7 @@
 function compare(a, b) {
-    if (a.data.date > b.data.date)
+    if (a.date > b.date)
         return -1;
-    if (a.data.date < b.data.date)
+    if (a.date < b.date)
         return 1;
     return 0;
 }
@@ -9,28 +9,18 @@ function compare(a, b) {
 export const changeState = (S) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();
-        const firestore = getFirestore();
 
-        const Chi = firebase.functions().httpsCallable('getAllBookPost')
-        Chi({ id: 'tMx0iOpL7GSYz0pJCkr4dyeooEO2', file: 'bangkok.jpeg' }).then(result => {
+        const Chi = firebase.functions().httpsCallable('searchPhotoByTheme')
+        Chi({ id: 'rLSKX6kYF3bGHwm17h8P2Cw0V3X2', file: 'bangkok.jpeg', keyword: 'PERSON' }).then(result => {
             console.log(result.data);
         })
             .catch(error => console.log(error))
 
-        firestore.collection('diary').get().then(snapshot => {
-            const result = []
-            snapshot.docs.map(doc =>
-                doc.data().public && S === doc.data().state ?
-                    firestore.collection('user').doc(doc.data().writer).get()
-                        .then(wr => {
-                            result.push({ id: doc.id, data: doc.data(), writer: wr.data() })
-                            result.sort(compare)
-                            console.log(result)
-                            dispatch({ type: 'CHANGE_STATE', S, result })
-                        })
-                    : null)
-            dispatch({ type: 'CHANGE_STATE', S, result })
+        const searchState = firebase.functions().httpsCallable('searchPostByState')
+        searchState({ state: S }).then(result => {
+            dispatch({ type: 'CHANGE_STATE', S, result: result.data.sort(compare) })
         })
+            .catch(error => console.log(error))
     }
 }
 
