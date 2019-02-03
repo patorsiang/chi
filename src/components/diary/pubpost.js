@@ -8,6 +8,8 @@ import LoveIcon from '@material-ui/icons/Favorite';
 import { withStyles } from '@material-ui/core/styles';
 import ReportIcon from '@material-ui/icons/MoreVert';
 import { connect } from 'react-redux'
+import Chip from '@material-ui/core/Chip';
+import FaceIcon from '@material-ui/icons/Face';
 import {
   Carousel,
   CarouselItem,
@@ -42,6 +44,31 @@ const styles = theme => ({
   },
   expandOpen: {
     transform: 'rotate(180deg)',
+  },
+  safe: {
+    borderColor: '#33CC33',
+    backgroundColor: '#33CC33',
+    border: '1.5px solid',
+    fontSize: 12,
+    marginLeft: theme.spacing.unit*11,
+  },
+  maybe: {
+    borderColor: '#FFCC00',
+    backgroundColor: '#FFCC00',
+    border: '1.5px solid',
+    fontSize: 12,
+    marginLeft: theme.spacing.unit*11,
+  },
+  bad: {
+    borderColor: '#FF0000',
+    backgroundColor: '#FF0000',
+    border: '1.5px solid',
+    fontSize: 12,
+    marginLeft: theme.spacing.unit*11,
+  },
+  chip: {
+    margin: theme.spacing.unit,
+    fontSize: 12,
   },
 });
 
@@ -164,11 +191,21 @@ class PubPost extends Component {
                   {post.data.book ? post.data.book.includes(auth.uid) ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
                 </IconButton>
               </Fragment> : null}
+              
+              <Chip
+                    icon={<FaceIcon />}
+                    label="Social Optimum"
+                    className={classes.safe}
+                    color="primary"
+              />
           </CardActions>
           <CardContent>
             <Typography component="p" align="left">{post.data.note}</Typography>
             <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
             <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
+            <Chip label="PERSON" className={classes.chip} align= "left"/>
+            <Chip label="LOCATION" className={classes.chip} align="left" />
+            <Chip label="ART" className={classes.chip} align="left" />
           </CardContent>
         </Card>
       </Grid>
