@@ -13,7 +13,7 @@ import Result from '../../components/map/searchResult'
 const styles = {
     map:{
         width: '100%',
-        marginTop: '9%',
+        marginTop: '10%',
         display: 'block',
         margin: 'auto'
     },
@@ -25,7 +25,7 @@ const styles = {
         stroke: '#0e047b',
         strokeWidth:".5",
         cursor: 'pointer'
-    }
+        },
 }
 class Map extends Component {
     constructor(props) {

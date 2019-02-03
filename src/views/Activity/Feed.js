@@ -38,7 +38,7 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         backgroundColor: '#FF9933',
         borderColor: '#FF9933',
-        '&:hover': {
+        '&:onCilck': {
             backgroundColor: '#FF6633',
             borderColor: '#FF6633',
         },
@@ -54,11 +54,6 @@ const styles = theme => ({
 });
 
 class Feed extends Component {
-    handleClick() {
-        this.setState(state => ({
-            backgroundColor: '#FFCC99'
-        }));
-      }
     render() {
         const { classes, post } = this.props
         return (
@@ -68,19 +63,19 @@ class Feed extends Component {
                     <div className={classes.rootmod}>
                             <Grid container spacing={16} className={classes.main}>
                             <Grid item xs={12} align='center'>
-                            <Tooltip title="Person" aria-label="Person" onClick={this.handleClick}>
+                            <Tooltip title="Person" aria-label="Person" >
                                 <Fab color="secondary" size="small" className={classes.fab}> <PersonIcon /> </Fab>
                             </Tooltip>
-                            <Tooltip title="Location" aria-label="Location" onClick={this.handleClick}>
+                            <Tooltip title="Location" aria-label="Location" >
                                 <Fab color="secondary" size="small" className={classes.fab}> <LocIcon /> </Fab>
                             </Tooltip>
-                            <Tooltip title="Event" aria-label="Event" onClick={this.handleClick}>
+                            <Tooltip title="Event" aria-label="Event">
                                 <Fab color="secondary" size="small" className={classes.fab}> <EventIcon /> </Fab>
                             </Tooltip>
-                            <Tooltip title="Art" aria-label="Art" onClick={this.handleClick}>
+                            <Tooltip title="Art" aria-label="Art">
                                 <Fab color="secondary" size="small" className={classes.fab}> <ArtIcon /> </Fab>
                             </Tooltip>
-                            <Tooltip title="Consume_Good" aria-label="Consume_Good" onClick={this.handleClick}>
+                            <Tooltip title="Consume_Good" aria-label="Consume_Good">
                                 <Fab color="secondary" size="small" className={classes.fab}> <ConsumeIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="World_Heritage" aria-label="World_Heritage">
@@ -100,8 +95,8 @@ class Feed extends Component {
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
                             <Grid item xs={12} align='center'>
-                            <Tooltip title="Person" aria-label="Person" onClick={this.handleClick}>
-                                <Fab color="secondary" size="big" className={classes.fab}> <PersonIcon /> </Fab>
+                            <Tooltip title="Person" aria-label="Person">
+                                <Fab variant="flat" color="secondary" size="big" className={classes.fab}> <PersonIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Location" aria-label="Location">
                                 <Fab color="secondary" size="big" className={classes.fab}> <LocIcon /> </Fab>
