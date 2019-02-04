@@ -38,10 +38,13 @@ const styles = theme => ({
         margin: theme.spacing.unit,
         backgroundColor: '#FF9933',
         borderColor: '#FF9933',
-        '&:onCilck': {
-            backgroundColor: '#FF6633',
-            borderColor: '#FF6633',
-        },
+        '&:hover': {
+            backgroundColor: '#FF6600',
+            borderColor: '#FF6600',
+          },
+          '&:focus': {
+            boxShadow: '0 0 0 0.2rem rgba(255,153,102,.5)',
+          },
     },
     img: {
         width: 'auto',
@@ -64,27 +67,27 @@ class Feed extends Component {
                             <Grid container spacing={16} className={classes.main}>
                             <Grid item xs={12} align='center'>
                             <Tooltip title="Person" aria-label="Person" >
-                                <Fab color="secondary" size="small" className={classes.fab}> <PersonIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <PersonIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Location" aria-label="Location" >
-                                <Fab color="secondary" size="small" className={classes.fab}> <LocIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <LocIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Event" aria-label="Event">
-                                <Fab color="secondary" size="small" className={classes.fab}> <EventIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <EventIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Art" aria-label="Art">
-                                <Fab color="secondary" size="small" className={classes.fab}> <ArtIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <ArtIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Consume_Good" aria-label="Consume_Good">
-                                <Fab color="secondary" size="small" className={classes.fab}> <ConsumeIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <ConsumeIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="World_Heritage" aria-label="World_Heritage">
-                                <Fab color="secondary" size="small" className={classes.fab}> 
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> 
                                     <img className={classes.img} alt="complex" src= {img} /> 
                                 </Fab>
                             </Tooltip>
                             <Tooltip title="Other" aria-label="Other">
-                                <Fab color="secondary" size="small" className={classes.fab}> 
+                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> 
                                     <OtherIcon />
                                 </Fab>
                             </Tooltip>
@@ -96,19 +99,19 @@ class Feed extends Component {
                             <Grid container spacing={24} className={classes.main}>
                             <Grid item xs={12} align='center'>
                             <Tooltip title="Person" aria-label="Person">
-                                <Fab variant="flat" color="secondary" size="big" className={classes.fab}> <PersonIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <PersonIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Location" aria-label="Location">
-                                <Fab color="secondary" size="big" className={classes.fab}> <LocIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <LocIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Event" aria-label="Event">
-                                <Fab color="secondary" size="big" className={classes.fab}> <EventIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <EventIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Art" aria-label="Art">
-                                <Fab color="secondary" size="big" className={classes.fab}> <ArtIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <ArtIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="Consume_Good" aria-label="Consume_Good">
-                                <Fab color="secondary" size="big" className={classes.fab}> <ConsumeIcon /> </Fab>
+                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <ConsumeIcon /> </Fab>
                             </Tooltip>
                             <Tooltip title="World Heritage" aria-label="World_Heritage">
                                 <Fab color="secondary" size="big" className={classes.fab}> 
@@ -116,7 +119,7 @@ class Feed extends Component {
                                 </Fab>
                             </Tooltip>
                             <Tooltip title="Other" aria-label="Other">
-                                <Fab color="secondary" size="big" className={classes.fab}> 
+                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> 
                                     <OtherIcon />
                                 </Fab>
                             </Tooltip>
