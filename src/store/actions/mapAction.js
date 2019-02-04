@@ -18,7 +18,14 @@ export const changeState = (S) => {
 
         const searchState = firebase.functions().httpsCallable('searchPostByState')
         searchState({ state: S }).then(result => {
-            dispatch({ type: 'CHANGE_STATE', S, result: result.data.sort(compare) })
+            const userInfo = firebase.functions().httpsCallable('getUser')
+            result.data.map(data => userInfo({id: data.writer}).then(writer => {
+                data.writer = writer.data
+                return data
+            }).then(data => {
+                console.log(data);
+                dispatch({ type: 'CHANGE_STATE', S, result: result.data.sort(compare) })
+            }))
         })
             .catch(error => console.log(error))
     }

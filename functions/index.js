@@ -1,7 +1,7 @@
 // deploy: firebase deploy --only functions 
 // local test: firebase functions:shell 
 // run serve: firebase serve --only functions
-// remove: firebase functions:delete Chi
+// remove: firebase functions:delete Chi UpdateToken UpdateTokenDiaryActivity addWaterMarkImage callCloudVision callCloudNaturalLanguage UpdateThemeDiaryActivity notifyToken notifyNewUser notificationRemove notificationRemove notificationBook notificationReport getAllDiary getAllPost getAllNoti getUser getMetadata getAllBookPost getAllPostByWriter searchUserByName searchPostByTheme searchPostByTag searchPostByState searchPostByTitle searchPostByNote searchPhotoByTheme searchPhotoByTag
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);

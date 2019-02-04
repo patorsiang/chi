@@ -126,7 +126,6 @@ class PubPost extends Component {
   render() {
     const { activeIndex } = this.state;
     const { classes, sz, post, auth, no } = this.props
-    console.log(no);
     
     const slides = post.photo.map((item, i) => {
       return (
