@@ -27,11 +27,13 @@ export const changeState = (S) => {
                         safe.push(res.data.safe)
                         if (safe.includes("bad")) {
                             data.safe = "bad"
-                        } else if (safe.includes("maybe")) {
-                            data.safe = "maybe"
-                        } else {
+                        } else if (safe.includes("safe")) {
                             data.safe = "safe"
+                        } else {
+                            data.safe = "maybe"
                         }
+                    } else {
+                        data.safe = "maybe"
                     }
 
                     if (res.data.tags) {
