@@ -12,13 +12,14 @@ const styles = theme => ({
     state:{
         width: "100%",
         color: 'black',
-        textAlign: 'left',
+        textAlign: 'right',
         [theme.breakpoints.up('sm')]: {
             marginTop: '9%',
         },
         [theme.breakpoints.down('sm')]: {
             marginTop: '20%',
         },
+        fontSize: '16px bold'
     }
 })
 
@@ -47,7 +48,7 @@ class Result extends Component {
         return(
             <Fragment>
                 {search ? <div className={classes.state}>
-                    Search: '{Query}' with {valueState[0] === '' ? 0 : valueState.length} Result(s) <Button color='link' onClick={()=>{this.handleClick()}}><FontAwesomeIcon icon={['fas', 'arrow-right']} /><br/></Button>
+                    Search = '{Query}' with {valueState[0] === '' ? 0 : valueState.length} Result(s) <Button color='link' onClick={()=>{this.handleClick()}}><FontAwesomeIcon icon={['fas', 'arrow-right']} /><br/></Button>
                 </div> : null}
             </Fragment>
         )

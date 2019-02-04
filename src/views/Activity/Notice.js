@@ -11,7 +11,7 @@ import { changeMenu } from "../../store/actions/mapAction";
 
 const styles = theme => ({
   root: {
-    marginTop: '10%',
+    marginTop: '5%',
     width: '70%',
     backgroundColor: theme.palette.background.paper,
     marginLeft: '64px',
