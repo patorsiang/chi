@@ -50,21 +50,21 @@ const styles = theme => ({
     backgroundColor: '#33CC33',
     border: '1.5px solid',
     fontSize: 12,
-    marginLeft: theme.spacing.unit*11,
+    marginLeft: theme.spacing.unit * 11,
   },
   maybe: {
     borderColor: '#FFCC00',
     backgroundColor: '#FFCC00',
     border: '1.5px solid',
     fontSize: 12,
-    marginLeft: theme.spacing.unit*11,
+    marginLeft: theme.spacing.unit * 11,
   },
   bad: {
     borderColor: '#FF0000',
     backgroundColor: '#FF0000',
     border: '1.5px solid',
     fontSize: 12,
-    marginLeft: theme.spacing.unit*11,
+    marginLeft: theme.spacing.unit * 11,
   },
   chip: {
     margin: theme.spacing.unit,
@@ -126,7 +126,7 @@ class PubPost extends Component {
   render() {
     const { activeIndex } = this.state;
     const { classes, sz, post, auth, no } = this.props
-    
+
     const slides = post.photo.map((item, i) => {
       return (
         <CarouselItem
@@ -192,21 +192,33 @@ class PubPost extends Component {
                   {post.book ? post.book.includes(auth.uid) ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
                 </IconButton>
               </Fragment> : null}
-              
+
+            {post.safe ? post.safe === "safe" ?
               <Chip
-                    icon={<FaceIcon />}
-                    label="Social Optimum"
-                    className={classes.safe}
-                    color="primary"
-              />
+                icon={<FaceIcon />}
+                label="Social Optimum"
+                className={classes.safe}
+                color="primary"
+              /> : post.safe === "bad" ?
+                <Chip
+                  icon={<FaceIcon />}
+                  label="Social Optimum"
+                  className={classes.bad}
+                  color="primary"
+                /> : <Chip
+                  icon={<FaceIcon />}
+                  label="Social Optimum"
+                  className={classes.maybe}
+                  color="primary"
+                /> : null}
+
           </CardActions>
           <CardContent>
             <Typography component="p" align="left">{post.note}</Typography>
             <Typography variant="caption" align="right">  <Location /> {post.state} </Typography>
             <Typography variant="caption" align="right">  {post.tag.map(tag => ' #' + tag)} </Typography>
-            <Chip label="PERSON" className={classes.chip} align= "left"/>
-            <Chip label="LOCATION" className={classes.chip} align="left" />
-            <Chip label="ART" className={classes.chip} align="left" />
+            <Typography variant="caption" align="right">  {post.ProTag ? post.ProTag.map(tag => ' #' + tag) : null} </Typography>
+            {post.ProTheme ? post.ProTheme.map(theme => <Chip label={theme} className={classes.chip} align="left" />) : null}
           </CardContent>
         </Card>
       </Grid>

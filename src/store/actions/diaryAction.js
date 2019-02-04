@@ -68,6 +68,7 @@ export const save = (D) => {
                 like: [],
                 book: [],
                 report: [],
+                meta: null
             }).then(() => dispatch({ type: 'POSTING_SUCCESS' }))
                 .catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
         }

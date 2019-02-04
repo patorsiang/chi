@@ -10,21 +10,42 @@ export const changeState = (S) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();
 
-        const Chi = firebase.functions().httpsCallable('searchPhotoByTheme')
-        Chi({ id: 'rLSKX6kYF3bGHwm17h8P2Cw0V3X2', file: 'bangkok.jpeg', keyword: 'PERSON' }).then(result => {
-            console.log(result.data);
-        })
-            .catch(error => console.log(error))
-
         const searchState = firebase.functions().httpsCallable('searchPostByState')
         searchState({ state: S }).then(result => {
             const userInfo = firebase.functions().httpsCallable('getUser')
-            result.data.map(data => userInfo({id: data.writer}).then(writer => {
+            result.data.map(data => userInfo({ id: data.writer }).then(writer => {
+                data.id = data.writer
                 data.writer = writer.data
                 return data
             }).then(data => {
-                console.log(data);
-                dispatch({ type: 'CHANGE_STATE', S, result: result.data.sort(compare) })
+                const metadata = firebase.functions().httpsCallable('getMetadata')
+                const safe = []
+                const tags = []
+                const themes = []
+                data.meta.map(file => metadata({ id: data.id, file }).then(res => {
+                    if (res.data.safe) {
+                        safe.push(res.data.safe)
+                        if (safe.includes("bad")) {
+                            data.safe = "bad"
+                        } else if (safe.includes("maybe")) {
+                            data.safe = "maybe"
+                        } else {
+                            data.safe = "safe"
+                        }
+                    }
+
+                    if (res.data.tags) {
+                        res.data.tags.map(tag => tags.push(tag))
+                    }
+
+                    if (res.data.themes) {
+                        res.data.themes.map(theme => themes.push(theme))
+                    }
+                    return { safe, tags, themes }
+                }).then(obj => {
+                    data.ProTag = [...new Set(obj.tags)]
+                    data.ProTheme = [...new Set(obj.themes, data.theme)]
+                }).then(() => dispatch({ type: 'CHANGE_STATE', S, result: result.data.sort(compare) })))
             }))
         })
             .catch(error => console.log(error))
