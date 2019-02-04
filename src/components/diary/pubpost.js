@@ -17,7 +17,6 @@ import {
   CarouselIndicators,
 } from 'reactstrap';
 import Avatar from 'react-avatar'
-import { like, book } from "../../store/actions/mapAction";
 
 const styles = theme => ({
   root: {
@@ -115,14 +114,6 @@ class PubPost extends Component {
     this.setState({ activeIndex: newIndex });
   }
 
-  like(id, uid) {
-    this.props.like(id, uid)
-  }
-
-  book(id, uid) {
-    this.props.book(id, uid)
-  }
-
   render() {
     const { activeIndex } = this.state;
     const { classes, sz, post, auth, no } = this.props
@@ -218,7 +209,7 @@ class PubPost extends Component {
             <Typography variant="caption" align="right">  <Location /> {post.state} </Typography>
             <Typography variant="caption" align="right">  {post.tag.map(tag => ' #' + tag)} </Typography>
             <Typography variant="caption" align="right">  {post.ProTag ? post.ProTag.map(tag => ' #' + tag) : null} </Typography>
-            {post.ProTheme ? post.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> :<Chip label={theme} className={classes.chip} align="left" />) : null}
+            {post.ProTheme ? post.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> :post.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip label={theme} className={classes.chip} align="left" />) : null}
           </CardContent>
         </Card>
       </Grid>
@@ -233,11 +224,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    like: (id, uid) => dispatch(like(id, uid)),
-    book: (id, uid) => dispatch(book(id, uid)),
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PubPost))
+export default withStyles(styles)(connect(mapStateToProps)(PubPost))

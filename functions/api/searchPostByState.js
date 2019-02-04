@@ -16,6 +16,7 @@ exports.handler = (data, context) => {
                     return true
                 }).map(
                     post => {
+                        post.data().id = post.id;
                         return post.data()
                     }
                 )
@@ -40,6 +41,7 @@ exports.handler = (data, context) => {
                 return true
             }).map(
                 post => {
+                    post.data().id = post.id;
                     return post.data()
                 }
             )
