@@ -12,19 +12,18 @@ export const changeState = (S) => {
 
         const searchState = firebase.functions().httpsCallable('searchPostByState')
         searchState({ state: S }).then(result => {
+            console.log(result.data);
             const userInfo = firebase.functions().httpsCallable('getUser')
-            result.data.map(data => userInfo({ id: data.writer }).then(writer => {
-                data.idWriter = data.writer
-                data.writer = writer.data
-                return data
+            result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                data.data.idWriter = data.data.writer
+                data.data.writer = writer.data
+                return data.data
             }).then(data => {
                 const metadata = firebase.functions().httpsCallable('getMetadata')
                 const safe = []
                 const tags = []
                 const themes = []
                 data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
-                    console.log(file);
-
                     if (res.data.safe) {
                         safe.push(res.data.safe)
                         if (safe.includes("bad")) {
@@ -66,5 +65,43 @@ export const changeMenu = (S) => {
 export const searchMap = (S) => {
     return (dispatch, getState) => {
         dispatch({ type: 'SEARCH_MAP', S })
+    }
+}
+
+export const like = (id) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore()
+        const state = getState()
+        const uid = state.firebase.auth.uid
+        
+        const PostRef = firestore.collection('diary').doc(id)
+        
+        PostRef.get().then(snapshot => {
+            snapshot.data().book && snapshot.data().like.includes(uid) ?
+                PostRef.update({
+                    "like": firestore.FieldValue.arrayRemove(uid)
+                })
+                : PostRef.update({
+                    "like": firestore.FieldValue.arrayUnion(uid)
+                })
+        });
+    }
+}
+
+export const book = (id) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore()
+        const state = getState()
+        const uid = state.firebase.auth.uid
+        const PostRef = firestore.collection('diary').doc(id)
+        PostRef.get().then(snapshot => {
+            snapshot.data().book && snapshot.data().book.includes(uid) ?
+                PostRef.update({
+                    "book": firestore.FieldValue.arrayRemove(uid)
+                })
+                : PostRef.update({
+                    "book": firestore.FieldValue.arrayUnion(uid)
+                })
+        });
     }
 }

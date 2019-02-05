@@ -17,6 +17,7 @@ import {
   CarouselIndicators,
 } from 'reactstrap';
 import Avatar from 'react-avatar'
+import { like, book } from '../../store/actions/mapAction'
 
 const styles = theme => ({
   root: {
@@ -81,7 +82,7 @@ class PubPost extends Component {
   };
   constructor(props) {
     super(props);
-    this.state = { activeIndex: 0, open: false, };
+    this.state = { activeIndex: 0, open: false, book: this.props.post.data.book.includes(this.props.auth.uid), like: this.props.post.data.like.includes(this.props.auth.uid) };
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goToIndex = this.goToIndex.bind(this);
@@ -99,13 +100,13 @@ class PubPost extends Component {
 
   next() {
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === this.props.post.photo.length - 1 ? 0 : this.state.activeIndex + 1;
+    const nextIndex = this.state.activeIndex === this.props.post.data.photo.length - 1 ? 0 : this.state.activeIndex + 1;
     this.setState({ activeIndex: nextIndex });
   }
 
   previous() {
     if (this.animating) return;
-    const nextIndex = this.state.activeIndex === 0 ? this.props.post.photo.length - 1 : this.state.activeIndex - 1;
+    const nextIndex = this.state.activeIndex === 0 ? this.props.post.data.photo.length - 1 : this.state.activeIndex - 1;
     this.setState({ activeIndex: nextIndex });
   }
 
@@ -114,11 +115,27 @@ class PubPost extends Component {
     this.setState({ activeIndex: newIndex });
   }
 
+  like(id) {
+    this.setState({
+      like: !this.state.like
+    })
+
+    this.props.like(id)
+  }
+
+  book(id) {
+    this.setState({
+      book: !this.state.book
+    })
+    this.props.book(id)
+  }
+
   render() {
     const { activeIndex } = this.state;
     const { classes, sz, post, auth, no } = this.props
+    const { book, like } = this.state
 
-    const slides = post.photo.map((item, i) => {
+    const slides = post.data.photo.map((item, i) => {
       return (
         <CarouselItem
           onExiting={this.onExiting}
@@ -135,7 +152,7 @@ class PubPost extends Component {
           <CardHeader
             avatar={
               <Fragment>
-                <Avatar name={post.writer.displayName} size="45" src={post.writer.Photo} round={true} />
+                <Avatar name={post.data.writer.displayName} size="45" src={post.data.writer.Photo} round={true} />
               </Fragment>
             }
             action={
@@ -143,8 +160,8 @@ class PubPost extends Component {
                 <ReportIcon onClick={this.handleClickOpen} />
               </IconButton>
             }
-            title={post.title}
-            subheader={post.date}
+            title={post.data.title}
+            subheader={post.data.date}
           />
           <Dialog
             open={this.state.open}
@@ -168,7 +185,7 @@ class PubPost extends Component {
             </DialogActions>
           </Dialog>
           <Carousel key={no} activeIndex={activeIndex} next={this.next} previous={this.previous}>
-            <CarouselIndicators key={no} items={post.photo} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
+            <CarouselIndicators key={no} items={post.data.photo} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
             {slides}
             <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
             <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
@@ -176,21 +193,21 @@ class PubPost extends Component {
           <CardActions className={classes.actions} disableActionSpacing>
             {auth.uid ?
               <Fragment>
-                <IconButton onClick={() => { this.like(post.id, auth.uid) }}>
-                  {post.like ? post.like.includes(auth.uid) ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" /> : <FavIcon color="secondary" />}
+                <IconButton onClick={() => { this.like(post.id) }}>
+                  {like ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" />}
                 </IconButton>
-                <IconButton onClick={() => { this.book(post.id, auth.uid) }}>
-                  {post.book ? post.book.includes(auth.uid) ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
+                <IconButton onClick={() => { this.book(post.id) }}>
+                  {book ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
                 </IconButton>
               </Fragment> : null}
 
-            {post.safe ? post.safe === "safe" ?
+            {post.data.safe ? post.data.safe === "safe" ?
               <Chip
                 icon={<FaceIcon />}
                 label="Social Optimum"
                 className={classes.safe}
                 color="primary"
-              /> : post.safe === "bad" ?
+              /> : post.data.safe === "bad" ?
                 <Chip
                   icon={<FaceIcon />}
                   label="Social Optimum"
@@ -205,11 +222,11 @@ class PubPost extends Component {
 
           </CardActions>
           <CardContent>
-            <Typography component="p" align="left">{post.note}</Typography>
-            <Typography variant="caption" align="right">  <Location /> {post.state} </Typography>
-            <Typography variant="caption" align="right">  {post.tag.map(tag => ' #' + tag)} </Typography>
-            <Typography variant="caption" align="right">  {post.ProTag ? post.ProTag.map(tag => ' #' + tag) : null} </Typography>
-            {post.ProTheme ? post.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> :post.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip label={theme} className={classes.chip} align="left" />) : null}
+            <Typography component="p" align="left">{post.data.note}</Typography>
+            <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
+            <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
+            <Typography variant="caption" align="right">  {post.data.ProTag ? post.data.ProTag.map(tag => ' #' + tag) : null} </Typography>
+            {post.data.ProTheme ? post.data.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip label={theme} className={classes.chip} align="left" />) : null}
           </CardContent>
         </Card>
       </Grid>
@@ -224,4 +241,12 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(PubPost))
+const mapDispatchToProps = (dispatch) => {
+  return {
+    like: id => dispatch(like(id)),
+    book: id => dispatch(book(id)),
+  }
+}
+
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PubPost))
