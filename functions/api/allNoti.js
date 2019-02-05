@@ -17,7 +17,10 @@ exports.handler = (data, context) => {
                 return true
             }).map(
                 noti => {
-                    return noti.data()
+                    return {
+                        id: noti.id,
+                        data: noti.data()
+                    }
                 }
             )
         }

@@ -27,7 +27,10 @@ exports.handler = (data, context) => {
                 return true
             }).map(
                 post => {
-                    return post.data()
+                    return {
+                        id: post.id,
+                        data: post.data()
+                    }
                 }
             )
         }

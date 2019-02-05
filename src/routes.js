@@ -89,6 +89,12 @@ const EditDiary = Loadable({
     loading: LoadingComponant
 })
 
+
+const Acheive = Loadable({
+    loader: () => import('./views/Book/Acheive'),
+    loading: LoadingComponant
+})
+
 const Routes = props => {
     return (
         <App>
@@ -103,6 +109,7 @@ const Routes = props => {
                     <Route exact path="/diary/edit" component={EditDiary} />
                     <Route exact path="/feed" component={Feed} />
                     <Route exact path="/bookmark" component={Book} />
+                    <Route exact path="/acheive" component={Acheive} />
                     <Route exact path="/notice" component={Notice} />
                     <Route exact path="/profile" component={Profile} />
                     <Route exact path="/profile/img" component={UpdateIMG} />
