@@ -1,15 +1,19 @@
 const initState = {
     err: null,
-    success: null
+    success: null,
+    diary: []
 }
 
 const diaryReducer = (state, action) => {
     switch (action.type) {
         case 'POSTING_ERROR':
-            state = { ...state, err: action.err.message ,success: null }
+            state = { ...state, err: action.err.message, success: null }
             break;
         case 'POSTING_SUCCESS':
-            state = { ...state, err: null ,success: "success" }
+            state = { ...state, err: null, success: "success" }
+            break;
+        case 'GET_ALL_DIARY':
+            state = { ...state, err: null, success: null, diary: action.result }
             break;
         default:
             state = initState

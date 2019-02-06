@@ -7,9 +7,8 @@ import { withStyles } from '@material-ui/core/styles';
 import { isMobile } from "react-device-detect";
 import { Link } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { changeMenu } from "../../store/actions/mapAction";
+import { getDiary } from "../../store/actions/diaryAction";
 import PriPost from '../../components/diary/pripost'
 
 const styles = theme => ({
@@ -46,63 +45,47 @@ const styles = theme => ({
 class Diary extends Component {
     state = {
         date: new Date(),
-      }
-     
-      onChange = date => this.setState({ date })
-     
+    }
+
+    componentWillMount(){
+        this.props.getDiary()
+    }
+
+    onChange = date => this.setState({ date })
+
     render() {
-        const { classes } = this.props
+        const { classes, diary } = this.props
+        
         return (
             <Home>
                 {this.props.auth.uid ?
                     isMobile ?
                         <div className={classes.rootmod}>
                             <Grid container spacing={16} className={classes.main}>
-                            <Grid item xs={12} align='right'>
+                                <Grid item xs={12} align='right'>
                                     <Link to='/diary/edit'>
-                                        <Tooltip title="Add" aria-label="Add" onClick={() => { this.props.changeMenu("/diary/edit"); }}>
+                                        <Tooltip title="Add" aria-label="Add" onClick={() => { this.props.changeMenu("/diary/create"); }}>
                                             <Fab size="small" color="primary" align="right" className={classes.fab}>
                                                 <AddIcon />
                                             </Fab>
                                         </Tooltip>
                                     </Link>
-                                        <Tooltip title="Edit" aria-label="Edit">
-                                            <Fab size="small" color="secondary" align="right" aria-label="Edit" className={classes.fab}>
-                                                <EditIcon />
-                                            </Fab>
-                                        </Tooltip>  
-                                        <Tooltip title="Delete" aria-label="Delete">
-                                            <Fab size="small" color="extended" align="right" aria-label="Delete" className={classes.fab}>
-                                                <DeleteIcon />
-                                            </Fab>
-                                        </Tooltip>
-                                        
-                                        </Grid>
-                                <PriPost sz={12}/>
+                                </Grid>
+                                <PriPost diary={diary}/>
                             </Grid>
                         </div> :
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
-                                        <Grid item xs={12} align='right'>
-                                        <Link to='/diary/edit'>
-                                        <Tooltip title="Add" aria-label="Add" onClick={() => { this.props.changeMenu("/diary/edit"); }}>
+                                <Grid item xs={12} align='right'>
+                                    <Link to='/diary/edit'>
+                                        <Tooltip title="Add" aria-label="Add" onClick={() => { this.props.changeMenu("/diary/create"); }}>
                                             <Fab size="big" color="primary" align="right" className={classes.fab}>
                                                 <AddIcon />
                                             </Fab>
                                         </Tooltip>
-                                        </Link>
-                                        <Tooltip title="Edit" aria-label="Edit">
-                                            <Fab size="big" color="secondary" align="right" aria-label="Edit" className={classes.fab}>
-                                                <EditIcon />
-                                            </Fab>
-                                        </Tooltip>  
-                                        <Tooltip title="Delete" aria-label="Delete">
-                                            <Fab size="big" color="extended" align="right" aria-label="Delete" className={classes.fab}>
-                                                <DeleteIcon />
-                                            </Fab>
-                                        </Tooltip>
-                                        </Grid>
-                                    <PriPost sz={4}/>
+                                    </Link>
+                                </Grid>
+                                <PriPost diary={diary}/>
                             </Grid>
                         </div>
                     : <Unregist name='Diary' />}
@@ -114,12 +97,14 @@ class Diary extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
+        diary: state.diary.diary
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeMenu: Menu => dispatch(changeMenu(Menu))
+        changeMenu: Menu => dispatch(changeMenu(Menu)),
+        getDiary: () => dispatch(getDiary())
     }
 }
 

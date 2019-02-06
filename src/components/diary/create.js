@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import Home from '../../layouts/Home'
-import Unregist from '../../components/main/unregist'
+import Unregist from '../main/unregist'
 import { withStyles } from '@material-ui/core/styles';
 import { isMobile } from "react-device-detect";
 import PropTypes from 'prop-types';

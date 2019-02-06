@@ -3,45 +3,49 @@ import $ from 'jquery';
 import { withStyles } from '@material-ui/core/styles';
 import 'fullcalendar/dist/fullcalendar.css';
 import 'fullcalendar/dist/fullcalendar.js';
-
+import randomColor from "randomcolor";
 const styles = theme => ({
   App: {
     backgroundColor: '#FFFFFF',
     color: '#000000',
     fontSize: '14px'
-    
+
   },
 });
 class Calendar extends Component {
 
-  componentDidMount(){
+  constructor(props) {
+    super(props)
+    //change color in this point
+    this.state = {
+      color: randomColor({
+        count: 5,
+        hue: 'orange'
+      })
+    }
+  }
+
+  componentDidUpdate() {
     const { calendar } = this.refs;
-    
+    const { diary } = this.props
+    const { color } = this.state
+
     $(calendar).fullCalendar({
       header: {
         left: 'prevYear, prev',
         center: 'title,',
         right: 'today, next, nextYear'
       },
-      events: [
-        {
-          title: 'All Day Event',
-          start: '2019-02-05',
-          color: '#FF9933'
-        },
-        {
-          title: 'All Event',
-          start: '2019-02-05',
-          color: '#FFCC66'
-        },
-        {
-          title: 'Long Event',
-          start: '2019-01-01',
-          color: '#FF9933'
+      events: diary.map((data, i) => {
+        return {
+          title: data.data.title,
+          id: data.id,
+          start: new Date(data.data.date).toLocaleDateString(),
+          color: color[i%color.length]
         }
-      ],
-      eventClick: function(event) {
-        alert('Event: ' + event.title);
+      }),
+      eventClick: function (event) {
+        console.log(event.id);
       },
     });
   }
@@ -57,16 +61,15 @@ class Calendar extends Component {
 
 class PriPost extends Component {
   render() {
-    const { classes } = this.props
+    const { classes, diary } = this.props
     return (
       <div className={classes.App}>
-        <Calendar 
-          id = "your-custom-ID"
-          navLinks= {true} // can click day/week names to navigate views
-          editable= {true}
+        <Calendar
+          id="your-custom-ID"
+          navLinks={true} // can click day/week names to navigate views
+          editable={true}
+          diary={diary}
         />
-        
-        
       </div>
     );
   }

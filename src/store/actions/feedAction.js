@@ -99,6 +99,9 @@ export const chooseChoice = (choice) => {
                             }
                             return true
                         } else {
+                            if (choice === "OTHER") {
+                                return true
+                            }
                             return false
                         }
                     }).sort(compare) })))
