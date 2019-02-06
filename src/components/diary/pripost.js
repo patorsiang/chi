@@ -6,6 +6,8 @@ import 'fullcalendar/dist/fullcalendar.js';
 import randomColor from "randomcolor";
 import { focus } from '../../store/actions/diaryAction'
 import { connect } from 'react-redux'
+import { changeMenu } from "../../store/actions/mapAction";
+import { Link } from 'react-router-dom'
 
 const styles = theme => ({
   App: {
@@ -30,7 +32,7 @@ class Calendar extends Component {
 
   componentDidUpdate() {
     const { calendar } = this.refs;
-    const { diary, func } = this.props
+    const { diary, focus, changeMenu } = this.props
     const { color } = this.state
     $(calendar).fullCalendar({
       header: {
@@ -47,14 +49,18 @@ class Calendar extends Component {
         }
       }),
       eventClick: function (event) {
-        func(event.id);
+        focus(event.id);
+        changeMenu('/diary/edit')
       },
     });
   }
 
   render() {
     return (
-      <div ref='calendar'></div>
+      <Link to="/diary/edit" style={{textDecoration: 'none'}}>
+        <div ref='calendar'>
+        </div>
+      </Link>
     );
   }
 
@@ -63,7 +69,9 @@ class Calendar extends Component {
 
 class PriPost extends Component {
   render() {
-    const { classes, diary, focus } = this.props
+    const { classes, diary, focus, changeMenu, menu } = this.props
+    console.log(menu);
+
     return (
       <div className={classes.App}>
         <Calendar
@@ -71,17 +79,25 @@ class PriPost extends Component {
           navLinks={true} // can click day/week names to navigate views
           editable={true}
           diary={diary}
-          func={focus}
+          focus={focus}
+          changeMenu={changeMenu}
         />
       </div>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch) => {
+const mapStateToProps = (state) => {
   return {
-      focus: Id => dispatch(focus(Id)),
+    menu: state.map.Menu
   }
 }
 
-export default withStyles(styles)(connect(null, mapDispatchToProps)(PriPost));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    changeMenu: Menu => dispatch(changeMenu(Menu)),
+    focus: Id => dispatch(focus(Id)),
+  }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PriPost));

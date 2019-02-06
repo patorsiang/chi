@@ -89,6 +89,10 @@ const CreateDiary = Loadable({
     loading: LoadingComponant
 })
 
+const EditDiary = Loadable({
+    loader: () => import('./components/diary/edit'),
+    loading: LoadingComponant
+})
 
 const Acheive = Loadable({
     loader: () => import('./views/Book/Acheive'),
@@ -107,6 +111,7 @@ const Routes = props => {
                     <Route exact path="/upin" component={InUp} />
                     <Route exact path="/diary" component={Diary} />
                     <Route exact path="/diary/create" component={CreateDiary} />
+                    <Route exact path="/diary/edit" component={EditDiary} />
                     <Route exact path="/feed" component={Feed} />
                     <Route exact path="/bookmark" component={Book} />
                     <Route exact path="/acheive" component={Acheive} />

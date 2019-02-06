@@ -54,8 +54,7 @@ class Diary extends Component {
     onChange = date => this.setState({ date })
 
     render() {
-        const { classes, diary, edit } = this.props
-        console.log(edit);
+        const { classes, diary } = this.props
         
         return (
             <Home>
