@@ -4,6 +4,9 @@ import { withStyles } from '@material-ui/core/styles';
 import 'fullcalendar/dist/fullcalendar.css';
 import 'fullcalendar/dist/fullcalendar.js';
 import randomColor from "randomcolor";
+import { focus } from '../../store/actions/diaryAction'
+import { connect } from 'react-redux'
+
 const styles = theme => ({
   App: {
     backgroundColor: '#FFFFFF',
@@ -27,9 +30,8 @@ class Calendar extends Component {
 
   componentDidUpdate() {
     const { calendar } = this.refs;
-    const { diary } = this.props
+    const { diary, func } = this.props
     const { color } = this.state
-
     $(calendar).fullCalendar({
       header: {
         left: 'prevYear, prev',
@@ -41,11 +43,11 @@ class Calendar extends Component {
           title: data.data.title,
           id: data.id,
           start: new Date(data.data.date).toLocaleDateString(),
-          color: color[i%color.length]
+          color: color[i % color.length]
         }
       }),
       eventClick: function (event) {
-        console.log(event.id);
+        func(event.id);
       },
     });
   }
@@ -61,7 +63,7 @@ class Calendar extends Component {
 
 class PriPost extends Component {
   render() {
-    const { classes, diary } = this.props
+    const { classes, diary, focus } = this.props
     return (
       <div className={classes.App}>
         <Calendar
@@ -69,10 +71,17 @@ class PriPost extends Component {
           navLinks={true} // can click day/week names to navigate views
           editable={true}
           diary={diary}
+          func={focus}
         />
       </div>
     );
   }
 }
 
-export default withStyles(styles)(PriPost);
+const mapDispatchToProps = (dispatch) => {
+  return {
+      focus: Id => dispatch(focus(Id)),
+  }
+}
+
+export default withStyles(styles)(connect(null, mapDispatchToProps)(PriPost));

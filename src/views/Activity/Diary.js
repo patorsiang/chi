@@ -47,14 +47,15 @@ class Diary extends Component {
         date: new Date(),
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.props.getDiary()
     }
 
     onChange = date => this.setState({ date })
 
     render() {
-        const { classes, diary } = this.props
+        const { classes, diary, edit } = this.props
+        console.log(edit);
         
         return (
             <Home>
@@ -71,7 +72,7 @@ class Diary extends Component {
                                         </Tooltip>
                                     </Link>
                                 </Grid>
-                                <PriPost diary={diary}/>
+                                <PriPost diary={diary} />
                             </Grid>
                         </div> :
                         <div className={classes.root}>
@@ -85,7 +86,7 @@ class Diary extends Component {
                                         </Tooltip>
                                     </Link>
                                 </Grid>
-                                <PriPost diary={diary}/>
+                                <PriPost diary={diary} />
                             </Grid>
                         </div>
                     : <Unregist name='Diary' />}
@@ -97,7 +98,8 @@ class Diary extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
-        diary: state.diary.diary
+        diary: state.diary.diary,
+        edit: state.diary.edit,
     }
 }
 

@@ -52,6 +52,9 @@ exports.notificationRemove = functions.firestore.document('notification/{noitifi
 const allDiaryModule = require('./api/allDiary')
 exports.getAllDiary = functions.https.onCall(allDiaryModule.handler)
 
+const getDiaryModule = require('./api/getDiary')
+exports.getDiary = functions.https.onCall(getDiaryModule.handler)
+
 const allPostModule = require('./api/allPost')
 exports.getAllPost = functions.https.onCall(allPostModule.handler)
 
@@ -88,8 +91,3 @@ exports.searchPostByTitle = functions.https.onCall(searchPostByTitleModule.handl
 const searchPostByNoteModule = require('./api/searchPostByNote')
 exports.searchPostByNote = functions.https.onCall(searchPostByNoteModule.handler)
 
-const searchPhotoByThemeModule = require('./api/searchPhotoByTheme')
-exports.searchPhotoByTheme = functions.https.onCall(searchPhotoByThemeModule.handler)
-
-const searchPhotoByTagModule = require('./api/searchPhotoByTag')
-exports.searchPhotoByTag = functions.https.onCall(searchPhotoByTagModule.handler)

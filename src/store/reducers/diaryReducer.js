@@ -1,7 +1,8 @@
 const initState = {
     err: null,
     success: null,
-    diary: []
+    diary: [],
+    edit: null
 }
 
 const diaryReducer = (state, action) => {
@@ -14,6 +15,9 @@ const diaryReducer = (state, action) => {
             break;
         case 'GET_ALL_DIARY':
             state = { ...state, err: null, success: null, diary: action.result }
+            break;
+        case 'GET_DIARY':
+            state = { ...state, err: null, success: null, edit:  action.result }
             break;
         default:
             state = initState
