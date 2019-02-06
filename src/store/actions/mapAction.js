@@ -1,3 +1,5 @@
+const uuidv1 = require('uuid/v1');
+
 function compare(a, b) {
     if (a.data.date > b.date)
         return -1;
@@ -51,8 +53,8 @@ export const changeState = (S) => {
                 }).then(() => dispatch({ type: 'CHANGE_STATE', S, result: result.data.sort(compare) })))
             }))
         })
-            .catch(error => dispatch({ type: 'CHANGE_STATE', S, result: []}))
-        dispatch({ type: 'CHANGE_STATE', S, result: []})
+            .catch(error => dispatch({ type: 'CHANGE_STATE', S, result: [] }))
+        dispatch({ type: 'CHANGE_STATE', S, result: [] })
     }
 }
 
@@ -72,18 +74,40 @@ export const like = (id) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firestore = getFirestore()
         const state = getState()
+        const notid = uuidv1();
         const uid = state.firebase.auth.uid
-        
+
         const PostRef = firestore.collection('diary').doc(id)
-        
+
         PostRef.get().then(snapshot => {
-            snapshot.data().book && snapshot.data().like.includes(uid) ?
-                PostRef.update({
-                    "like": firestore.FieldValue.arrayRemove(uid)
-                })
-                : PostRef.update({
-                    "like": firestore.FieldValue.arrayUnion(uid)
-                })
+            if (snapshot.data().like) {
+                if (snapshot.data().like.includes(uid)) {
+                    PostRef.update({
+                        "like": firestore.FieldValue.arrayRemove(uid)
+                    })
+                } else {
+                    const name = state.firebase.profile.displayName
+                    const photo = state.firebase.profile.Photo
+                    const notiRef = firestore.collection('notification').doc(notid);
+                    notiRef.set({
+                        owner: snapshot.data().writer,
+                        type: 'like',
+                        content: `${name} save your diary, ${snapshot.data().title} of ${new Date()}`,
+                        read: false,
+                        linked: '/diary',
+                        name: name,
+                        photo: photo,
+                        date: Date()
+                    });
+                    PostRef.update({
+                        "like": firestore.FieldValue.arrayUnion(uid)
+                    })
+                }
+            } else {
+                PostRef.set({
+                    "like": [uid]
+                }, { merge: true })
+            }
         });
     }
 }
@@ -93,15 +117,76 @@ export const book = (id) => {
         const firestore = getFirestore()
         const state = getState()
         const uid = state.firebase.auth.uid
+        const notid = uuidv1();
+
         const PostRef = firestore.collection('diary').doc(id)
         PostRef.get().then(snapshot => {
-            snapshot.data().book && snapshot.data().book.includes(uid) ?
-                PostRef.update({
-                    "book": firestore.FieldValue.arrayRemove(uid)
-                })
-                : PostRef.update({
-                    "book": firestore.FieldValue.arrayUnion(uid)
-                })
+            if (snapshot.data().book) {
+                if (snapshot.data().book.includes(uid)) {
+                    PostRef.update({
+                        "book": firestore.FieldValue.arrayRemove(uid)
+                    })
+                } else {
+                    const name = state.firebase.profile.displayName
+                    const photo = state.firebase.profile.Photo
+                    const notiRef = firestore.collection('notification').doc(notid);
+                    notiRef.set({
+                        owner: snapshot.data().writer,
+                        type: 'book',
+                        content: `${name} save your diary, ${snapshot.data().title} of ${new Date()}`,
+                        read: false,
+                        linked: '/diary',
+                        name: name,
+                        photo: photo,
+                        date: Date()
+                    });
+                    PostRef.update({
+                        "book": firestore.FieldValue.arrayUnion(uid)
+                    })
+                }
+            } else {
+                PostRef.set({
+                    "book": [uid]
+                }, { merge: true })
+            }
+        });
+    }
+}
+
+export const report = (id) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firestore = getFirestore()
+        const state = getState()
+        const notid = uuidv1();
+        const uid = state.firebase.auth.uid
+
+        const PostRef = firestore.collection('diary').doc(id)
+
+        PostRef.get().then(snapshot => {
+            if (snapshot.data().report) {
+                if (snapshot.data().report.includes(uid)) {
+                    PostRef.update({
+                        "report": firestore.FieldValue.arrayRemove(uid)
+                    })
+                } else {
+                    const notiRef = firestore.collection('notification').doc(notid);
+                    notiRef.set({
+                        owner: snapshot.data().writer,
+                        type: 'report',
+                        content: `your diary was reported, ${snapshot.data().title} of ${new Date()}`,
+                        read: false,
+                        linked: '/diary',
+                        date: Date()
+                    });
+                    PostRef.update({
+                        "report": firestore.FieldValue.arrayUnion(uid)
+                    })
+                }
+            } else {
+                PostRef.set({
+                    "report": [uid]
+                }, { merge: true })
+            }
         });
     }
 }

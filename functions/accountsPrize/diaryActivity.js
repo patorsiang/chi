@@ -6,7 +6,7 @@ exports.handler = (change, context) => {
     const userID = data.writer;
     
     const userRef = admin.firestore().collection('user').doc(userID);
-    
+
     const token = userRef.get().then(doc => {
         if (doc.exists) {
             return userRef.set({

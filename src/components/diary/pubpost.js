@@ -17,7 +17,7 @@ import {
   CarouselIndicators,
 } from 'reactstrap';
 import Avatar from 'react-avatar'
-import { like, book } from '../../store/actions/mapAction'
+import { like, book, report } from '../../store/actions/mapAction'
 
 const styles = theme => ({
   root: {
@@ -80,9 +80,16 @@ class PubPost extends Component {
   handleClose = () => {
     this.setState({ open: false });
   };
+
   constructor(props) {
     super(props);
-    this.state = { activeIndex: 0, open: false, book: this.props.post.data.book.includes(this.props.auth.uid), like: this.props.post.data.like.includes(this.props.auth.uid) };
+    this.state = {
+      activeIndex: 0,
+      open: false,
+      book: this.props.post.data.book.includes(this.props.auth.uid),
+      like: this.props.post.data.like.includes(this.props.auth.uid),
+      report: false,
+    }
     this.next = this.next.bind(this);
     this.previous = this.previous.bind(this);
     this.goToIndex = this.goToIndex.bind(this);
@@ -130,10 +137,15 @@ class PubPost extends Component {
     this.props.book(id)
   }
 
+  report(id) {
+    this.props.report(id)
+    this.setState({ open: false, report: true});
+  };
+
   render() {
     const { activeIndex } = this.state;
     const { classes, sz, post, auth, no } = this.props
-    const { book, like } = this.state
+    const { book, like, report } = this.state
 
     const slides = post.data.photo.map((item, i) => {
       return (
@@ -147,89 +159,91 @@ class PubPost extends Component {
       );
     });
     return (
-      <Grid item xs={sz} className={classes.root} key={no}>
-        <Card key={no} className={classes.card} >
-          <CardHeader
-            avatar={
-              <Fragment>
-                <Avatar name={post.data.writer.displayName} size="45" src={post.data.writer.Photo} round={true} />
-              </Fragment>
-            }
-            action={
-              <IconButton>
-                <ReportIcon onClick={this.handleClickOpen} />
-              </IconButton>
-            }
-            title={post.data.title}
-            subheader={post.data.date}
-          />
-          <Dialog
-            open={this.state.open}
-            onClose={this.handleClose}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <DialogTitle id="alert-dialog-title">{"This content is inappropriate or incorrect."}</DialogTitle>
-            <DialogContent>
-              <DialogContentText id="alert-dialog-description">
-                Do you want to report it?
+      <Fragment>
+          {!report ? <Grid item xs={sz} className={classes.root} key={no}>
+            <Card key={no} className={classes.card} >
+              <CardHeader
+                avatar={
+                  <Fragment>
+                    <Avatar name={post.data.writer.displayName} size="45" src={post.data.writer.Photo} round={true} />
+                  </Fragment>
+                }
+                action={
+                  <IconButton>
+                    <ReportIcon onClick={this.handleClickOpen} />
+                  </IconButton>
+                }
+                title={post.data.title}
+                subheader={post.data.date}
+              />
+              <Dialog
+                open={this.state.open}
+                onClose={this.handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+              >
+                <DialogTitle id="alert-dialog-title">{"This content is inappropriate or incorrect."}</DialogTitle>
+                <DialogContent>
+                  <DialogContentText id="alert-dialog-description">
+                    Do you want to report it?
             </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={this.handleClose} color="primary">
-                Cancel
+                </DialogContent>
+                <DialogActions>
+                  <Button onClick={this.handleClose} color="primary">
+                    Cancel
             </Button>
-              <Button onClick={this.handleClose} color="primary" autoFocus>
-                Report
+                  <Button onClick={() => this.report(post.id)} color="primary" autoFocus>
+                    Report
             </Button>
-            </DialogActions>
-          </Dialog>
-          <Carousel key={no} activeIndex={activeIndex} next={this.next} previous={this.previous}>
-            <CarouselIndicators key={no} items={post.data.photo} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
-            {slides}
-            <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
-            <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
-          </Carousel>
-          <CardActions className={classes.actions} disableActionSpacing>
-            {auth.uid ?
-              <Fragment>
-                <IconButton onClick={() => { this.like(post.id) }}>
-                  {like ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" />}
-                </IconButton>
-                <IconButton onClick={() => { this.book(post.id) }}>
-                  {book ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
-                </IconButton>
-              </Fragment> : null}
+                </DialogActions>
+              </Dialog>
+              <Carousel key={no} activeIndex={activeIndex} next={this.next} previous={this.previous}>
+                <CarouselIndicators key={no} items={post.data.photo} activeIndex={activeIndex} onClickHandler={this.goToIndex} />
+                {slides}
+                <CarouselControl direction="prev" directionText="Previous" onClickHandler={this.previous} />
+                <CarouselControl direction="next" directionText="Next" onClickHandler={this.next} />
+              </Carousel>
+              <CardActions className={classes.actions} disableActionSpacing>
+                {auth.uid ?
+                  <Fragment>
+                    <IconButton onClick={() => { this.like(post.id) }}>
+                      {like ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" />}
+                    </IconButton>
+                    <IconButton onClick={() => { this.book(post.id) }}>
+                      {book ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
+                    </IconButton>
+                  </Fragment> : null}
 
-            {post.data.safe ? post.data.safe === "safe" ?
-              <Chip
-                icon={<FaceIcon />}
-                label="Social Optimum"
-                className={classes.safe}
-                color="primary"
-              /> : post.data.safe === "bad" ?
-                <Chip
-                  icon={<FaceIcon />}
-                  label="Social Optimum"
-                  className={classes.bad}
-                  color="primary"
-                /> : <Chip
-                  icon={<FaceIcon />}
-                  label="Social Optimum"
-                  className={classes.maybe}
-                  color="primary"
-                /> : null}
+                {post.data.safe ? post.data.safe === "safe" ?
+                  <Chip
+                    icon={<FaceIcon />}
+                    label="Social Optimum"
+                    className={classes.safe}
+                    color="primary"
+                  /> : post.data.safe === "bad" ?
+                    <Chip
+                      icon={<FaceIcon />}
+                      label="Social Optimum"
+                      className={classes.bad}
+                      color="primary"
+                    /> : <Chip
+                      icon={<FaceIcon />}
+                      label="Social Optimum"
+                      className={classes.maybe}
+                      color="primary"
+                    /> : null}
 
-          </CardActions>
-          <CardContent>
-            <Typography component="p" align="left">{post.data.note}</Typography>
-            <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
-            <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
-            <Typography variant="caption" align="right">  {post.data.ProTag ? post.data.ProTag.map(tag => ' #' + tag) : null} </Typography>
-            {post.data.ProTheme ? post.data.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip label={theme} className={classes.chip} align="left" />) : null}
-          </CardContent>
-        </Card>
-      </Grid>
+              </CardActions>
+              <CardContent>
+                <Typography component="p" align="left">{post.data.note}</Typography>
+                <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
+                <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
+                <Typography variant="caption" align="right">  {post.data.ProTag ? post.data.ProTag.map(tag => ' #' + tag) : null} </Typography>
+                {post.data.ProTheme ? post.data.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip label={theme} className={classes.chip} align="left" />) : null}
+              </CardContent>
+            </Card>
+          </Grid> : null}
+      </Fragment>
     )
   }
 }
@@ -245,6 +259,7 @@ const mapDispatchToProps = (dispatch) => {
   return {
     like: id => dispatch(like(id)),
     book: id => dispatch(book(id)),
+    report: id => dispatch(report(id)),
   }
 }
 

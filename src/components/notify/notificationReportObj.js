@@ -1,8 +1,12 @@
 import React, { Component } from 'react'
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
-import ReportIcon from '@material-ui/icons/ReportProblem';
 import { withStyles } from '@material-ui/core/styles';
-import img from '../../assets/test1.jpg'
+import ReportIcon from '@material-ui/icons/ReportProblem';
+import { connect } from 'react-redux'
+import Avatar from 'react-avatar'
+import { changeMenu } from "../../store/actions/mapAction";
+import { checkRead } from "../../store/actions/notiAction";
+import { Link } from 'react-router-dom'
 
 const styles = theme => ({
     list: {
@@ -11,32 +15,65 @@ const styles = theme => ({
             borderColor: '#FFCC99',
         },
     },
-    img: {
-        width: 'auto',
-        height: 'auto',
-        margin: 'right',
-        display: 'block',
-        maxWidth: '20%',
-        maxHeight: '20%%',
+    image: {
+        width: '40px',
+        height: '40px',
+        margin: '0 5%',
     },
-
+    dec: {
+        '&:hover': {
+            textDecoration: 'none'
+        },
+    }
 });
 
 class notiObj extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            value: this.props.Menu,
+        };
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(event, t, id) {
+        this.setState({ value: t });
+        this.props.changeMenu(t)
+        this.props.checkRead(this.props.data.id)
+    }
+
     render() {
-        const { classes } = this.props
+        const { classes, data, profile } = this.props
+
+
         return (
-                <ListItem button className={classes.list}>
+            <Link to={data.data.linked} className={classes.dec}>
+                <ListItem button className={classes.list} key={data.id} onClick={(event) => this.handleChange(event, data.data.linked)}>
                     <ListItemIcon>
                         <ReportIcon />
                     </ListItemIcon>
-                    <ListItemText primary="F reports your post." secondary="23 minutes ago" />
-                    <img className={classes.img} alt="complex" src={img} />
+                    <ListItemText primary={data.data.content} secondary={data.data.date} />
+                    <Avatar name={profile.displayName} size="40" src={profile.Photo} />
                 </ListItem>
+            </Link>
         )
     }
 
 }
 
-export default withStyles(styles)(notiObj)
+const mapStateToProps = (state) => {
+    return {
+        profile: state.firebase.profile,
+        Menu: state.map.Menu,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeMenu: Menu => dispatch(changeMenu(Menu)),
+        checkRead: Id => dispatch(checkRead(Id)),
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(notiObj))

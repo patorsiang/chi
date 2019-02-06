@@ -7,11 +7,11 @@ exports.handler = (change, context) => {
     // Retrieve the current and previous value
     const data = change.after.data();
     const previousData = change.before.data();
-
-    console.log(data.tag.toString());
     // We'll only update if the name has changed.
     // This is crucial to prevent infinite loops.
-    if (data.tag === previousData.tag) return null;
+    if (previousData.theme){
+        if (data.theme.toString() === previousData.theme.toString()) return null;
+    }
 
     const document = {
         content: data.tag.toString(),

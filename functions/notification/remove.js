@@ -1,7 +1,6 @@
 exports.handler = (change, context) => {
     // Retrieve the current and previous value
     const data = change.after.data();
-    const previousData = change.before.data();
 
     // We'll only update if the name has changed.
     // This is crucial to prevent infinite loops.

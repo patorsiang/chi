@@ -46,16 +46,7 @@ const notificationNewUser = require('./notification/notificationNewUser')
 exports.notifyNewUser = functions.auth.user().onCreate(notificationNewUser.handler)
 
 const notificationRemoveModule = require('./notification/remove')
-exports.notificationRemove = functions.firestore.document('noitification/{noitificationID}').onUpdate(notificationRemoveModule.handler)
-
-const notificationLikeModule = require('./notification/like')
-exports.notificationLike = functions.firestore.document('diary/{diaryID}').onUpdate(notificationLikeModule.handler)
-
-const notificationBookModule = require('./notification/book')
-exports.notificationBook = functions.firestore.document('diary/{diaryID}').onUpdate(notificationBookModule.handler)
-
-const notificationReportModule = require('./notification/report')
-exports.notificationReport = functions.firestore.document('diary/{diaryID}').onUpdate(notificationReportModule.handler)
+exports.notificationRemove = functions.firestore.document('notification/{noitificationID}').onWrite(notificationRemoveModule.handler)
 
 // api 
 const allDiaryModule = require('./api/allDiary')
