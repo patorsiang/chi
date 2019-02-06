@@ -2,18 +2,12 @@ import React, { Component } from 'react'
 import Home from '../../layouts/Home'
 import { connect } from 'react-redux'
 import Unregist from '../../components/main/unregist'
-import { Grid, Fab } from '@material-ui/core/'
+import { Grid } from '@material-ui/core/'
 import { isMobile } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
-import PersonIcon from '@material-ui/icons/Portrait';
-import LocIcon from '@material-ui/icons/WhereToVote';
-import EventIcon from '@material-ui/icons/Event';
-import ArtIcon from '@material-ui/icons/Collections';
-import ConsumeIcon from '@material-ui/icons/LocalDining';
-import OtherIcon from '@material-ui/icons/MoreHoriz';
-import Tooltip from '@material-ui/core/Tooltip';
-import PubPost from '../../components/diary/pubpost'
-import img from '../../assets/world_her.png';
+import Choice from '../../components/feed/themeChoice'
+import { chooseChoice } from '../../store/actions/feedAction'
+import Post from '../../components/diary/pubpost'
 
 const styles = theme => ({
     root: {
@@ -24,7 +18,7 @@ const styles = theme => ({
     rootmod: {
         flexGrow: 1,
     },
-    main:{
+    main: {
         [theme.breakpoints.up('sm')]: {
             marginTop: '8.5%',
             marginBottom: '2.5%',
@@ -41,10 +35,10 @@ const styles = theme => ({
         '&:hover': {
             backgroundColor: '#FF6600',
             borderColor: '#FF6600',
-          },
-          '&:focus': {
+        },
+        '&:focus': {
             boxShadow: '0 0 0 0.2rem rgba(255,153,102,.5)',
-          },
+        },
     },
     img: {
         width: 'auto',
@@ -53,78 +47,36 @@ const styles = theme => ({
         display: 'block',
         maxWidth: '50%',
         maxHeight: '50%',
-      },
+    },
 });
 
 class Feed extends Component {
+    componentWillMount() {
+        this.props.chooseChoice(this.props.choice)
+    }
+
     render() {
         const { classes, post } = this.props
+        console.log(post);
+
         return (
             <Home>
                 {this.props.auth.uid ?
                     isMobile ?
-                    <div className={classes.rootmod}>
+                        <div className={classes.rootmod}>
                             <Grid container spacing={16} className={classes.main}>
-                            <Grid item xs={12} align='center'>
-                            <Tooltip title="Person" aria-label="Person" >
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <PersonIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Location" aria-label="Location" >
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <LocIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Event" aria-label="Event">
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <EventIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Art" aria-label="Art">
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <ArtIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Consume_Good" aria-label="Consume_Good">
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> <ConsumeIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="World_Heritage" aria-label="World_Heritage">
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> 
-                                    <img className={classes.img} alt="complex" src= {img} /> 
-                                </Fab>
-                            </Tooltip>
-                            <Tooltip title="Other" aria-label="Other">
-                                <Fab variant="contained" color="secondary" size="small" className={classes.fab}> 
-                                    <OtherIcon />
-                                </Fab>
-                            </Tooltip>
+                                <Choice s={"small"} />
                             </Grid>
-                                <PubPost sz={12} like={true} book={true}/>
+                            <Grid container spacing={24} >
+                                {post.map((postData, i) => <Post key={i} no={i} sz={12} post={postData} />)}
                             </Grid>
                         </div> :
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
-                            <Grid item xs={12} align='center'>
-                            <Tooltip title="Person" aria-label="Person">
-                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <PersonIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Location" aria-label="Location">
-                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <LocIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Event" aria-label="Event">
-                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <EventIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Art" aria-label="Art">
-                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <ArtIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="Consume_Good" aria-label="Consume_Good">
-                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> <ConsumeIcon /> </Fab>
-                            </Tooltip>
-                            <Tooltip title="World Heritage" aria-label="World_Heritage">
-                                <Fab color="secondary" size="big" className={classes.fab}> 
-                                    <img className={classes.img} alt="complex" src= {img} /> 
-                                </Fab>
-                            </Tooltip>
-                            <Tooltip title="Other" aria-label="Other">
-                                <Fab variant="contained" color="secondary" size="big" className={classes.fab}> 
-                                    <OtherIcon />
-                                </Fab>
-                            </Tooltip>
+                                <Choice s={"big"} />
                             </Grid>
-                                {post.map(postData => <PubPost sz={4} like={true} love={true} book={true} booked={true} post={postData} />)}
+                            <Grid container spacing={24} >
+                                {post.map((postData, i) => <Post key={i} no={i} sz={4} post={postData} />)}
                             </Grid>
                         </div>
                     : <Unregist name='Feed' />}
@@ -136,8 +88,15 @@ class Feed extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
-        post: state.map.post,
+        post: state.feed.post,
+        choice: state.feed.choice,
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Feed))
+const mapDispatchToProps = (dispatch) => {
+    return {
+        chooseChoice: Menu => dispatch(chooseChoice(Menu)),
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Feed))

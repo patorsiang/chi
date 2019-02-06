@@ -4,6 +4,7 @@ import imgReducer from './imgReducer'
 import diaryReducer from './diaryReducer'
 import notiReducer from './notiReducer';
 import bookReducer from './bookReducer';
+import feedReducer from './feedReducer'
 import { combineReducers } from 'redux'
 import { firestoreReducer } from 'redux-firestore'
 import { firebaseReducer } from 'react-redux-firebase'
@@ -16,7 +17,8 @@ const rootReducer = combineReducers({
     firebase: firebaseReducer,
     diary: diaryReducer,
     noti: notiReducer,
-    book: bookReducer
+    book: bookReducer,
+    feed: feedReducer
 })
 
 export default rootReducer
