@@ -5,12 +5,12 @@ import PropTypes from 'prop-types'
 const styles = {
     err: {
         color: 'Red',
-        fontSize: '.5em',
+        fontSize: '14px',
         marginTop: '5%'
     },
     suc: {
         color: 'Green',
-        fontSize: '.5em',
+        fontSize: '14px',
         marginTop: '5%'
     }
 }

@@ -11,12 +11,12 @@ import { changeMenu } from '../../store/actions/mapAction'
 import { Link } from 'react-router-dom'
 const styles = theme => ({
   root: {
-    marginTop: '10%',
+    marginTop: '3%',
     flexGrow: 1,
     marginLeft: '64px',
   },
   rootmod: {
-    marginTop: '10%',
+    marginTop: '5%',
     flexGrow: 1,
   },
   button: {

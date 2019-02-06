@@ -19,7 +19,7 @@ class Calendar extends Component {
     //change color in this point
     this.state = {
       color: randomColor({
-        count: 5,
+        count: 7,
         hue: 'orange'
       })
     }
