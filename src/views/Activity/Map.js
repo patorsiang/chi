@@ -907,15 +907,15 @@ class Map extends Component {
                                 c0,0.846-3.739,0-3.739,0L369.25,543l-3.998,1.398H364l-1.506-0.971l1.27-1.407l-1.178-2.891V538z"/>
                         </g>
                         }
-                        {valueState[0] === "Dadra and Nagar Mavell" ?
-                        <g id="Dadra and Nagar Mavell">
+                        {valueState[0] === "Dadra and Nagar Haveli" ?
+                        <g id="Dadra and Nagar Haveli">
                         <polygon className={classes.selected} fill="#FFFFFF" points="370.333,542.333 370.333,542.333 372,540.667 370.917,538.583 369.667,539.129 367.739,539.333
                             365.5,541.107 363.167,542.333 361.833,544.5 361.833,546.833 363.167,547.833 365.203,549.667 367.739,548.333 369.667,548
                             371.667,547.333 373.667,545.167 374,543.333 	"/>
                         </g>
                         :
-                        <g id="Dadra and Nagar Mavell">
-                            <polygon onClick={()=>{this.handleClick('Dadra and Nagar Mavell')}} className={classes.unselected} fill="#FFFFFF" points="370.333,542.333 370.333,542.333 372,540.667 370.917,538.583 369.667,539.129 367.739,539.333
+                        <g id="Dadra and Nagar Haveli">
+                            <polygon onClick={()=>{this.handleClick('Dadra and Nagar Haveli')}} className={classes.unselected} fill="#FFFFFF" points="370.333,542.333 370.333,542.333 372,540.667 370.917,538.583 369.667,539.129 367.739,539.333
                                 365.5,541.107 363.167,542.333 361.833,544.5 361.833,546.833 363.167,547.833 365.203,549.667 367.739,548.333 369.667,548
                                 371.667,547.333 373.667,545.167 374,543.333 	"/>
                         </g>
