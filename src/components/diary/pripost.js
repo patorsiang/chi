@@ -30,15 +30,18 @@ class Calendar extends Component {
   }
 
   componentDidUpdate() {
-    const { calendar } = this.refs;
+    const { calendar,calendar1 } = this.refs;
     const { diary, focus, changeMenu } = this.props
     const { color } = this.state
+   // $(calendar1).fullCalendar({
+   // header: {
+   //   left: 'prevYear, prev',
+   //  center: 'title,',
+    //  right: 'today, next, nextYear'
+   // },
+ // });
     $(calendar).fullCalendar({
-      header: {
-        left: 'prevYear, prev',
-        center: 'title,',
-        right: 'today, next, nextYear'
-      },
+     
       events: diary.map((data, i) => {
         return {
           title: data.data.title,
@@ -66,7 +69,14 @@ class Calendar extends Component {
     return (
       <div ref='calendar'>
         {menu === '/diary/edit' ? this.renderRedirect('/diary/edit') : null}
-      </div>
+        </div>
+     // <div ref='calendar1'> 
+     //</div> <Link to="/diary/edit" style={{textDecoration: 'none'}}>
+      //  <div ref='calendar'>
+      //  </div>
+     // </Link>
+
+      
     );
   }
 
@@ -79,6 +89,7 @@ class PriPost extends Component {
     return (
       <div className={classes.App}>
         <Calendar
+        
           id="your-custom-ID"
           navLinks={true} // can click day/week names to navigate views
           editable={true}
