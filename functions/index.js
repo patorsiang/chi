@@ -1,7 +1,7 @@
 // deploy: firebase deploy --only functions 
 // local test: firebase functions:shell 
 // run serve: firebase serve --only functions
-// remove: firebase functions:delete Chi UpdateToken UpdateTokenDiaryActivity addWaterMarkImage callCloudVision callCloudNaturalLanguage UpdateThemeDiaryActivity notifyToken notifyNewUser notificationRemove notificationRemove notificationBook notificationReport getAllDiary getAllPost getAllNoti getUser getMetadata getAllBookPost getAllPostByWriter searchUserByName searchPostByTheme searchPostByTag searchPostByState searchPostByTitle searchPostByNote searchPhotoByTheme searchPhotoByTag
+// remove: firebase functions:delete Chi UpdateToken UpdateTokenDiaryActivity modifiedBasicImage addWaterMarkImage callCloudVision callCloudNaturalLanguage UpdateThemeDiaryActivity notifyToken notifyNewUser notificationRemove getAllDiary getDiary removeDiary getAllPost getAllNoti getUser getMetadata getAllBookPost getAllPostByWriter searchUserByName searchPostByTheme searchPostByTag searchPostByState searchPostByTitle searchPostByNote
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
@@ -37,6 +37,9 @@ exports.callCloudNaturalLanguage = functions.storage.object().onFinalize(callTra
 // analyze and call diary
 const diaryThemeModule = require('./diary/themeOfTag')
 exports.UpdateThemeDiaryActivity = functions.firestore.document('diary/{diaryID}').onWrite(diaryThemeModule.handler)
+
+const diaryRemoveModule = require('./diary/themeOfTag')
+exports.removeDiary = functions.firestore.document('diary/{diaryID}').onWrite(diaryRemoveModule.handler)
 
 // notification
 const notificationTokenModule = require('./notification/notificationTokenActivity')

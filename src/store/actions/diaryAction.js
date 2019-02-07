@@ -188,6 +188,9 @@ export const saveEdit = (diary) => {
             if (diary.files.length > 0) {
                 diary.files.map((file, i) => {
 
+                    if (photoMeta.includes(file.name)) {
+                        return false
+                    }
                     var storageRef = firebase.storage().ref(user.uid + "/" + file.name);
 
                     //Upload file
@@ -203,11 +206,9 @@ export const saveEdit = (diary) => {
                         },
                         function complete() {
                             storageRef.getDownloadURL().then(function (url) {
-                                if (!photoURL.includes(url)) {
-                                    photoURL.push(url);
-                                    photoMeta.push(file.name);
-                                }
                                 // Add a new document in collection "cities"
+                                photoURL.push(url);
+                                photoMeta.push(file.name);
                                 firestore.collection('diary').doc(diary.id).update({
                                     writer: user.uid,
                                     title: diary.title,
