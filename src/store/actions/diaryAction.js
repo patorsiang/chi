@@ -81,20 +81,42 @@ export const getDiary = () => {
 
         const allDairy = firebase.functions().httpsCallable('getAllDiary')
         allDairy().then(result => {
-            dispatch({ type: 'GET_ALL_DIARY', result: result.data})
+            dispatch({ type: 'GET_ALL_DIARY', result: result.data })
         })
-            .catch(error => dispatch({ type: 'GET_ALL_DIARY', result: []}))
+            .catch(error => dispatch({ type: 'GET_ALL_DIARY', result: [] }))
     }
 }
 
 export const focus = (id) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase();
-
+        console.log(id);
+        
         const Dairy = firebase.functions().httpsCallable('getDiary')
-        Dairy({id}).then(result => {
-            dispatch({ type: 'GET_DIARY', result: result.data})
-        }).catch(error => dispatch({ type: 'GET_DIARY', result: []}))
+        Dairy({ id }).then(result => {
+            dispatch({ type: 'GET_DIARY', result: result.data })
+        }).catch(error => dispatch({ type: 'GET_DIARY', result: [] }))
+
+    }
+}
+
+export const deleteDiary = (id) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+
+        const Dairy = firebase.functions().httpsCallable('removeDiary')
+        Dairy({ id }).then(result => {
+            dispatch({ type: 'ROMOVE_SUCCESS', result: "Document successfully deleted!" })
+        }).catch(err => dispatch({ type: 'POSTING_ERROR', err }))
+    }
+}
+
+export const saveEdit = (diary) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+        const state = getState()
+
+        console.log(state.diary.diary, diary);
         
     }
 }

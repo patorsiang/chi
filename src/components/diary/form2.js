@@ -8,7 +8,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import { state } from '../../models/state.json'
 import { Col } from 'reactstrap'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import { save } from '../../store/actions/diaryAction'
+import { deleteDiary, saveEdit } from '../../store/actions/diaryAction'
 import Typography from '@material-ui/core/Typography';
 import ErrMessage from '../main/errMessage'
 const styles = theme => ({
@@ -117,9 +117,8 @@ class EditForm extends Component {
     }
 
     componentDidUpdate() {
+        console.log(this.props.edit);
         if (this.props.edit) {
-            console.log(this.props.edit);
-
             if (this.props.edit.data.photo !== null) {
                 if (this.props.edit.data.photo.toString() !== this.state.uploaded.toString()) {
                     this.setState({
@@ -435,11 +434,11 @@ class EditForm extends Component {
                             </Col>
                             <Col xs='7'></Col>
                             <Col xs='5' align="right">
-                                <Button size="small" className={classes.button} onClick={() => this.props.save(this.state)}>
+                                <Button size="small" className={classes.button} onClick={() => this.props.delete(this.state.id)}>
                                     <DeleteOutlineIcon />
                                     Delete
                                 </Button>
-                                <Button size="small" className={classes.button} onClick={() => this.props.save(this.state)}>
+                                <Button size="small" className={classes.button} onClick={() => this.props.saveEdit(this.state)}>
                                     <SaveIcon />
                                     Save
                                 </Button>
@@ -460,15 +459,16 @@ EditForm.propTypes = {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
-        err: state.diary.err,
-        success: state.diary.success,
+        err: state.diary.err2,
+        success: state.diary.success2,
         edit: state.diary.edit,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        save: page => dispatch(save(page)),
+        delete: id => dispatch(deleteDiary(id)),
+        saveEdit: diary => dispatch(saveEdit(diary))
     }
 }
 

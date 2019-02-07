@@ -55,6 +55,9 @@ exports.getAllDiary = functions.https.onCall(allDiaryModule.handler)
 const getDiaryModule = require('./api/getDiary')
 exports.getDiary = functions.https.onCall(getDiaryModule.handler)
 
+const removeDiaryModule = require('./api/deleteDiary')
+exports.removeDiary = functions.https.onCall(removeDiaryModule.handler)
+
 const allPostModule = require('./api/allPost')
 exports.getAllPost = functions.https.onCall(allPostModule.handler)
 

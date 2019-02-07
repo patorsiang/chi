@@ -7,7 +7,7 @@ import randomColor from "randomcolor";
 import { focus } from '../../store/actions/diaryAction'
 import { connect } from 'react-redux'
 import { changeMenu } from "../../store/actions/mapAction";
-import { Link } from 'react-router-dom'
+import { Redirect } from 'react-router-dom'
 
 const styles = theme => ({
   App: {
@@ -55,12 +55,19 @@ class Calendar extends Component {
     });
   }
 
+  renderRedirect = (value) => {
+    if (value !== window.location.pathname) {
+      this.props.changeMenu(value);
+      return <Redirect to={value} />
+    }
+  }
+
   render() {
+    const { menu } = this.props
     return (
-      <Link to="/diary/edit" style={{textDecoration: 'none'}}>
-        <div ref='calendar'>
-        </div>
-      </Link>
+      <div ref='calendar'>
+        {menu === '/diary/edit' ? this.renderRedirect('/diary/edit') : null}
+      </div>
     );
   }
 
@@ -70,7 +77,6 @@ class Calendar extends Component {
 class PriPost extends Component {
   render() {
     const { classes, diary, focus, changeMenu, menu } = this.props
-    console.log(menu);
 
     return (
       <div className={classes.App}>
@@ -81,6 +87,7 @@ class PriPost extends Component {
           diary={diary}
           focus={focus}
           changeMenu={changeMenu}
+          menu={menu}
         />
       </div>
     );
@@ -89,7 +96,7 @@ class PriPost extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    menu: state.map.Menu
+    menu: state.map.Menu,
   }
 }
 

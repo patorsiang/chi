@@ -55,7 +55,7 @@ class Diary extends Component {
 
     render() {
         const { classes, diary } = this.props
-        
+
         return (
             <Home>
                 {this.props.auth.uid ?
@@ -63,7 +63,7 @@ class Diary extends Component {
                         <div className={classes.rootmod}>
                             <Grid container spacing={16} className={classes.main}>
                                 <Grid item xs={12} align='right'>
-                                    <Link to='/diary/edit'>
+                                    <Link to='/diary/create'>
                                         <Tooltip title="Add" aria-label="Add" onClick={() => { this.props.changeMenu("/diary/create"); }}>
                                             <Fab size="small" color="primary" align="right" className={classes.fab}>
                                                 <AddIcon />
@@ -77,7 +77,7 @@ class Diary extends Component {
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
                                 <Grid item xs={12} align='right'>
-                                    <Link to='/diary/edit'>
+                                    <Link to='/diary/create'>
                                         <Tooltip title="Add" aria-label="Add" onClick={() => { this.props.changeMenu("/diary/create"); }}>
                                             <Fab size="big" color="primary" align="right" className={classes.fab}>
                                                 <AddIcon />

@@ -2,7 +2,9 @@ const initState = {
     err: null,
     success: null,
     diary: [],
-    edit: null
+    edit: null,
+    err2: null,
+    success2: null,
 }
 
 const diaryReducer = (state, action) => {
@@ -17,7 +19,13 @@ const diaryReducer = (state, action) => {
             state = { ...state, err: null, success: null, diary: action.result }
             break;
         case 'GET_DIARY':
-            state = { ...state, err: null, success: null, edit:  action.result }
+            state = { ...state, err: null, success: null, edit: action.result }
+            break;
+        case 'ROMOVE_SUCCESS':
+            state = { ...state, success2: action.result, err2: null }
+            break;
+        case 'ROMOVE_ERROR':
+            state = { ...state, err2: action.err, success2: null }
             break;
         default:
             state = initState
