@@ -14,7 +14,6 @@ const styles = theme => ({
     backgroundColor: '#FFFFFF',
     color: '#000000',
     fontSize: '14px'
-
   },
 });
 class Calendar extends Component {
@@ -72,7 +71,6 @@ class Calendar extends Component {
   }
 
 }
-
 
 class PriPost extends Component {
   render() {

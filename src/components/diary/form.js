@@ -25,7 +25,7 @@ const styles = theme => ({
     colorChecked: {},
     root: {
         flexGrow: 1,
-        
+
     },
     paper: {
         [theme.breakpoints.up('sm')]: {
@@ -109,9 +109,9 @@ class EditForm extends Component {
             state: '',
             note: '',
             tag: [],
+            err: ''
         };
         this.handleButtonPress = this.handleButtonPress.bind(this)
-        this.handleButtonRelease = this.handleButtonRelease.bind(this)
     }
 
     componentWillMount() {
@@ -155,13 +155,7 @@ class EditForm extends Component {
     }
 
     handleButtonPress() {
-        this.buttonPressTimer = setTimeout(() => this.setState({ hide: false }), 1500)
-        clearInterval(this.timerID);
-    }
-
-    handleButtonRelease() {
-        clearTimeout(this.buttonPressTimer);
-        this.timerID = setInterval(() => this.setState({ hide: true }), 1500)
+        this.setState({ hide: !this.state.hide })
     }
 
     //display multi
@@ -181,6 +175,26 @@ class EditForm extends Component {
         this.state.imgfile.splice(i, 1)
         this.setState({ files: this.state.files })
         this.setState({ imgfile: this.state.imgfile })
+    }
+
+    save = () => {
+        if (this.state.public) {
+            if (this.state.files.length > 0 && this.state.title !== '' && this.state.state !== '' && this.state.note !== '' && this.state.tag.length > 0) {
+                this.setState({
+                    err: ''
+                })
+                this.props.save(this.state)
+            } else {
+                this.setState({
+                    err: 'missing some Field'
+                })
+            }
+        } else {
+            this.setState({
+                err: ''
+            })
+            this.props.save(this.state)
+        }
     }
 
     render() {
@@ -212,10 +226,8 @@ class EditForm extends Component {
                                     {this.state.imgfile.map(im => (
                                         <GridListTile key={im} cols={1}>
                                             <img src={im} alt={im} className={classes.im}
-                                                onTouchStart={this.handleButtonPress}
-                                                onTouchEnd={this.handleButtonRelease}
-                                                onMouseDown={this.handleButtonPress}
-                                                onMouseUp={this.handleButtonRelease} />
+                                                onClick={this.handleButtonPress}
+                                            />
                                             {!this.state.hide ?
                                                 <GridListTileBar
                                                     titlePosition="top"
@@ -293,7 +305,7 @@ class EditForm extends Component {
                                 required={this.state.public}
                                 margin="normal"
                                 variant="outlined"
-                                
+
                             >
                                 {state.map((option, i) => (
                                     <MenuItem key={i} value={option}>
@@ -356,12 +368,13 @@ class EditForm extends Component {
                                 multiline
                             />
                             <Col xs='12'>
+                                <ErrMessage err={this.state.err} />
                                 <ErrMessage err={err} />
                                 <ErrMessage suc={success} />
                             </Col>
                             <Col xs='7'></Col>
                             <Col xs='5' align="right">
-                                <Button size="small" className={classes.button} onClick={() => this.props.save(this.state)}>
+                                <Button size="small" className={classes.button} onClick={() => this.save()}>
                                     <SaveIcon />
                                     Save
                                 </Button>

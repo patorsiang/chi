@@ -22,6 +22,7 @@ export const chooseChoice = (choice) => {
                     const safe = []
                     const tags = []
                     const themes = []
+
                     data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
                         if (res.data.safe) {
                             safe.push(res.data.safe)

@@ -98,7 +98,6 @@ class EditForm extends Component {
         super(props)
         this.state = {
             public: false,
-            text: 'Private',
             labelWidth: 0,
             imgfile: [],
             files: [],
@@ -110,10 +109,11 @@ class EditForm extends Component {
             state: '',
             note: '',
             tag: [],
-            tagString: ''
+            tagString: '',
+            delete: this.props.deleted,
+            err: ''
         };
         this.handleButtonPress = this.handleButtonPress.bind(this)
-        this.handleButtonRelease = this.handleButtonRelease.bind(this)
     }
 
     componentDidUpdate() {
@@ -130,24 +130,8 @@ class EditForm extends Component {
                         tagString: this.props.edit.data.tag.map(t => '#' + t).toString().replace(/,/g, ' '),
                         title: this.props.edit.data.title,
                         note: this.props.edit.data.note,
+                        public: this.props.edit.data.public,
                     })
-                }
-            }
-            if (this.props.edit.data.public !== null) {
-                if (this.props.edit.data.public) {
-                    if (this.props.edit.data.public !== this.state.public) {
-                        this.setState({
-                            public: this.props.edit.data.public,
-                            text: 'Public',
-                        })
-                    }
-                } else {
-                    if (this.props.edit.data.public !== this.state.public) {
-                        this.setState({
-                            public: this.props.edit.data.public,
-                            text: 'Private',
-                        })
-                    }
                 }
             }
             console.log(this.state);
@@ -155,12 +139,9 @@ class EditForm extends Component {
     }
 
     handleChange = name => event => {
+        console.log(event.target.checked);
+
         this.setState({ [name]: event.target.checked });
-        if (event.target.checked) {
-            this.setState({ text: 'Public' })
-        } else {
-            this.setState({ text: 'Private' })
-        }
     };
 
     handleChangeField = name => event => {
@@ -191,14 +172,28 @@ class EditForm extends Component {
         // console.log(diff[diff.length-1]);
     }
 
-    handleButtonPress() {
-        this.buttonPressTimer = setTimeout(() => this.setState({ hide: false }), 1500)
-        clearInterval(this.timerID);
+    save = () => {
+        if (this.state.public) {
+            if ((this.state.files.length > 0 || this.state.uploadedfiles.length > 0) && this.state.title !== '' && this.state.state !== '' && this.state.note !== '' && this.state.tag.length > 0) {
+                this.setState({
+                    err: ''
+                })
+                this.props.saveEdit(this.state)
+            } else {
+                this.setState({
+                    err: 'missing some Field'
+                })
+            }
+        } else {
+            this.setState({
+                err: ''
+            })
+            this.props.saveEdit(this.state)
+        }
     }
 
-    handleButtonRelease() {
-        clearTimeout(this.buttonPressTimer);
-        this.timerID = setInterval(() => this.setState({ hide: true }), 1500)
+    handleButtonPress() {
+        this.setState({ hide: !this.state.hide })
     }
 
     //display multi
@@ -251,17 +246,14 @@ class EditForm extends Component {
                                         }}
                                     />
                                 }
-                                label={this.state.text}
+                                label={this.state.public ? 'Public' : 'Private'}
                             />
                             <div className={classes.root}>
                                 <GridList cellHeight={160} cols={3}>
                                     {this.state.uploaded.map(im => (
                                         <GridListTile key={im} cols={1}>
                                             <img src={im} alt={im} className={classes.im}
-                                                onTouchStart={this.handleButtonPress}
-                                                onTouchEnd={this.handleButtonRelease}
-                                                onMouseDown={this.handleButtonPress}
-                                                onMouseUp={this.handleButtonRelease} />
+                                                onClick={this.handleButtonPress} />
                                             {!this.state.hide ?
                                                 <GridListTileBar
                                                     titlePosition="top"
@@ -282,10 +274,7 @@ class EditForm extends Component {
                                     {this.state.imgfile.map(im => (
                                         <GridListTile key={im} cols={1}>
                                             <img src={im} alt={im} className={classes.im}
-                                                onTouchStart={this.handleButtonPress}
-                                                onTouchEnd={this.handleButtonRelease}
-                                                onMouseDown={this.handleButtonPress}
-                                                onMouseUp={this.handleButtonRelease} />
+                                                onClick={this.handleButtonPress} />
                                             {!this.state.hide ?
                                                 <GridListTileBar
                                                     titlePosition="top"
@@ -429,6 +418,7 @@ class EditForm extends Component {
                                 multiline
                             />
                             <Col xs='12'>
+                                <ErrMessage err={this.state.err} />
                                 <ErrMessage err={err} />
                                 <ErrMessage suc={success} />
                             </Col>
@@ -438,7 +428,7 @@ class EditForm extends Component {
                                     <DeleteOutlineIcon />
                                     Delete
                                 </Button>
-                                <Button size="small" className={classes.button} onClick={() => this.props.saveEdit(this.state)}>
+                                <Button size="small" className={classes.button} onClick={() => this.save()}>
                                     <SaveIcon />
                                     Save
                                 </Button>
@@ -462,6 +452,7 @@ const mapStateToProps = (state) => {
         err: state.diary.err2,
         success: state.diary.success2,
         edit: state.diary.edit,
+        deleted: state.diary.delete
     }
 }
 
