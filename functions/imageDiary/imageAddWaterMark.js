@@ -22,7 +22,16 @@ exports.handler = (object) => {
     const storage = new Storage();
     const bucket = storage.bucket(bucketName)
 
-    if (!filePath.startsWith('center/')) {
+    if (!filePath.startsWith('WYHLMiznfHekKgd3qgQQfHTj6S82/')) {
+        if (!object.contentType.startsWith('image/')) {
+            console.log('This is not an image.')
+            return null
+        }
+    
+        if (!metadata.autoOrientNResize) {
+            console.log('This has not rotated yet')
+            return null
+        }
         console.log('This is not an image from center.')
         return mkdirp(tempLocalDir).then(() => {
             // Download file from bucket.

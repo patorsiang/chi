@@ -23,7 +23,7 @@ exports.UpdateTokenDiaryActivity = functions.firestore.document('diary/{diaryID}
 
 //analyze image
 const imageDiaryRotateNResizeModule = require('./imageDiary/imageFixBasic')
-exports.rotateUsingExif = functions.storage.object().onArchive(imageDiaryRotateNResizeModule.handler)
+exports.modifiedBasicImage = functions.storage.object().onFinalize(imageDiaryRotateNResizeModule.handler)
 
 const imageDiaryWaterMarkModule = require('./imageDiary/imageAddWaterMark')
 exports.addWaterMarkImage = functions.storage.object().onFinalize(imageDiaryWaterMarkModule.handler)
