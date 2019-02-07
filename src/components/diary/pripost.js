@@ -33,13 +33,13 @@ class Calendar extends Component {
     const { calendar,calendar1 } = this.refs;
     const { diary, focus, changeMenu } = this.props
     const { color } = this.state
-    $(calendar1).fullCalendar({
-    header: {
-      left: 'prevYear, prev',
-      center: 'title,',
-      right: 'today, next, nextYear'
-    },
-  });
+   // $(calendar1).fullCalendar({
+   // header: {
+   //   left: 'prevYear, prev',
+   //  center: 'title,',
+    //  right: 'today, next, nextYear'
+   // },
+ // });
     $(calendar).fullCalendar({
      
       events: diary.map((data, i) => {
@@ -67,17 +67,16 @@ class Calendar extends Component {
   render() {
     const { menu } = this.props
     return (
-<<<<<<< Updated upstream
       <div ref='calendar'>
         {menu === '/diary/edit' ? this.renderRedirect('/diary/edit') : null}
-=======
-      <div ref='calendar1'> 
-      <Link to="/diary/edit" style={{textDecoration: 'none'}}>
-        <div ref='calendar'>
         </div>
-      </Link>
->>>>>>> Stashed changes
-      </div>
+     // <div ref='calendar1'> 
+     //</div> <Link to="/diary/edit" style={{textDecoration: 'none'}}>
+      //  <div ref='calendar'>
+      //  </div>
+     // </Link>
+
+      
     );
   }
 
