@@ -238,9 +238,9 @@ class Header extends Component {
             <Typography variant="h6" color="inherit">
               <Link to="/" onClick={() => this.props.changeMenu("/")}><img src={logo} alt='CHI' className={classes.logo} /></Link>
             </Typography>
-            {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
-              <Fragment>
                 <div className={classes.search} style={{ width: '100%', marginLeft: 0 }}>
+                {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
+              <Fragment>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
                   </div>
@@ -253,6 +253,8 @@ class Header extends Component {
                     value={this.state.search}
                     onChange={this.handleChangeSearch}
                   />
+                  </Fragment>
+              : null}
                 </div>
                 {this.props.auth.uid ?
                   <IconButton
@@ -268,8 +270,6 @@ class Header extends Component {
                     fontWeight: "bold",
                     color: "white"
                   }}> Login </Link> </Button>}
-              </Fragment>
-              : null}
           </Toolbar>
         </AppBar>
         {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ?

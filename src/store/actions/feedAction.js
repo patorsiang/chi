@@ -111,7 +111,7 @@ export const chooseChoice = (choice) => {
                 }))
             })
                 .catch(error => dispatch({ type: 'SPECIAL_THEME', choice, result: [] }))
-            dispatch({ type: 'SPECIAL_THEME', choice, result: [] })
+                dispatch({ type: 'SPECIAL_THEME', choice, result: [] })
         }
     }
 }

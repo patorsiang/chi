@@ -56,10 +56,10 @@ exports.handler = (object) => {
         console.log(detections);
         
         metadata.safeAdult = detections.adult
-        metadata.safeMedical = detections.medical
-        metadata.safeSpoof = detections.spoof
-        metadata.safeViolence = detections.violence
-        metadata.safeRacy = detections.racy
+        // metadata.safeMedical = detections.medical
+        // metadata.safeSpoof = detections.spoof
+        // metadata.safeViolence = detections.violence
+        // metadata.safeRacy = detections.racy
 
         return bucket.upload(tempLocalFile, {
             destination: filePath,
