@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
+import {Badge, BottomNavigation, BottomNavigationAction} from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Redirect } from 'react-router-dom'
 import { changeMenu } from "../../store/actions/mapAction";
 import { connect } from 'react-redux'
+import { getNotiNum } from '../../store/actions/notiAction'
 
 const styles = {
     root: {
@@ -31,6 +31,10 @@ class Footer extends Component {
         }
     }
 
+    componentWillMount() {
+        this.props.getNotiNum()
+    }
+
     handleChange = (event, value) => {
         this.setState({ value })
         this.props.changeMenu(value)
@@ -52,7 +56,7 @@ class Footer extends Component {
                 <BottomNavigationAction className={classes.choice} label="Diary" value="/diary" icon={<FontAwesomeIcon icon={['fas', 'file-signature']} />} />
                 <BottomNavigationAction className={classes.choice} label="Feed" value="/feed" icon={<FontAwesomeIcon icon={['fas', 'newspaper']} />} />
                 <BottomNavigationAction className={classes.choice} label="Bookmark" value="/bookmark" icon={<FontAwesomeIcon icon={['fas', 'bookmark']} />} />
-                <BottomNavigationAction className={classes.choice} label="Notice" value="/notice" icon={<FontAwesomeIcon icon={['fas', 'bell']} />} />
+                <BottomNavigationAction className={classes.choice} label="Notice" value="/notice" icon={this.props.num > 0 ? <Badge badgeContent={this.props.num} color="secondary"><FontAwesomeIcon icon={['fas', 'bell']} /></Badge>: <FontAwesomeIcon icon={['fas', 'bell']} />} />
             </BottomNavigation>
         )
     }
@@ -65,12 +69,14 @@ Footer.propTypes = {
 const mapStateToProps = (state) => {
     return {
         Menu: state.map.Menu,
+        num: state.noti.num
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeMenu: Menu => dispatch(changeMenu(Menu))
+        changeMenu: Menu => dispatch(changeMenu(Menu)),
+        getNotiNum: () => dispatch(getNotiNum())
     }
 }
 

@@ -22,7 +22,7 @@ exports.handler = (data, context) => {
                         data: noti.data()
                     }
                 }
-            )
+            ).length
         }
     )
 }

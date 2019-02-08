@@ -29,3 +29,13 @@ export const checkRead = (id) => {
     }
 }
 
+export const getNotiNum = () => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase();
+
+        const getNum = firebase.functions().httpsCallable('getAllNoti')
+        getNum().then(result => {
+            dispatch({ type: 'NOTI_NUM', result: result.data })
+        })
+    }
+}

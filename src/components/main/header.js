@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
-import { Icon, Drawer, MenuItem, Menu, AppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, InputBase, Button } from '@material-ui/core';
+import { Badge, Icon, Drawer, MenuItem, Menu, AppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, InputBase, Button } from '@material-ui/core';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Search as SearchIcon } from '@material-ui/icons';
 import logo from '../../assets/logo.png'
 import { Link, Redirect } from 'react-router-dom'
@@ -14,6 +14,7 @@ import Avatar from 'react-avatar'
 import { signout } from '../../store/actions/authAction'
 import { changeMenu } from "../../store/actions/mapAction";
 import { searchElse } from "../../store/actions/feedAction";
+import { getNotiNum } from '../../store/actions/notiAction'
 import { isMobile, isTablet } from "react-device-detect";
 
 const drawerWidth = 240;
@@ -140,6 +141,10 @@ class Header extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
+  componentWillMount() {
+    this.props.getNotiNum()
+  }
+
   handleChange(event, t) {
     this.setState({ value: t });
     this.props.changeMenu(t)
@@ -238,9 +243,9 @@ class Header extends Component {
             <Typography variant="h6" color="inherit">
               <Link to="/" onClick={() => this.props.changeMenu("/")}><img src={logo} alt='CHI' className={classes.logo} /></Link>
             </Typography>
-                <div className={classes.search} style={{ width: '100%', marginLeft: 0 }}>
-                {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
-              <Fragment>
+            <div className={classes.search} style={{ width: '100%', marginLeft: 0 }}>
+              {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
+                <Fragment>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
                   </div>
@@ -253,23 +258,23 @@ class Header extends Component {
                     value={this.state.search}
                     onChange={this.handleChangeSearch}
                   />
-                  </Fragment>
-              : null}
-                </div>
-                {this.props.auth.uid ?
-                  <IconButton
-                    aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                    aria-haspopup="true"
-                    onClick={this.handleProfileMenuOpen}
-                    color="inherit"
-                    className={classes.but}
-                  >
-                    <Avatar name={profile.displayName} size="45" src={profile.Photo} round={true} />
-                  </IconButton>
-                  : <Button color="inherit" className={classes.but}><Link to="/upin" style={{
-                    fontWeight: "bold",
-                    color: "white"
-                  }}> Login </Link> </Button>}
+                </Fragment>
+                : null}
+            </div>
+            {this.props.auth.uid ?
+              <IconButton
+                aria-owns={isMenuOpen ? 'material-appbar' : undefined}
+                aria-haspopup="true"
+                onClick={this.handleProfileMenuOpen}
+                color="inherit"
+                className={classes.but}
+              >
+                <Avatar name={profile.displayName} size="45" src={profile.Photo} round={true} />
+              </IconButton>
+              : <Button color="inherit" className={classes.but}><Link to="/upin" style={{
+                fontWeight: "bold",
+                color: "white"
+              }}> Login </Link> </Button>}
           </Toolbar>
         </AppBar>
         {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ?
@@ -305,7 +310,9 @@ class Header extends Component {
                           <FontAwesomeIcon icon={['fas', 'newspaper']} /> :
                           index === 3 ?
                             <FontAwesomeIcon icon={['fas', 'bookmark']} /> :
-                            <FontAwesomeIcon icon={['fas', 'bell']} />}
+                            <Badge badgeContent={this.props.num} color="secondary">
+                              <FontAwesomeIcon icon={['fas', 'bell']} />
+                            </Badge>}
                   </ListItemIcon>
                   {index === 0 ? <ListItemText primary={'map'} /> : <ListItemText primary={text.replace('/', '  ')} />}
                 </ListItem>
@@ -356,6 +363,7 @@ const mapStateToProps = (state) => {
     auth: state.firebase.auth,
     profile: state.firebase.profile,
     Menu: state.map.Menu,
+    num: state.noti.num
   }
 }
 
@@ -365,6 +373,7 @@ const mapDispatchToProps = (dispatch) => {
     searchElse: valueSearch => dispatch(searchElse(valueSearch)),
     signout: () => dispatch(signout()),
     changeMenu: Menu => dispatch(changeMenu(Menu)),
+    getNotiNum: () => dispatch(getNotiNum())
   }
 }
 export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Header));
