@@ -81,6 +81,14 @@ class Choice extends Component {
         })
     }
 
+    componentDidUpdate(){
+        if (this.props.choice !== this.state.choice) {
+            this.setState({
+                choice: this.props.choice
+            })
+        }
+    }
+
     render() {
         const { classes, s } = this.props
         const { choice } = this.state
