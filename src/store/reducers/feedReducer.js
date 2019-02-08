@@ -6,14 +6,13 @@ const initState = {
 const bookReducer = (state, action) => {
     switch (action.type) {
         case 'SPECIAL_THEME':
-            state = { ...state, choice: action.choice, post: action.result}
+            state = { ...state, choice: action.choice, post: action.result }
             break;
-
         default:
             state = initState
             break;
     }
-    return state
+    return  state
 }
 
 export default bookReducer

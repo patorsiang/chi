@@ -90,64 +90,64 @@ class Choice extends Component {
             <Grid item xs={12} align='center'>
                 {choice === 'ALL' ?
                     <Tooltip title="All" aria-label="All" onClick={() => this.changeChoice("ALL")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active} > <AllIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active} > <AllIcon /> </Fab>
                     </Tooltip> : <Tooltip title="All" aria-label="All" onClick={() => this.changeChoice("ALL")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}> <AllIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}> <AllIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'PERSON' ?
                     <Tooltip title="Person" aria-label="Person" onClick={() => this.changeChoice("PERSON")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}> <PersonIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}> <PersonIcon /> </Fab>
                     </Tooltip>
                     : <Tooltip title="Person" aria-label="Person" onClick={() => this.changeChoice("PERSON")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}> <PersonIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}> <PersonIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'LOCATION' ?
                     <Tooltip title="Location" aria-label="Location" onClick={() => this.changeChoice("LOCATION")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}> <LocIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}> <LocIcon /> </Fab>
                     </Tooltip>
                     : <Tooltip title="Location" aria-label="Location" onClick={() => this.changeChoice("LOCATION")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}> <LocIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}> <LocIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'EVENT' ?
                     <Tooltip title="Event" aria-label="Event" onClick={() => this.changeChoice("EVENT")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}> <EventIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}> <EventIcon /> </Fab>
                     </Tooltip>
                     : <Tooltip title="Event" aria-label="Event" onClick={() => this.changeChoice("EVENT")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}> <EventIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}> <EventIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'WORK_OF_ART' ?
                     <Tooltip title="Art" aria-label="Art" onClick={() => this.changeChoice("WORK_OF_ART")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}> <ArtIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}> <ArtIcon /> </Fab>
                     </Tooltip>
                     : <Tooltip title="Art" aria-label="Art" onClick={() => this.changeChoice("WORK_OF_ART")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}> <ArtIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}> <ArtIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'CONSUMER_GOOD' ?
                     <Tooltip title="Consume_Good" aria-label="Consume_Good" onClick={() => this.changeChoice("CONSUMER_GOOD")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}> <ConsumeIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}> <ConsumeIcon /> </Fab>
                     </Tooltip>
                     : <Tooltip title="Consume_Good" aria-label="Consume_Good" onClick={() => this.changeChoice("CONSUMER_GOOD")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}> <ConsumeIcon /> </Fab>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}> <ConsumeIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'ORGANIZATION' ?
                     <Tooltip title="World_Heritage" aria-label="World_Heritage" onClick={() => this.changeChoice("ORGANIZATION")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}>
                             <img className={classes.img} alt="complex" src={img} />
                         </Fab>
                     </Tooltip>
                     : <Tooltip title="World_Heritage" aria-label="World_Heritage" onClick={() => this.changeChoice("ORGANIZATION")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}>
                             <img className={classes.img} alt="complex" src={img} />
                         </Fab>
                     </Tooltip>}
                 {choice === 'OTHER' ?
                     <Tooltip title="Other" aria-label="Other" onClick={() => this.changeChoice("OTHER")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.active}>
+                        <Fab variant="round" color="secondary" size={s} className={classes.active}>
                             <OtherIcon />
                         </Fab>
                     </Tooltip>
                     : <Tooltip title="Other" aria-label="Other" onClick={() => this.changeChoice("OTHER")}>
-                        <Fab variant="contained" color="secondary" size={s} className={classes.fab}>
+                        <Fab variant="round" color="secondary" size={s} className={classes.fab}>
                             <OtherIcon />
                         </Fab>
                     </Tooltip>}

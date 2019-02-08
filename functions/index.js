@@ -1,5 +1,5 @@
-// deploy: firebase deploy --only functions 
-// local test: firebase functions:shell 
+// deploy: firebase deploy --only functions
+// local test: firebase functions:shell
 // run serve: firebase serve --only functions
 // remove: firebase functions:delete Chi UpdateToken UpdateTokenDiaryActivity modifiedBasicImage addWaterMarkImage callCloudVision callCloudNaturalLanguage UpdateThemeDiaryActivity notifyToken notifyNewUser notificationRemove getAllDiary getDiary removeDiary getAllPost getAllNoti getUser getMetadata getAllBookPost getAllPostByWriter searchUserByName searchPostByTheme searchPostByTag searchPostByState searchPostByTitle searchPostByNote
 const functions = require('firebase-functions');
@@ -51,7 +51,7 @@ exports.notifyNewUser = functions.auth.user().onCreate(notificationNewUser.handl
 const notificationRemoveModule = require('./notification/remove')
 exports.notificationRemove = functions.firestore.document('notification/{noitificationID}').onWrite(notificationRemoveModule.handler)
 
-// api 
+// api
 const allDiaryModule = require('./api/allDiary')
 exports.getAllDiary = functions.https.onCall(allDiaryModule.handler)
 
@@ -97,3 +97,5 @@ exports.searchPostByTitle = functions.https.onCall(searchPostByTitleModule.handl
 const searchPostByNoteModule = require('./api/searchPostByNote')
 exports.searchPostByNote = functions.https.onCall(searchPostByNoteModule.handler)
 
+const searchPostByDateModule = require('./api/searchPostByDate')
+exports.searchPostByDate = functions.https.onCall(searchPostByDateModule.handler)

@@ -239,7 +239,7 @@ class PubPost extends Component {
                 <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
                 <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
                 <Typography variant="caption" align="right">  {post.data.ProTag ? post.data.ProTag.map(tag => ' #' + tag) : null} </Typography>
-                {post.data.ProTheme ? post.data.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.ProTheme.map(theme => theme === "ORGANIZATION" ? <Chip label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip label={theme} className={classes.chip} align="left" />) : null}
+                {post.data.ProTheme ? post.data.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.ProTheme.map((theme, i) => theme === "ORGANIZATION" ? <Chip key={i} label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip key={i} label={theme} className={classes.chip} align="left" />) : null}
               </CardContent>
             </Card>
           </Grid> : null}

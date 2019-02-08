@@ -14,7 +14,6 @@ export const changeState = (S) => {
 
         const searchState = firebase.functions().httpsCallable('searchPostByState')
         searchState({ state: S }).then(result => {
-            console.log(result.data);
             const userInfo = firebase.functions().httpsCallable('getUser')
             result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
                 data.data.idWriter = data.data.writer

@@ -13,6 +13,7 @@ import Co from '../../components/main/cooperate'
 import Avatar from 'react-avatar'
 import { signout } from '../../store/actions/authAction'
 import { changeMenu } from "../../store/actions/mapAction";
+import { searchElse } from "../../store/actions/feedAction";
 import { isMobile, isTablet } from "react-device-detect";
 
 const drawerWidth = 240;
@@ -153,7 +154,17 @@ class Header extends Component {
   };
 
   handleChangeSearch = event => {
-    this.props.searchMap(event.target.value)
+    if (window.location.pathname.includes('feed')) {
+      this.setState({
+        search: event.target.value
+      })
+      this.props.searchElse(event.target.value)
+    } else {
+      this.setState({
+        search: event.target.value
+      })
+      this.props.searchMap(event.target.value)
+    }
   };
 
   handleclick = () => {
@@ -182,7 +193,7 @@ class Header extends Component {
   }
 
   render() {
-    const { classes, theme, valueSearch, profile } = this.props;
+    const { classes, theme, profile } = this.props;
     const { anchorEl, value } = this.state;
     const isMenuOpen = Boolean(anchorEl);
 
@@ -227,7 +238,7 @@ class Header extends Component {
             <Typography variant="h6" color="inherit">
               <Link to="/" onClick={() => this.props.changeMenu("/")}><img src={logo} alt='CHI' className={classes.logo} /></Link>
             </Typography>
-            {window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
+            {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
               <Fragment>
                 <div className={classes.search} style={{ width: '100%', marginLeft: 0 }}>
                   <div className={classes.searchIcon}>
@@ -239,7 +250,7 @@ class Header extends Component {
                       root: classes.inputRoot,
                       input: classes.inputInput,
                     }}
-                    value={valueSearch}
+                    value={this.state.search}
                     onChange={this.handleChangeSearch}
                   />
                 </div>
@@ -284,7 +295,7 @@ class Header extends Component {
             <Divider />
             <List>
               {['/', '/diary', '/feed', '/bookmark', '/notice'].map((text, index) => (
-                <ListItem button key={text} selected={this.props.Menu === text} onClick={(event) => this.handleChange(event, text)}>
+                <ListItem button key={text} selected={window.location.pathname === text} onClick={(event) => this.handleChange(event, text)}>
                   <ListItemIcon>
                     {index === 0 ?
                       <FontAwesomeIcon icon={['fas', 'map-marked-alt']} /> :
@@ -351,6 +362,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     searchMap: valueSearch => dispatch(searchMap(valueSearch)),
+    searchElse: valueSearch => dispatch(searchElse(valueSearch)),
     signout: () => dispatch(signout()),
     changeMenu: Menu => dispatch(changeMenu(Menu)),
   }

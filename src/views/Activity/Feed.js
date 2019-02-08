@@ -57,7 +57,6 @@ class Feed extends Component {
 
     render() {
         const { classes, post } = this.props
-        console.log(post);
 
         return (
             <Home>
@@ -73,7 +72,7 @@ class Feed extends Component {
                         </div> :
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
-                                <Choice s={"big"} />
+                                <Choice s={"large"} />
                             </Grid>
                             <Grid container spacing={24} >
                                 {post.map((postData, i) => <Post key={i} no={i} sz={4} post={postData} />)}

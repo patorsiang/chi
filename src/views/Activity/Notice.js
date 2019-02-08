@@ -11,22 +11,34 @@ import { changeMenu } from "../../store/actions/mapAction";
 
 const styles = theme => ({
   root: {
-    marginTop: '5%',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '6%',
+      marginBottom: '2.5%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '20%',
+      marginBottom: '20%',
+    },
     width: '70%',
     backgroundColor: theme.palette.background.paper,
     marginLeft: '64px',
-    marginBottom: '10%'
   },
   mobileroot: {
-    marginTop: '5%',
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '6%',
+      marginBottom: '2.5%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '20%',
+      marginBottom: '20%',
+    },
     width: '100%',
     backgroundColor: theme.palette.background.paper,
-    marginBottom: '10%'
   },
 });
 class Notice extends Component {
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.changeMenu('/notice')
   }
 
@@ -42,10 +54,10 @@ class Notice extends Component {
         {this.props.auth.uid ?
           isMobile ?
             <List component="nav" className={classes.mobileroot} subheader={<ListSubheader component="div" align="left">Notification</ListSubheader>}>
-              <Notification noti = {noti}/>
+              <Notification noti={noti} />
             </List>
             : <List component="nav" className={classes.root} subheader={<ListSubheader component="div" align="left">Notification</ListSubheader>}>
-              <Notification noti = {noti}/>
+              <Notification noti={noti} />
             </List>
           : <Unregist name='Notice' />}
       </Home>

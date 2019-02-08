@@ -5,7 +5,7 @@ const initState = {
     edit: null,
     err2: null,
     success2: null,
-    delete: false
+    delete: false,
 }
 
 const diaryReducer = (state, action) => {

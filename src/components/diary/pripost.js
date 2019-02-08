@@ -30,7 +30,8 @@ class Calendar extends Component {
   }
 
   componentDidUpdate() {
-    const { calendar,calendar1 } = this.refs;
+    // const { calendar,calendar1 } = this.refs;
+    const { calendar } = this.refs;
     const { diary, focus, changeMenu } = this.props
     const { color } = this.state
    // $(calendar1).fullCalendar({
