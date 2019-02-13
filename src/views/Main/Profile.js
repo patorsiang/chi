@@ -39,7 +39,7 @@ const styles = theme => ({
         margin: '2.5% 0',
     },
     button: {
-        fontSize: '12px', 
+        fontSize: '12px',
         marginRight: theme.spacing.unit,
     },
     form: {
@@ -63,15 +63,15 @@ const styles = theme => ({
     },
     cssLabel: {
         '&$cssFocused': {
-          color: '#FF9933',
+            color: '#FF9933',
         },
-      },
-      cssFocused: {},
-      cssUnderline: {
+    },
+    cssFocused: {},
+    cssUnderline: {
         '&:after': {
-          borderBottomColor: '#FF9933',
+            borderBottomColor: '#FF9933',
         },
-      },
+    },
 })
 class Profile extends Component {
     constructor(props) {
@@ -89,7 +89,7 @@ class Profile extends Component {
         this.onDismiss = this.onDismiss.bind(this);
     }
 
-    componentDidMount(){
+    componentDidMount() {
         this.props.initial()
     }
 
@@ -101,7 +101,7 @@ class Profile extends Component {
 
     handleClick(e) {
         e.preventDefault();
-        this.setState({click: 1})
+        this.setState({ click: 1 })
         this.props.updateNameEmailDOB(this.state);
     }
 
@@ -116,12 +116,12 @@ class Profile extends Component {
         }
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         if (this.props.success) {
-            this.setState({success: this.props.success})
+            this.setState({ success: this.props.success })
         }
         if (this.state.click === 1) {
-            this.props.changeMenu('/profile')   
+            this.props.changeMenu('/profile')
         }
     }
 
@@ -145,7 +145,7 @@ class Profile extends Component {
                             </Col>
                             <Col xs="12" md="8">
                                 <Row className={classes.row}>
-                                    <img className={classes.image} alt="complex" src= {img} /> {' '}{profile.token}{' token'}
+                                    <img className={classes.image} alt="complex" src={img} /> {' '}{profile.token}{' token'}
                                 </Row>
                                 <Row>
                                     <Col className={classes.row}>
@@ -157,26 +157,26 @@ class Profile extends Component {
                                                 <ButtomPW onClick={() => this.props.updatePWD(this.state)} className={classes.button}>Change password</ButtomPW>
                                             </a>
                                         </Col> : null}
-                                    
+
                                 </Row>
                                 <form className={classes.form} method="post" onSubmit={(event) => this.handleClick(event)}>
                                     <FormControl margin="normal" required fullWidth>
                                         <InputLabel htmlFor="name" classes={{
-                                        root: classes.cssLabel,
-                                        focused: classes.cssFocused,
+                                            root: classes.cssLabel,
+                                            focused: classes.cssFocused,
                                         }}>
-                                        Display name</InputLabel>
+                                            Display name</InputLabel>
                                         <Input id="name" name="name" value={this.state.displayName} classes={{
-                                        underline: classes.cssUnderline,
+                                            underline: classes.cssUnderline,
                                         }} onChange={this.handleChange('displayName')} />
                                     </FormControl>
                                     <FormControl margin="normal" required fullWidth>
-                                        <InputLabel htmlFor="email"classes={{
-                                        root: classes.cssLabel,
-                                        focused: classes.cssFocused,
+                                        <InputLabel htmlFor="email" classes={{
+                                            root: classes.cssLabel,
+                                            focused: classes.cssFocused,
                                         }}>Email Address</InputLabel>
                                         <Input id="email" name="email" value={this.state.newEmail} classes={{
-                                        underline: classes.cssUnderline,
+                                            underline: classes.cssUnderline,
                                         }} onChange={this.handleChange('newEmail')} />
                                     </FormControl>
                                     <div style={{ marginTop: 10 }}>
@@ -195,7 +195,7 @@ class Profile extends Component {
                                     </div>
                                     <ErrMessage err={errprofile} />
                                     <ErrMessage err={erremail} />
-                                    <ErrMessage suc={this.state.success} path={'/profile'}/>
+                                    <ErrMessage suc={this.state.success} path={'/profile'} />
                                     <Button
                                         type="submit"
                                         variant="contained"
@@ -213,7 +213,7 @@ class Profile extends Component {
         )
     }
 }
-const mapStateToProps = (state) => {    
+const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
         profile: state.firebase.profile,

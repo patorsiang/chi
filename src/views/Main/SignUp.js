@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Button, CssBaseline, FormControl, Input, InputLabel, Paper, Typography, TextField } from '@material-ui/core';
-import { CustomInput, FormGroup, Label } from 'reactstrap';
+import { Container, CustomInput, FormGroup, Label } from 'reactstrap';
 import withStyles from '@material-ui/core/styles/withStyles';
 import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
@@ -11,7 +11,8 @@ import { connect } from 'react-redux'
 import { register, initial } from '../../store/actions/authAction'
 import { Redirect } from 'react-router-dom'
 import ErrMessage from '../../components/main/errMessage';
-import Avatar from '../../components/inup/avatar'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 const styles = theme => ({
   main: {
     width: 'auto',
@@ -40,7 +41,10 @@ const styles = theme => ({
     padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
 
   },
-  avatar: {
+  block: {
+    width: '10rem',
+    height: '10rem',
+    borderRadius: '50%',
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.secondary.main,
   },
@@ -67,7 +71,9 @@ const styles = theme => ({
       borderColor: '#FF9933',
     },
   },
-  notchedOutline: {},
+  start: {
+    fontSize: '10em',
+  },
 });
 
 class SignUp extends Component {
@@ -83,6 +89,7 @@ class SignUp extends Component {
       filename: '',
       err: null,
       progress: 0,
+      url: null
     };
     this.handleChangePhoto = this.handleChangePhoto.bind(this)
   }
@@ -97,7 +104,8 @@ class SignUp extends Component {
     if (event.target.files[0]) {
       this.setState({
         Photo: event.target.files[0],
-        filename: event.target.files[0].name
+        filename: event.target.files[0].name,
+        url: URL.createObjectURL(event.target.files[0])
       })
     }
   }
@@ -209,7 +217,12 @@ class SignUp extends Component {
               <Label for="exampleCustomFileBrowser" style={{ fontSize: 15, float: 'left' }}><b>Profile image:</b></Label>
               <CustomInput style={{ fontSize: 1 }} type="file" id="exampleCustomFileBrowser" accept="image/*" name="customFile" onChange={(event) => this.handleChangePhoto(event)} label={this.state.filename} />
             </FormGroup>
-            <Avatar ph={this.state.Photo} />
+            {this.state.url ?
+              <img className={classes.block} src={this.state.url} alt={this.state.filename} /> :
+              <Container fluid className={classes.start}>
+                <FontAwesomeIcon icon={['far', 'images']} />
+              </Container>
+            }
             <Button
               type="submit"
               fullWidth

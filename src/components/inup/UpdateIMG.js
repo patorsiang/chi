@@ -4,7 +4,6 @@ import { connect } from 'react-redux'
 import { Button, Paper } from '@material-ui/core';
 import { Container, Col, Row, CustomInput, FormGroup, Label, Button as ButtomPW } from 'reactstrap'
 import withStyles from '@material-ui/core/styles/withStyles';
-import AvatarE from './avatar'
 import Avatar from 'react-avatar'
 import { updateProImg } from '../../store/actions/authAction'
 import ErrMessage from '../../components/main/errMessage';
@@ -61,7 +60,7 @@ class UpdateIMG extends Component {
         this.state = {
             filename: null,
             Photo: null,
-            show: true,
+            url: null,
             menu: '/profile/img'
         }
     }
@@ -72,19 +71,6 @@ class UpdateIMG extends Component {
             this.setState({
                 Photo
             })
-            if (Photo) {
-                if (typeof (Photo) === 'object') {
-                    this.setState({ show: false })
-                } else {
-                    if (Photo.includes('facebook')) {
-                        this.setState({ show: true })
-                    } else {
-                        this.setState({ show: false })
-                    }
-                }
-            } else {
-                this.setState({ show: true })
-            }
         }
         if (this.props.menu) {
             this.props.changeMenu(this.props.menu);
@@ -97,6 +83,7 @@ class UpdateIMG extends Component {
             this.setState({
                 Photo: event.target.files[0],
                 filename: event.target.files[0].name,
+                url: URL.createObjectURL(event.target.files[0]),
                 show: false
             })
         }
@@ -116,7 +103,7 @@ class UpdateIMG extends Component {
 
     render() {
         const { classes, profile, errproimg, success } = this.props;
-        const { filename, Photo, show, menu } = this.state
+        const { filename, Photo, menu, url } = this.state
         return (
             <Home>
                 {this.renderRedirect(menu)}
@@ -132,17 +119,13 @@ class UpdateIMG extends Component {
                                 </Col>
                                 <Col>
                                     <Row className={classes.row}>
-                                        {show ?
-                                            <Avatar name={profile.displayName} src={Photo} round={true} className={classes.profileimg} />
-                                            :
-                                            <AvatarE ph={Photo} />
-                                        }
+                                        <Avatar name={profile.displayName} src={url ? url : Photo} round={true} className={classes.profileimg} />
                                     </Row>
                                     <Row>
                                         <form method="post" onSubmit={(event) => this.handleClick(event)} className={classes.form}>
-                                        <Col xs='5'>
-                                            <Label for="exampleCustomFileBrowser" style={{ fontSize: '16px', float: 'left' }}><b>Profile image</b></Label>
-                                        </Col>
+                                            <Col xs='5'>
+                                                <Label for="exampleCustomFileBrowser" style={{ fontSize: '16px', float: 'left' }}><b>Profile image</b></Label>
+                                            </Col>
                                             <FormGroup className={classes.input}>
                                                 <CustomInput type="file" id="exampleCustomFileBrowser" accept="image/*" name="customFile" onChange={(event) => this.handleChangePhoto(event)} label={filename} />
                                             </FormGroup>
@@ -182,7 +165,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        updateProImg: () => dispatch(updateProImg()),
+        updateProImg: (S) => dispatch(updateProImg(S)),
         changeMenu: Menu => dispatch(changeMenu(Menu))
     }
 }

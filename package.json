@@ -22,7 +22,6 @@
     "react": "^16.6.3",
     "react-agenda": "^0.0.8",
     "react-avatar": "^3.4.6",
-    "react-avatar-editor": "^11.0.4",
     "react-big-calendar": "^0.20.3",
     "react-big-scheduler": "^0.2.5",
     "react-calendar": "^2.18.1",
