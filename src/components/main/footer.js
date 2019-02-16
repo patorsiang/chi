@@ -1,27 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import {Badge, BottomNavigation, BottomNavigationAction} from '@material-ui/core';
+import { Badge, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Redirect } from 'react-router-dom'
 import { changeMenu } from "../../store/actions/mapAction";
 import { connect } from 'react-redux'
 import { getNotiNum } from '../../store/actions/notiAction'
-import Background from '../../assets/bg.jpg'
+// import Background from '../../assets/bg.jpg'
 
 const styles = {
     root: {
         width: '100%',
         position: 'fixed',
         bottom: 0,
-        // backgroundColor: 'rgb(162,224,120)',
-        backgroundImage: `url( ${Background} )`,
-        color: 'green',
+        backgroundColor: 'rgb(98,12,7)',
+        // backgroundImage: `url( ${Background} )`,
         fontSize: '1.5em',
     },
     choice: {
+        color: 'white',
         minWidth: '0 !important',
         padding: '0 !important',
+        "&$selected": {
+            color: 'rgb(233,176,106)',
+        }
+    },
+    selected: {
+        color: 'rgb(233,176,106)',
     }
 }
 
@@ -54,11 +60,27 @@ class Footer extends Component {
         return (
             <BottomNavigation value={value} onChange={this.handleChange} className={classes.root} showLabels>
                 {this.renderRedirect(value)}
-                <BottomNavigationAction className={classes.choice} label="Map" value="/" icon={<FontAwesomeIcon icon={['fas', 'map-marked-alt']} />} />
-                <BottomNavigationAction className={classes.choice} label="Diary" value="/diary" icon={<FontAwesomeIcon icon={['fas', 'file-signature']} />} />
-                <BottomNavigationAction className={classes.choice} label="Feed" value="/feed" icon={<FontAwesomeIcon icon={['fas', 'newspaper']} />} />
-                <BottomNavigationAction className={classes.choice} label="Bookmark" value="/bookmark" icon={<FontAwesomeIcon icon={['fas', 'bookmark']} />} />
-                <BottomNavigationAction className={classes.choice} label="Notice" value="/notice" icon={this.props.num > 0 ? <Badge badgeContent={this.props.num} color="secondary"><FontAwesomeIcon icon={['fas', 'bell']} /></Badge>: <FontAwesomeIcon icon={['fas', 'bell']} />} />
+                <BottomNavigationAction
+                    classes={{
+                        root: classes.choice,
+                        selected: classes.selected
+                    }} label="Map" value="/" icon={<FontAwesomeIcon icon={['fas', 'map-marked-alt']} />} />
+                <BottomNavigationAction classes={{
+                    root: classes.choice,
+                    selected: classes.selected
+                }} label="Diary" value="/diary" icon={<FontAwesomeIcon icon={['fas', 'file-signature']} />} />
+                <BottomNavigationAction classes={{
+                    root: classes.choice,
+                    selected: classes.selected
+                }} label="Feed" value="/feed" icon={<FontAwesomeIcon icon={['fas', 'newspaper']} />} />
+                <BottomNavigationAction classes={{
+                    root: classes.choice,
+                    selected: classes.selected
+                }} label="Bookmark" value="/bookmark" icon={<FontAwesomeIcon icon={['fas', 'bookmark']} />} />
+                <BottomNavigationAction classes={{
+                    root: classes.choice,
+                    selected: classes.selected
+                }} label="Notice" value="/notice" icon={this.props.num > 0 ? <Badge badgeContent={this.props.num} color="secondary"><FontAwesomeIcon icon={['fas', 'bell']} /></Badge> : <FontAwesomeIcon icon={['fas', 'bell']} />} />
             </BottomNavigation>
         )
     }

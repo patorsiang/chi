@@ -35,9 +35,9 @@ const styles = theme => ({
   search: {
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: 'yellowgreen',
+    backgroundColor: '#FFF',
     '&:hover': {
-      backgroundColor: 'olivedrab'
+      backgroundColor: '#FC3'
     },
     marginRight: theme.spacing.unit * 2,
     width: '100%',
@@ -54,9 +54,10 @@ const styles = theme => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    color: 'rgb(98,12,7)'
   },
   inputRoot: {
-    color: 'inherit',
+    color: 'rgb(98,12,7)',
     width: '100%',
   },
   inputInput: {
