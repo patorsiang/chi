@@ -8,11 +8,27 @@ import { withStyles } from '@material-ui/core/styles';
 import Post from '../../components/diary/pubpost'
 const styles = theme => ({
     root: {
+        [theme.breakpoints.up('sm')]: {
+            marginTop: '6%',
+            marginBottom: '2.5%',
+        },
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '20%',
+            marginBottom: '20%',
+        },
         marginTop: '10%',
         flexGrow: 1,
         marginLeft: '64px',
     },
     rootmod: {
+        [theme.breakpoints.up('sm')]: {
+            marginTop: '6%',
+            marginBottom: '2.5%',
+        },
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '20%',
+            marginBottom: '20%',
+        },
         marginTop: '10%',
         flexGrow: 1,
     },

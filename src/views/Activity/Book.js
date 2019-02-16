@@ -11,11 +11,27 @@ import { changeMenu } from '../../store/actions/mapAction'
 import { Link } from 'react-router-dom'
 const styles = theme => ({
   root: {
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '6%',
+      marginBottom: '2.5%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '20%',
+      marginBottom: '20%',
+    },
     marginTop: '3%',
     flexGrow: 1,
     marginLeft: '64px',
   },
   rootmod: {
+    [theme.breakpoints.up('sm')]: {
+      marginTop: '6%',
+      marginBottom: '2.5%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginTop: '20%',
+      marginBottom: '20%',
+    },
     marginTop: '5%',
     flexGrow: 1,
   },
