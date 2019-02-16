@@ -31,38 +31,57 @@ const styles = theme => ({
 
 
 class Book extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      booklist: null
+    }
+  }
+
   componentWillMount() {
     this.props.getBook()
   }
 
+  componentDidUpdate() {
+    if (this.props.book.length > 0) {
+      window.localStorage.setItem('book', JSON.stringify(this.props.book))
+    }
+    if (!this.state.booklist) {
+      this.setState({
+        booklist: JSON.parse(window.localStorage.getItem('book'))
+      })
+    }
+  }
+
   render() {
-    const { classes, book, changeMenu } = this.props
+    const { booklist } = this.state
+    const { classes, changeMenu } = this.props
     return (
       <Home>
         {this.props.auth.uid ?
           isMobile ?
             <div className={classes.rootmod}>
               <Grid container spacing={16}>
-                {book.map(b =>
-                  <Grid item xs={6}>
+                {booklist ? booklist.map((b, i) =>
+                  <Grid item xs={6} key={i}>
                     <Link to='/acheive'>
                       <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
                         <img className={classes.img} alt="complex" src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
-                  </Grid>)}
+                  </Grid>) : null}
               </Grid>
             </div> :
             <div className={classes.root}>
               <Grid container spacing={24}>
-                {book.map(b =>
-                  <Grid item xs={3}>
+                {booklist ? booklist.map((b, i) =>
+                  <Grid item xs={3} key={i}>
                     <Link to='/acheive'>
                       <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
                         <img className={classes.img} alt="complex" src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
-                  </Grid>)}
+                  </Grid>) : null}
               </Grid>
             </div>
           : <Unregist name='Book' />}
