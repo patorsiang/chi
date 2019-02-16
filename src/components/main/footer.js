@@ -7,13 +7,15 @@ import { Redirect } from 'react-router-dom'
 import { changeMenu } from "../../store/actions/mapAction";
 import { connect } from 'react-redux'
 import { getNotiNum } from '../../store/actions/notiAction'
+import Background from '../../assets/bg.jpg'
 
 const styles = {
     root: {
         width: '100%',
         position: 'fixed',
         bottom: 0,
-        backgroundColor: 'rgb(162,224,120)',
+        // backgroundColor: 'rgb(162,224,120)',
+        backgroundImage: `url( ${Background} )`,
         color: 'green',
         fontSize: '1.5em',
     },

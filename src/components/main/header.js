@@ -16,6 +16,7 @@ import { changeMenu } from "../../store/actions/mapAction";
 import { searchElse } from "../../store/actions/feedAction";
 import { getNotiNum } from '../../store/actions/notiAction'
 import { isMobile, isTablet } from "react-device-detect";
+import Background from '../../assets/bg.jpg'
 
 const drawerWidth = 240;
 
@@ -75,7 +76,8 @@ const styles = theme => ({
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    backgroundColor: 'rgb(162,224,120)'
+    // backgroundColor: 'rgb(162,224,120)'
+    backgroundImage: `url( ${Background} )`,
   },
   appBarShift: {
     marginLeft: drawerWidth,
