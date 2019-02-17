@@ -62,42 +62,42 @@ class Book extends Component {
     if (this.props.book.length > 0) {
       window.localStorage.setItem('book', JSON.stringify(this.props.book))
     }
-    if (!this.state.booklist) {
-      this.setState({
+    if (!this.state.booklist && JSON.parse(window.localStorage.getItem('book'))) {
+      this.setState({ 
         booklist: JSON.parse(window.localStorage.getItem('book'))
       })
     }
   }
 
   render() {
-    const { booklist } = this.state
-    const { classes, changeMenu } = this.props
+    // const { booklist } = this.state
+    const { classes, changeMenu, book } = this.props
     return (
       <Home>
         {this.props.auth.uid ?
           isMobile ?
             <div className={classes.rootmod}>
               <Grid container spacing={16}>
-                {booklist ? booklist.map((b, i) =>
+                {book.map((b, i) =>
                   <Grid item xs={6} key={i}>
                     <Link to='/acheive'>
                       <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
                         <img className={classes.img} alt="complex" src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
-                  </Grid>) : null}
+                  </Grid>)}
               </Grid>
             </div> :
             <div className={classes.root}>
               <Grid container spacing={24}>
-                {booklist ? booklist.map((b, i) =>
+                {book.map((b, i) =>
                   <Grid item xs={3} key={i}>
                     <Link to='/acheive'>
                       <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
                         <img className={classes.img} alt="complex" src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
-                  </Grid>) : null}
+                  </Grid>)}
               </Grid>
             </div>
           : <Unregist name='Book' />}
