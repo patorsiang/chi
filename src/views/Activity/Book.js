@@ -47,31 +47,15 @@ const styles = theme => ({
 
 
 class Book extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      booklist: null
-    }
-  }
-
   componentWillMount() {
     this.props.getBook()
-  }
-
-  componentDidUpdate() {
-    if (this.props.book.length > 0) {
-      window.localStorage.setItem('book', JSON.stringify(this.props.book))
-    }
-    if (!this.state.booklist && JSON.parse(window.localStorage.getItem('book'))) {
-      this.setState({ 
-        booklist: JSON.parse(window.localStorage.getItem('book'))
-      })
-    }
   }
 
   render() {
     // const { booklist } = this.state
     const { classes, changeMenu, book } = this.props
+    console.log(book);
+
     return (
       <Home>
         {this.props.auth.uid ?

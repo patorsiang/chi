@@ -34,7 +34,7 @@ class Map extends Component {
     }
 
     componentWillMount(){
-        this.props.changeState(['Andaman and Nicobar Islands']);
+        this.props.changeState(['Andaman and Nicobar Islands'])
     }
 
     handleClick(s) {
@@ -1576,7 +1576,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        changeState: valueState => dispatch(changeState(valueState))
+        changeState: valueState => dispatch(changeState(valueState)),
     }
 }
 

@@ -5,6 +5,7 @@ import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
 import { isMobile } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
+import { getBook } from '../../store/actions/bookAction'
 import Post from '../../components/diary/pubpost'
 const styles = theme => ({
     root: {
@@ -44,29 +45,24 @@ const styles = theme => ({
 
 
 class Acheive extends Component {
-    constructor(props) {
-        super(props)
-        this.state = {
-            booklist: JSON.parse(window.localStorage.getItem('book'))
-        }
+    componentWillMount() {
+        this.props.getBook()
     }
-
     render() {
-        const { booklist } = this.state
-        const { classes } = this.props
+        const { classes, book } = this.props
         return (
             <Home>
                 {this.props.auth.uid ?
                     isMobile ?
                         <div className={classes.rootmod}>
                             <Grid container spacing={16}>
-                                {booklist.map((b, i) =>
+                                {book.map((b, i) =>
                                     <Post sz={12} key={i} no={i} post={b} />)}
                             </Grid>
                         </div> :
                         <div className={classes.root}>
                             <Grid container spacing={24}>
-                                {booklist.map((b, i) =>
+                                {book.map((b, i) =>
                                     <Fragment>
                                         <Grid item xs={3}></Grid>
                                         <Post sz={6} key={i} no={i} post={b} />
@@ -83,7 +79,14 @@ class Acheive extends Component {
 const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
+        book: state.book.post
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Acheive))
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getBook: () => dispatch(getBook()),
+    }
+}
+
+export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Acheive))
