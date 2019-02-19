@@ -17,7 +17,7 @@ export const getBook = () => {
             result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
                 data.data.idWriter = data.data.writer
                 data.data.writer = writer.data
-                data.data.photo.map(photo => {
+                data.data.photo.forEach(photo => {
                     const httpsReference = firebase.storage().refFromURL(photo)
                     // Create file metadata to update
                     var newMetadata = {
@@ -27,7 +27,7 @@ export const getBook = () => {
                     // Update metadata properties
                     httpsReference.updateMetadata(newMetadata).then(function (metadata) {
                         // Updated metadata for 'images/forest.jpg' is returned in the Promise
-                        console.log(metadata);
+                        // console.log(metadata);
                     }).catch(function (error) {
                         // Uh-oh, an error occurred!
                     });
