@@ -54,7 +54,7 @@ class Book extends Component {
   render() {
     // const { booklist } = this.state
     const { classes, changeMenu, book } = this.props
-    console.log(book);
+    // console.log(book);
 
     return (
       <Home>
@@ -66,7 +66,7 @@ class Book extends Component {
                   <Grid item xs={6} key={i}>
                     <Link to='/acheive'>
                       <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
-                        <img className={classes.img} alt="complex" src={b.data.photo[0]} />
+                        <img className={classes.img} alt={b.data.title} src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
                   </Grid>)}
@@ -78,7 +78,7 @@ class Book extends Component {
                   <Grid item xs={3} key={i}>
                     <Link to='/acheive'>
                       <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
-                        <img className={classes.img} alt="complex" src={b.data.photo[0]} />
+                        <img className={classes.img} alt={b.data.title} src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
                   </Grid>)}

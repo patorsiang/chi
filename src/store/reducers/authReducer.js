@@ -5,7 +5,7 @@ const initState = {
     erremail: null,
     success: null,
     errproimg: null,
-    post: []
+    // post: []
 }
 
 const authReducer = (state, action) => {

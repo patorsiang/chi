@@ -13,9 +13,25 @@ export const getBook = () => {
         const searchBook = firebase.functions().httpsCallable('getAllBookPost')
         searchBook().then(result => {
             const userInfo = firebase.functions().httpsCallable('getUser')
+            
             result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
                 data.data.idWriter = data.data.writer
                 data.data.writer = writer.data
+                data.data.photo.map(photo => {
+                    const httpsReference = firebase.storage().refFromURL(photo)
+                    // Create file metadata to update
+                    var newMetadata = {
+                        cacheControl: 'public,max-age=10000000000',
+                    }
+
+                    // Update metadata properties
+                    httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                        // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                        console.log(metadata);
+                    }).catch(function (error) {
+                        // Uh-oh, an error occurred!
+                    });
+                })
                 return data.data
             }).then(data => {
                 const metadata = firebase.functions().httpsCallable('getMetadata')
