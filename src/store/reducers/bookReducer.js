@@ -8,7 +8,7 @@ const bookReducer = (state, action) => {
             // In the following line, you should include the prefixes of implementations you want to test.
             const inDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
-            var openRequest = inDB.open('chi_db', 1);
+            var openRequest = inDB.open('chi_db_book');
             openRequest.onupgradeneeded = function (e) {
                 const db = e.target.result;
                 if (!db.objectStoreNames.contains('book')) {

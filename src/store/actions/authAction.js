@@ -125,6 +125,29 @@ export const signin = (credentials) => {
 
 export const signout = () => {
     return (dispatch, getState, { getFirebase }) => {
+        const inDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        var openRequest = inDB.open('chi_db_book');
+        var openRequest2 = inDB.open('chi_db_noti');
+        openRequest.onsuccess = function (e) {
+            const db = e.target.result;
+            const transaction = db.transaction(['book'], 'readwrite');
+            const store = transaction.objectStore('book');
+            store.clear();
+        }
+        openRequest.onerror = function (e) {
+            console.log('onerror!');
+            console.dir(e);
+        };
+        openRequest2.onsuccess = function (e) {
+            const db = e.target.result;
+            const transaction = db.transaction(['noti'], 'readwrite');
+            const store = transaction.objectStore('noti');
+            store.clear();
+        }
+        openRequest2.onerror = function (e) {
+            console.log('onerror!');
+            console.dir(e);
+        };
         const firebase = getFirebase()
         firebase.auth().signOut().then(() => {
             dispatch({ type: 'SIGNOUT_SUCCESS' })
