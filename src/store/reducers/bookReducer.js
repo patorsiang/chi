@@ -22,42 +22,28 @@ const bookReducer = (state, action) => {
                 const db = e.target.result;
                 const transaction = db.transaction(['book'], 'readwrite');
                 const store = transaction.objectStore('book');
-                action.result.forEach(element => {
-                    const item = {
-                        id: element.id,
-                        data: JSON.stringify(element.data)
-                    }
-                    const req = store.add(item);
-                    // req.onerror = function (e) {
-                    //     console.log('Error', e.target.error.name);
-                    // };
-                    req.onsuccess = function (e) {
-                        console.log('Woot! Did it');
-                    };
-                });
-                const object_store = transaction.objectStore("book");
-                const request = object_store.openCursor();
+                if (action.result.length > 0) {
+                    store.clear();
+                    action.result.forEach(element => {
+                        const item = {
+                            id: element.id,
+                            data: JSON.stringify(element.data)
+                        }
+                        store.add(item);
+                    });
+                }
+                
+                const request = store.getAll();
                 // request.onerror = function (event) {
                 //     console.log("error fetching data");
                 // };
-                request.onsuccess = (event) => {
-                    const cursor = event.target.result;
-                    if (cursor) {
-                        const id = cursor.value.id;
-                        const data = JSON.parse(cursor.value.data);
-                        const idlist = initState.post.map(p => { return p.id })
-                        if (!idlist.includes(id)) {
-                            initState.post.push({
-                                id,
-                                data
-                            })
+                request.onsuccess = function (event) {
+                    initState.post = event.target.result.map(post => {
+                        return {
+                            id: post.id,
+                            data: JSON.parse(post.data)
                         }
-                        cursor.continue();
-                    }
-                    else {
-                        // no more results
-                        state = initState
-                    }
+                    })
                 };
             };
             openRequest.onerror = function (e) {
