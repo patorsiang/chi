@@ -59,6 +59,9 @@ const notiReducer = (state, action) => {
             const inDB2 = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
             // (Mozilla has never prefixed these objects, so we don't need window.mozIDB*)
             var openRequest2 = inDB2.open('chi_db_noti');
+            if (action.result > 0) {
+                initState.num = action.result
+            }
             openRequest2.onsuccess = function (e) {
                 // console.log('running onsuccess');
                 const db = e.target.result;

@@ -3,7 +3,7 @@ import Home from '../../layouts/Home'
 import { connect } from 'react-redux'
 import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
-import { isMobile } from "react-device-detect";
+import { isMobileOnly, isTablet } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
 import Choice from '../../components/feed/themeChoice'
 import { chooseChoice } from '../../store/actions/feedAction'
@@ -61,7 +61,7 @@ class Feed extends Component {
         return (
             <Home>
                 {this.props.auth.uid ?
-                    isMobile ?
+                    isMobileOnly ?
                         <div className={classes.rootmod}>
                             <Grid container spacing={16} className={classes.main}>
                                 <Choice s={"small"} />
@@ -70,6 +70,15 @@ class Feed extends Component {
                                 {post.map((postData, i) => <Post key={i} no={i} sz={12} post={postData} />)}
                             </Grid>
                         </div> :
+                        isTablet ? 
+                            <div className={classes.rootmod}>
+                                <Grid container spacing={16} className={classes.main}>
+                                    <Choice s={"small"} />
+                                </Grid>
+                                <Grid container spacing={24} >
+                                    {post.map((postData, i) => <Post key={i} no={i} sz={6} post={postData} />)}
+                                </Grid>
+                            </div> :
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
                                 <Choice s={"large"} />

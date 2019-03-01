@@ -139,7 +139,7 @@ class PubPost extends Component {
 
   report(id) {
     this.props.report(id)
-    this.setState({ open: false, report: true});
+    this.setState({ open: false, report: true });
   };
 
   render() {
@@ -160,7 +160,8 @@ class PubPost extends Component {
     });
     return (
       <Fragment>
-          {!report ? <Grid item xs={sz} className={classes.root} key={no}>
+        {!report ?
+          <Grid item xs={sz} className={classes.root} key={no}>
             <Card key={no} className={classes.card} >
               <CardHeader
                 avatar={
