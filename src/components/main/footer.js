@@ -4,9 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Badge, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Redirect } from 'react-router-dom'
-import { changeMenu } from "../../store/actions/mapAction";
-import { connect } from 'react-redux'
-import { getNotiNum } from '../../store/actions/notiAction'
+// import { connect } from 'react-redux'
 // import Background from '../../assets/bg.jpg'
 
 const styles = {
@@ -90,19 +88,5 @@ Footer.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => {
-    return {
-        Menu: state.map.Menu,
-        num: state.noti.num
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeMenu: Menu => dispatch(changeMenu(Menu)),
-        getNotiNum: () => dispatch(getNotiNum())
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Footer))
+export default withStyles(styles)(Footer)
 

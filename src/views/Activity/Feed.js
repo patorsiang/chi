@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
 import { isMobileOnly, isTablet } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
 import Choice from '../../components/feed/themeChoice'
-import { chooseChoice } from '../../store/actions/feedAction'
 import Post from '../../components/diary/pubpost'
 
 const styles = theme => ({
@@ -93,18 +92,4 @@ class Feed extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-        post: state.feed.post,
-        choice: state.feed.choice,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        chooseChoice: Menu => dispatch(chooseChoice(Menu)),
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Feed))
+export default withStyles(styles)(Feed)

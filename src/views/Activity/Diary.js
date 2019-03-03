@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import Home from '../../layouts/Home'
 import Unregist from '../../components/main/unregist'
 import { Grid, Fab, Tooltip } from '@material-ui/core/'
@@ -7,8 +7,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { isMobile } from "react-device-detect";
 import { Link } from "react-router-dom";
 import AddIcon from '@material-ui/icons/Add';
-import { changeMenu } from "../../store/actions/mapAction";
-import { getDiary } from "../../store/actions/diaryAction";
 import PriPost from '../../components/diary/pripost'
 
 const styles = theme => ({
@@ -94,19 +92,4 @@ class Diary extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-        diary: state.diary.diary,
-        edit: state.diary.edit,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeMenu: Menu => dispatch(changeMenu(Menu)),
-        getDiary: () => dispatch(getDiary())
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Diary))
+export default withStyles(styles)(Diary)

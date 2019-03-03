@@ -5,10 +5,9 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
 import Co from '../../components/main/cooperate'
-import { Redirect, Link } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
+// import { connect } from 'react-redux'
 import { Button, Container, Row, Col } from 'reactstrap';
-import { signinwithfb } from '../../store/actions/authAction'
 import ErrMessage from '../../components/main/errMessage';
 
 const styles = theme => ({
@@ -66,15 +65,6 @@ class InUp extends Component {
     this.state = { err: null };
   }
 
-  renderRedirect = () => {
-    if (this.props.auth.uid) {
-      if (this.props.auth.email && !this.props.auth.emailVerified) {
-        window.open('https://www.' + this.props.auth.email.split("@")[1], '_blank');
-      }
-      return <Redirect to={'/'} />
-    }
-  }
-
   signinwithfb = () => {
     this.props.signinwithfb()
     this.setState({ err: this.props.err })
@@ -84,8 +74,7 @@ class InUp extends Component {
     const { classes } = this.props;
     const { err } = this.state;
     return (
-      <main className={classes.main}>
-        {this.renderRedirect()}
+      <main className={classes.main}>e
         <Header />
         <CssBaseline />
         <Paper className={classes.paper}>
@@ -131,17 +120,5 @@ InUp.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.firebase.auth,
-    err: state.auth.errsignin,
-  }
-}
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signinwithfb: () => dispatch(signinwithfb())
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(InUp));
+export default withStyles(styles)(InUp);

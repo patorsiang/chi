@@ -5,9 +5,8 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
 import Co from '../../components/main/cooperate'
-import { Redirect, Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { signin, initial } from '../../store/actions/authAction'
+import { Link } from 'react-router-dom'
+// import { connect } from 'react-redux'
 import ErrMessage from '../../components/main/errMessage';
 
 const styles = theme => ({
@@ -81,10 +80,6 @@ class SignIn extends Component {
     };
   }
 
-  componentDidMount(){
-    this.props.initial()
-  }
-
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value,
@@ -96,20 +91,10 @@ class SignIn extends Component {
     this.props.signin(this.state)
   }
 
-  renderRedirect = () => {
-    if (typeof (this.props.auth.uid) !== 'undefined') {
-      if (this.props.auth.email && !this.props.auth.emailVerified) {
-        window.open('https://www.' + this.props.auth.email.split("@")[1], '_blank');
-      }
-      return <Redirect to={'/'} />
-    }
-  }
-
   render() {
     const { classes, err } = this.props;
     return (
       <main className={classes.main}>
-        {this.renderRedirect()}
         <Header />
         <CssBaseline />
         <Paper className={classes.paper}>
@@ -168,18 +153,4 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.firebase.auth,
-    err: state.auth.errsignin,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    signin: user => dispatch(signin(user)),
-    initial: () => dispatch(initial())
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SignIn));
+export default withStyles(styles)(SignIn);

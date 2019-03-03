@@ -1,11 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import Home from '../../layouts/Home'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
 import { isMobile } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
-import { getBook } from '../../store/actions/bookAction'
 import Post from '../../components/diary/pubpost'
 const styles = theme => ({
     root: {
@@ -76,17 +75,4 @@ class Acheive extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-        book: state.book.post
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getBook: () => dispatch(getBook()),
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Acheive))
+export default withStyles(styles)(Acheive)

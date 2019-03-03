@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 //import map from '../assets/map.svg';
 import { withStyles } from '@material-ui/core/styles';
 import {Button} from 'reactstrap'
-import { connect } from 'react-redux'
-import { changeState } from '../../store/actions/mapAction'
+// import { connect } from 'react-redux'
 import { scroller } from 'react-scroll'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -58,18 +57,5 @@ class Result extends Component {
 Result.propTypes = {
     classes: PropTypes.object.isRequired,
 };
-const mapStateToProps = (state) => {
-    return {
-        valueState: state.map.valueState,
-        search: state.map.search,
-        Query: state.map.Query,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeState: valueState => dispatch(changeState(valueState))
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Result))
+export default withStyles(styles)(Result)

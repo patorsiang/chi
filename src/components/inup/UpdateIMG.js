@@ -1,14 +1,12 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import { Button, Paper } from '@material-ui/core';
 import { Container, Col, Row, CustomInput, FormGroup, Label, Button as ButtomPW } from 'reactstrap'
 import withStyles from '@material-ui/core/styles/withStyles';
 import Avatar from 'react-avatar'
-import { updateProImg } from '../../store/actions/authAction'
 import ErrMessage from '../../components/main/errMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { changeMenu } from "../../store/actions/mapAction";
 import { Redirect } from 'react-router-dom'
 
 const styles = theme => ({
@@ -152,22 +150,4 @@ class UpdateIMG extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-        profile: state.firebase.profile,
-        errproimg: state.auth.errproimg,
-        erremail: state.auth.erremail,
-        success: state.auth.success,
-        menu: state.map.Menu,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updateProImg: (S) => dispatch(updateProImg(S)),
-        changeMenu: Menu => dispatch(changeMenu(Menu))
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(UpdateIMG));
+export default withStyles(styles)(UpdateIMG);

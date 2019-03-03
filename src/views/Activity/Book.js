@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-import { connect } from 'react-redux'
 import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
 import { isMobile } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
-import { getBook } from '../../store/actions/bookAction'
-import { changeMenu } from '../../store/actions/mapAction'
 import { Link } from 'react-router-dom'
 const styles = theme => ({
   root: {
@@ -90,18 +87,4 @@ class Book extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.firebase.auth,
-    book: state.book.post
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getBook: () => dispatch(getBook()),
-    changeMenu: (S) => dispatch(changeMenu(S))
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Book))
+export default withStyles(styles)(Book)

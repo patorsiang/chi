@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types';
 //import map from '../assets/map.svg';
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import Home from '../../layouts/Home'
 import Detail from '../../components/map/detail'
 import { Row, Col } from 'reactstrap';
-import { connect } from 'react-redux'
-import { changeState } from '../../store/actions/mapAction'
+// import { connect } from 'react-redux'
 import { Element, scroller } from 'react-scroll'
 import Result from '../../components/map/searchResult'
 
-const styles = {
+const styles = theme => ({
     map:{
         width: '100%',
         marginTop: '10%',
@@ -26,16 +25,20 @@ const styles = {
         strokeWidth:".5",
         cursor: 'pointer'
         },
-}
+})
+
 class Map extends Component {
     constructor(props) {
         super(props);
+        this.state = { 
+            valueState: ['Andaman and Nicobar Islands']
+        };
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentWillMount(){
-        this.props.changeState(['Andaman and Nicobar Islands'])
-    }
+    // componentWillMount(){
+    //     this.props.changeState(['Andaman and Nicobar Islands'])
+    // }
 
     handleClick(s) {
         this.props.changeState(s);
@@ -48,7 +51,8 @@ class Map extends Component {
     }
 
     render() {
-        const { classes, valueState} = this.props;
+        const { classes } = this.props;
+        const { valueState } = this.state;
 
         return(
             <Home>
@@ -1565,19 +1569,6 @@ class Map extends Component {
 
 Map.propTypes = {
     classes: PropTypes.object.isRequired,
-    changeState: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state) => {
-    return {
-        valueState: state.map.valueState,
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        changeState: valueState => dispatch(changeState(valueState)),
-    }
-}
-
-export default injectSheet(styles)(connect(mapStateToProps, mapDispatchToProps)(Map))
+export default withStyles(styles)(Map)

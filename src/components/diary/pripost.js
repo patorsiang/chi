@@ -4,9 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import 'fullcalendar/dist/fullcalendar.css';
 import 'fullcalendar/dist/fullcalendar.js';
 import randomColor from "randomcolor";
-import { focus } from '../../store/actions/diaryAction'
-import { connect } from 'react-redux'
-import { changeMenu } from "../../store/actions/mapAction";
 import { Redirect } from 'react-router-dom'
 
 const styles = theme => ({
@@ -108,17 +105,4 @@ class PriPost extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    menu: state.map.Menu,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    changeMenu: Menu => dispatch(changeMenu(Menu)),
-    focus: Id => dispatch(focus(Id)),
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PriPost));
+export default withStyles(styles)(PriPost);

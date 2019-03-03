@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 
-const styles = {
+const styles = theme => ({
     err: {
         color: 'Red',
         fontSize: '14px',
@@ -13,7 +13,7 @@ const styles = {
         fontSize: '14px',
         marginTop: '5%'
     }
-}
+})
 
 
 class errMessage extends Component {
@@ -32,4 +32,4 @@ errMessage.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default injectSheet(styles)(errMessage)
+export default withStyles(styles)(errMessage)

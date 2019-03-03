@@ -5,16 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 import { Badge, Icon, Drawer, MenuItem, Menu, AppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, InputBase, Button } from '@material-ui/core';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Search as SearchIcon } from '@material-ui/icons';
 import logo from '../../assets/logo.png'
-import { Link, Redirect } from 'react-router-dom'
-import { searchMap } from '../../store/actions/mapAction'
-import { connect } from 'react-redux'
+import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Co from '../../components/main/cooperate'
-import Avatar from 'react-avatar'
-import { signout } from '../../store/actions/authAction'
-import { changeMenu } from "../../store/actions/mapAction";
-import { searchElse } from "../../store/actions/feedAction";
-import { getNotiNum } from '../../store/actions/notiAction'
+// import Avatar from 'react-avatar'
 import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
 
@@ -144,13 +138,12 @@ class Header extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentWillMount() {
-    this.props.getNotiNum()
-  }
+  // componentWillMount() {
+  //   this.props.getNotiNum()
+  // }
 
   handleChange(event, t) {
-    this.setState({ value: t });
-    this.props.changeMenu(t)
+    this.setState({value: t})
   }
 
   handleDrawerOpen = () => {
@@ -191,18 +184,11 @@ class Header extends Component {
   handleProfile = (value) => {
     this.setState({ anchorEl: null });
     this.setState({ value });
-    this.props.changeMenu(value)
-  }
-
-  renderRedirect = (value) => {
-    if (value !== window.location.pathname) {
-      return <Redirect to={value} />
-    }
   }
 
   render() {
-    const { classes, theme, profile } = this.props;
-    const { anchorEl, value } = this.state;
+    const { classes, theme } = this.props;
+    const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
 
     const renderMenu = (
@@ -223,7 +209,7 @@ class Header extends Component {
     return (
       <div className={classes.root}>
         <CssBaseline />
-        {window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ? this.renderRedirect(value) : null}
+        {/* {window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ? this.renderRedirect(value) : null} */}
         <AppBar
           position="fixed"
           className={classNames(classes.appBar, {
@@ -231,7 +217,8 @@ class Header extends Component {
           })}
         >
           <Toolbar disableGutters={!this.state.open}>
-            {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ?
+            {/* {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ? */}
+            {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
@@ -244,7 +231,7 @@ class Header extends Component {
               </IconButton>
               : null}
             <Typography variant="h6" color="inherit">
-              <Link to="/" onClick={() => this.props.changeMenu("/")}><img src={logo} alt='CHI' className={classes.logo} /></Link>
+              <Link to="/"><img src={logo} alt='CHI' className={classes.logo} /></Link>
             </Typography>
             <div className={classes.search} style={{ width: '100%', marginLeft: 0 }}>
               {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
@@ -264,7 +251,11 @@ class Header extends Component {
                 </Fragment>
                 : null}
             </div>
-            {this.props.auth.uid ?
+            <Button color="inherit" className={classes.but}><Link to="/upin" style={{
+              fontWeight: "bold",
+              color: "white"
+            }}> Login </Link> </Button>
+            {/* {this.props.auth.uid ?
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup="true"
@@ -277,10 +268,11 @@ class Header extends Component {
               : <Button color="inherit" className={classes.but}><Link to="/upin" style={{
                 fontWeight: "bold",
                 color: "white"
-              }}> Login </Link> </Button>}
+              }}> Login </Link> </Button>} */}
           </Toolbar>
         </AppBar>
-        {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ?
+        {/* {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ? */}
+        {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
           <Drawer
             variant="permanent"
             className={classNames(classes.drawer, {
@@ -313,7 +305,7 @@ class Header extends Component {
                           <FontAwesomeIcon icon={['fas', 'newspaper']} /> :
                           index === 3 ?
                             <FontAwesomeIcon icon={['fas', 'bookmark']} /> :
-                            <Badge badgeContent={this.props.num} color="secondary">
+                            <Badge badgeContent={0} color="secondary">
                               <FontAwesomeIcon icon={['fas', 'bell']} />
                             </Badge>}
                   </ListItemIcon>
@@ -360,23 +352,4 @@ Header.propTypes = {
   valueSearch: PropTypes.string
 };
 
-const mapStateToProps = (state) => {
-  return {
-    valueSearch: state.map.valueSearch,
-    auth: state.firebase.auth,
-    profile: state.firebase.profile,
-    Menu: state.map.Menu,
-    num: state.noti.num
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    searchMap: valueSearch => dispatch(searchMap(valueSearch)),
-    searchElse: valueSearch => dispatch(searchElse(valueSearch)),
-    signout: () => dispatch(signout()),
-    changeMenu: Menu => dispatch(changeMenu(Menu)),
-    getNotiNum: () => dispatch(getNotiNum())
-  }
-}
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Header));
+export default withStyles(styles, { withTheme: true })(Header);

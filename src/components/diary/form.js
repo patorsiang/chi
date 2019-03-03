@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import { GridListTileBar, GridListTile, GridList, IconButton, Button, MenuItem, Paper, Grid, FormGroup, FormControlLabel, Switch, TextField } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -8,7 +8,6 @@ import SaveIcon from '@material-ui/icons/Save';
 import { state } from '../../models/state.json'
 import { Col } from 'reactstrap'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import { save } from '../../store/actions/diaryAction'
 import uuidv1 from 'uuid/v1'
 import Typography from '@material-ui/core/Typography';
 import ErrMessage from '../main/errMessage'
@@ -391,19 +390,4 @@ EditForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-        err: state.diary.err,
-        success: state.diary.success
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        save: page => dispatch(save(page)),
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(EditForm))
+export default withStyles(styles)(EditForm)

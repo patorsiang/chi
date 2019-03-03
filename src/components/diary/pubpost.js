@@ -7,7 +7,7 @@ import FavIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import LoveIcon from '@material-ui/icons/Favorite';
 import { withStyles } from '@material-ui/core/styles';
 import ReportIcon from '@material-ui/icons/MoreVert';
-import { connect } from 'react-redux'
+// import { connect } from 'react-redux'
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import {
@@ -17,7 +17,6 @@ import {
   CarouselIndicators,
 } from 'reactstrap';
 import Avatar from 'react-avatar'
-import { like, book, report } from '../../store/actions/mapAction'
 
 const styles = theme => ({
   root: {
@@ -249,20 +248,4 @@ class PubPost extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.firebase.auth,
-    valueState: state.map.valueState,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    like: id => dispatch(like(id)),
-    book: id => dispatch(book(id)),
-    report: id => dispatch(report(id)),
-  }
-}
-
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(PubPost))
+export default withStyles(styles)(PubPost)

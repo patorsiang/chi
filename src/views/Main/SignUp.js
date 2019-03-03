@@ -7,9 +7,7 @@ import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
 import { Link } from 'react-router-dom'
 import Co from '../../components/main/cooperate'
-import { connect } from 'react-redux'
-import { register, initial } from '../../store/actions/authAction'
-import { Redirect } from 'react-router-dom'
+// import { connect } from 'react-redux'
 import ErrMessage from '../../components/main/errMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -119,24 +117,10 @@ class SignUp extends Component {
     }
   }
 
-  renderRedirect = () => {
-    if (typeof (this.props.auth.uid) !== 'undefined') {
-      if (this.props.auth.email && !this.props.auth.emailVerified) {
-        window.open('https://www.' + this.props.auth.email.split("@")[1], '_blank');
-      }
-      return <Redirect to={'/'} />
-    }
-  }
-
-  componentDidMount() {
-    this.props.initial()
-  }
-
   render() {
     const { classes, err } = this.props;
     return (
       <main className={classes.main}>
-        {this.renderRedirect()}
         <Header />
         <CssBaseline />
         <Paper className={classes.paper}>
@@ -252,19 +236,4 @@ SignUp.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  return {
-    err: state.auth.errsignin,
-    auth: state.firebase.auth,
-    img: state.img.imgPro,
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    register: valueState => dispatch(register(valueState)),
-    initial: () => dispatch(initial())
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(SignUp));
+export default withStyles(styles)(SignUp);

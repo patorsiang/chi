@@ -10,8 +10,7 @@ import OtherIcon from '@material-ui/icons/MoreHoriz';
 import Tooltip from '@material-ui/core/Tooltip';
 import img from '../../assets/world_her.png';
 import AllIcon from '@material-ui/icons/AllInclusive'
-import { connect } from 'react-redux'
-import { chooseChoice } from '../../store/actions/feedAction'
+// import { connect } from 'react-redux'
 
 const styles = theme => ({
     root: {
@@ -163,16 +162,5 @@ class Choice extends Component {
         )
     }
 }
-const mapStateToProps = (state) => {
-    return {
-        choice: state.feed.choice,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        chooseChoice: Menu => dispatch(chooseChoice(Menu)),
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Choice))
+export default withStyles(styles)(Choice)

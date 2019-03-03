@@ -2,7 +2,10 @@ import React from "react";
 import Loadable from 'react-loadable'
 
 import App from "./layouts/App";
-import { Route, Switch, Router } from "react-router-dom";
+import Unregist from './components/main/unregist'
+
+import { connect } from 'react-redux'
+import { Route, Switch, Router, Redirect } from "react-router-dom";
 
 import createBrowserHistory from 'history/createBrowserHistory'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -99,25 +102,87 @@ const Acheive = Loadable({
     loading: LoadingComponant
 })
 
+const redirect = () => {
+    console.log(1);
+
+    // if (this.state.value !== window.location.pathname) {
+    //     return <Redirect to={this.state.value} />
+    // }
+}
+
 const Routes = props => {
     return (
         <App>
+            {redirect()}
             <Router history={history}>
                 <Switch>
                     <Route exact path="/Privacy" component={Privacy} />
                     <Route exact path="/Terms" component={Term} />
-                    <Route exact path="/in" component={SignIn} />
-                    <Route exact path="/up" component={SignUp} />
-                    <Route exact path="/upin" component={InUp} />
-                    <Route exact path="/diary" component={Diary} />
-                    <Route exact path="/diary/create" component={CreateDiary} />
-                    <Route exact path="/diary/edit" component={EditDiary} />
-                    <Route exact path="/feed" component={Feed} />
-                    <Route exact path="/bookmark" component={Book} />
-                    <Route exact path="/acheive" component={Acheive} />
-                    <Route exact path="/notice" component={Notice} />
-                    <Route exact path="/profile" component={Profile} />
-                    <Route exact path="/profile/img" component={UpdateIMG} />
+                    <Route exact path="/upin" render={() =>
+                        !props.auth.uid ?
+                            <InUp />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/up" render={() =>
+                        !props.auth.uid ?
+                            <SignUp />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/in" render={() =>
+                        !props.auth.uid ?
+                            <SignIn />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/upin" render={() =>
+                        !props.auth.uid ?
+                            <InUp />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/diary" render={() =>
+                        props.auth.uid ?
+                            <Diary />
+                            : <Unregist name='Diary' />
+                    } />
+                    <Route exact path="/diary/create" render={() =>
+                        props.auth.uid ?
+                            <CreateDiary />
+                            : <Unregist name='Create Diary' />
+                    } />
+                    <Route exact path="/diary/edit" render={() =>
+                        props.auth.uid ?
+                            <EditDiary />
+                            : <Unregist name='Edit Diary' />
+                    } />
+                    <Route exact path="/feed" render={() =>
+                        props.auth.uid ?
+                            <Feed />
+                            : <Unregist name='Feed' />
+                    } />
+                    <Route exact path="/bookmark" render={() =>
+                        props.auth.uid ?
+                            <Book />
+                            : <Unregist name='Book' />
+                    } />
+                    <Route exact path="/acheive" render={() =>
+                        props.auth.uid ?
+                            <Acheive />
+                            : <Unregist name='Acheive' />
+                    } />
+                    <Route exact path="/notice" render={() =>
+                        props.auth.uid ?
+                            <Notice />
+                            : <Unregist name='Notice' />
+                    } />
+                    <Route exact path="/profile" render={() =>
+                        props.auth.uid ?
+                            <Profile />
+                            : <Unregist name='Profile' />
+                    } />
+                    <Route exact path="/profile/img" render={() =>
+                        props.auth.uid ?
+                            <UpdateIMG />
+                            : <Unregist name='/profile/img' />
+                    } />
                     <Route exact path="/" component={Map} />
                     <Route path="*" component={NotFound} />
                 </Switch>
@@ -126,4 +191,10 @@ const Routes = props => {
     );
 };
 
-export default Routes;
+const mapStateToProps = (state) => {
+    return {
+        auth: state.firebase.auth,
+    }
+}
+
+export default connect(mapStateToProps)(Routes);

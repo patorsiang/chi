@@ -1,13 +1,10 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-import { connect } from 'react-redux'
-import Unregist from '../../components/main/unregist'
+// import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
 import Notification from '../../components/notify/notification'
 import { isMobile } from 'react-device-detect'
-import { initial } from '../../store/actions/notiAction'
 import { List, ListSubheader } from '@material-ui/core';
-import { changeMenu } from "../../store/actions/mapAction";
 
 const styles = theme => ({
   root: {
@@ -51,32 +48,16 @@ class Notice extends Component {
 
     return (
       <Home>
-        {this.props.auth.uid ?
-          isMobile ?
+        {isMobile ?
             <List component="nav" className={classes.mobileroot} subheader={<ListSubheader component="div" align="left">Notification</ListSubheader>}>
               <Notification noti={noti} />
             </List>
             : <List component="nav" className={classes.root} subheader={<ListSubheader component="div" align="left">Notification</ListSubheader>}>
               <Notification noti={noti} />
-            </List>
-          : <Unregist name='Notice' />}
+            </List>}
       </Home>
     )
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    auth: state.firebase.auth,
-    noti: state.noti.noti
-  }
-}
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    initial: () => dispatch(initial()),
-    changeMenu: Menu => dispatch(changeMenu(Menu)),
-  }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Notice))
+export default withStyles(styles)(Notice)

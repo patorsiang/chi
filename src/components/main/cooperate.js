@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import injectSheet from 'react-jss';
+import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types'
 import Mu from '../../assets/MU Symbol- Full Colour.png'
 import ICT from '../../assets/customLogo.gif.png'
 import Bh from '../../assets/Logo_BharatMahidol_Feb2016.png'
 import { Container, Row, Col } from 'reactstrap'
 
-const styles = {
+const styles = theme => ({
     mulogo: {
         width: '100%',
         verticalAlign: 'bottom',
@@ -15,7 +15,7 @@ const styles = {
         transform: 'translate(-50%, -50%)',
         margin: '50% -50% 0 50%'
     },
-}
+})
 
 class Cooperate extends Component {
     render() {
@@ -43,5 +43,5 @@ Cooperate.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default injectSheet(styles)(Cooperate)
+export default withStyles(styles)(Cooperate)
 

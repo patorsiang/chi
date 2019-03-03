@@ -4,11 +4,9 @@ import { Button, FormControl, Input, InputLabel, Paper, TextField } from '@mater
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Container, Col, Row, Button as ButtomPW, Alert } from 'reactstrap'
 import Avatar from 'react-avatar'
-import { connect } from 'react-redux'
-import { updateNameEmailDOB, updatePWD, initial } from '../../store/actions/authAction'
+// import { connect } from 'react-redux'
 import ErrMessage from '../../components/main/errMessage';
 import { Redirect, Link } from 'react-router-dom'
-import { changeMenu } from "../../store/actions/mapAction";
 import img from '../../assets/peacock.png';
 const styles = theme => ({
     main: {
@@ -213,23 +211,5 @@ class Profile extends Component {
         )
     }
 }
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-        profile: state.firebase.profile,
-        errprofile: state.auth.errprofile,
-        erremail: state.auth.erremail,
-        success: state.auth.success,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        updateNameEmailDOB: valueState => dispatch(updateNameEmailDOB(valueState)),
-        updatePWD: valueState => dispatch(updatePWD(valueState)),
-        changeMenu: Menu => dispatch(changeMenu(Menu)),
-        initial: () => dispatch(initial()),
-    }
-}
-
-export default withStyles(styles)(connect(mapStateToProps, mapDispatchToProps)(Profile))
+export default withStyles(styles)(Profile)
