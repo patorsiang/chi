@@ -7,7 +7,7 @@ import FavIcon from '@material-ui/icons/FavoriteBorderOutlined';
 import LoveIcon from '@material-ui/icons/Favorite';
 import { withStyles } from '@material-ui/core/styles';
 import ReportIcon from '@material-ui/icons/MoreVert';
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import Chip from '@material-ui/core/Chip';
 import FaceIcon from '@material-ui/icons/Face';
 import {
@@ -248,4 +248,10 @@ class PubPost extends Component {
   }
 }
 
-export default withStyles(styles)(PubPost)
+const mapStateToProps = (state) => {
+  return {
+    auth: state.firebase.auth,
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(PubPost))

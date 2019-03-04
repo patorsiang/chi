@@ -87,4 +87,4 @@ class Book extends Component {
   }
 }
 
-export default withStyles(styles)(Book)
+export default withStyles(styles, { withTheme: true })(Book)

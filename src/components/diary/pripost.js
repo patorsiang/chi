@@ -105,4 +105,4 @@ class PriPost extends Component {
   }
 }
 
-export default withStyles(styles)(PriPost);
+export default withStyles(styles, { withTheme: true })(PriPost);

@@ -5,9 +5,10 @@ import { withStyles } from '@material-ui/core/styles';
 import Home from '../../layouts/Home'
 import Detail from '../../components/map/detail'
 import { Row, Col } from 'reactstrap';
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { Element, scroller } from 'react-scroll'
 import Result from '../../components/map/searchResult'
+import { changeState } from '../../store/actions/appAction'
 
 const styles = theme => ({
     map:{
@@ -31,7 +32,7 @@ class Map extends Component {
     constructor(props) {
         super(props);
         this.state = { 
-            valueState: ['Andaman and Nicobar Islands']
+            INstate: this.props.INstate
         };
         this.handleClick = this.handleClick.bind(this);
     }
@@ -41,7 +42,7 @@ class Map extends Component {
     // }
 
     handleClick(s) {
-        this.props.changeState(s);
+        this.props.changeState(s)
         scroller.scrollTo('section_detail', {
             duration: 1000,
             delay: 100,
@@ -51,17 +52,16 @@ class Map extends Component {
     }
 
     render() {
-        const { classes } = this.props;
-        const { valueState } = this.state;
+        const { classes, searchState, post, INstate } = this.props;
 
         return(
             <Home>
-                    <Result/>
+                <Result searchState={searchState}/>
                     <Element name="section_map" />
                     <Row>
                     <Col xs="12" md="8">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" width={window.innerWidth} height={window.innerHeight} viewBox={`170 0 990 990`} className={classes.map}>
-                        {valueState[0] === "Lakshadweep" ?
+                        {INstate[0] === "Lakshadweep" ?
                          <g id="Lakshadweep">
                             <polygon className={classes.selected} fill="#0e047b" points="304.833,804.333 303.667,805.833 306.333,807.667 309.417,806.667 308,804.333 	"/>
                             <polygon className={classes.selected} fill="#0e047b" points="309,787.333 307.333,788.667 308.167,791.667 310.167,792.833 311.5,791.167 310.833,790.083 	"/>
@@ -94,7 +94,7 @@ class Map extends Component {
                             <polygon onClick={()=>{this.handleClick('Lakshadweep')}} className={classes.unselected} fill="#128832" points="360.833,864.333 359.333,867.167 360.833,869 363.333,867.667 363.333,865.833 	"/>
                             <path onClick={()=>{this.handleClick('Lakshadweep')}} className={classes.unselected} fill="#128832" d="M315.083,861l-1.417,0.667l-0.833,2.667c0,0.833,0.833,2.333,0.833,2.333l2.833-2.833v-2L315.083,861z"/>
                         </g>}
-                        {valueState[0] === "Andaman and Nicobar Islands" ?
+                        {INstate[0] === "Andaman and Nicobar Islands" ?
                         <g id="Andaman and Nicobar Islands" >
                             <polygon className={classes.selected} fill="#128832" points="1008.5,722 1005,722 1008.5,728.5 1011.5,725.25 	"/>
                             <polygon className={classes.selected} fill="#128832" points="986.5,762.5 983.5,768 983.5,778 990.5,775.5 990.5,766 	"/>
@@ -125,7 +125,7 @@ class Map extends Component {
                             <polygon onClick={()=>{this.handleClick('Andaman and Nicobar Islands')}} className={classes.unselected} fill="#128832" points="1008.25,948.5 1005,948.5 1011.5,948.5 1011.5,941 1008.25,937.25 	"/>
                             <path onClick={()=>{this.handleClick('Andaman and Nicobar Islands')}} className={classes.unselected} fill="#128832" d="M1021.5,961.5l2.5,8l-2.5,3.5l2.5,7.5h6h3c0,0,0.5-6,0-5.5s-5.639-6.5-5.639-6.5V965v-3.5H1021.5z"/>
                         </g>}
-                        {valueState[0] === "Goa" ?
+                        {INstate[0] === "Goa" ?
                         <g id="Goa">
                             <path className={classes.selected} fill="#128832" d="M375.026,684.56l-0.776,5.69l3,3.25c0,0,2.5,0.75,2.5,2.5s0,5.75,0,5.75s1.75,0.75,1.5,1.5
                                 s0.024,4.75,0.024,4.75H385v4.5v2.25l5-1.5l2-2l-1.75-5.75l-0.75-1.75c0,0,2.5,0,2.5,0.25s0-2.25,0-2.25v-2.095l-1.25-4.155
@@ -136,7 +136,7 @@ class Map extends Component {
                                 s0.024,4.75,0.024,4.75H385v4.5v2.25l5-1.5l2-2l-1.75-5.75l-0.75-1.75c0,0,2.5,0,2.5,0.25s0-2.25,0-2.25v-2.095l-1.25-4.155
                                 l1.25-0.25v-3l-3.25-2L386,691.5l-1.75-1.25l-3.75-1l-0.25-1.75V685l-2.75-1.5L375.026,684.56z"/>
                         </g>}
-                        {valueState[0] === "Karnataka" ?
+                        {INstate[0] === "Karnataka" ?
                         <g id="Karnataka">
                         <path  className={classes.selected} fill="#128832" d="M401.75,658l-3.106,1.654L397,660.75l-1.659,0.664l-1.767,0.707L391,663.5l2.5,2.25l0.611,1.046L393.75,668
                             l1.537,2.209l3.402,1.323l0.165,1.605l-0.816,2.856L397,677h-0.75l-0.5,2.25l2,1.25v0.5l-0.688,2.5L395,684.25v3l-0.524-0.037
@@ -219,7 +219,7 @@ class Map extends Component {
                                 l-1.065-1.194L401.75,658z"/>
                         </g>
                         }
-                        {valueState[0] === "Andhra Pradesh" ?
+                        {INstate[0] === "Andhra Pradesh" ?
                         <g id="Andhra Pradesh">
                         <path className={classes.selected} fill="#128832" d="M477.313,748.188l0.188,3.625l-1.313,1.563l0.25,2.438l3.313,0.438l1-1l0.355-2.213l1.645,0.463
                             l5.229-0.604l0.896,3.354l2.25,1.438l5.25-0.563l2.75-1.125l1.5-1.125l1.108-1.611l0.267-0.389l2.875,0.375l1.624,2.274
@@ -295,7 +295,7 @@ class Map extends Component {
                                 l1.563,1.625l0.75,2.813L469.333,726l0.969,2.107l0.42,3.503l0.153,1.015l1.358,0.66l0.579,0.403l0.75,1.313l0.357,2.467
                                 l0.425,2.211l-0.782,3.884l1.028,1.267L477.313,748.188z"/>
                         </g>}
-                        {valueState[0] === "Puducherry" ?
+                        {INstate[0] === "Puducherry" ?
                         <g id="Puducherry">
                             <polygon className={classes.selected} fill="#82027E" points="566.25,820.75 563.25,820.75 561.25,817.75 559.25,819.25 556.875,821.125 559.25,823.5 560.25,825.25 563.75,825.25 566.25,826.25 	"/>
                             <polygon className={classes.selected} fill="#82027E" points="566.25,851.75 562.083,851.75 561.375,854.25 563.813,855.25 566.25,856.5 	"/>
@@ -310,7 +310,7 @@ class Map extends Component {
                             <polygon onClick={()=>{this.handleClick('Puducherry')}} className={classes.unselected} fill="#128832" points="425,818.417 429.667,822 429.667,825.833 429.333,828.917 427.333,828.375 425,823.667 425,821 "/>
                         </g>
                         }
-                        {valueState[0] === "Keraia" ?
+                        {INstate[0] === "Keraia" ?
                         <g id="Keraia">
                         <path className={classes.selected} fill="#128832" d="M410.708,789.667l2.917,0.583l2.778,1.263l1.372,0.682l0.589,1.635l0.998,1.894l0.739,0.828l0.902,2.31
                             L421.75,801l1.829,1.444l2.965,2.43l2.027,2.306l2.054,1.695l3.625,1.625l1.505,2.506l1.074,1.568l3.031,0.881l3.015-0.58
@@ -364,7 +364,7 @@ class Map extends Component {
                                 l-1.333-1.083l-0.417-2.25c0,0,0.25-2,0.083-2.5s-2.083-1.583-2.083-1.583L412.333,800l-0.417-2.083l-1.208-1.583v-3
                                 c0,0-0.542-2.167-0.792-2.167s-1.083-1.5-1.083-1.5v-0.861L410.708,789.667z"/>
                         </g>}
-                        {valueState[0] === "Tamil Nadu" ?
+                        {INstate[0] === "Tamil Nadu" ?
                         <g id="Tamil Nadu">
                         <path className={classes.selected} fill="#128832" d="M474.875,821.75l-3.25,0.125l-0.851,0.803l-0.959,0.754l-0.564,0.444l-0.503,1.078l-0.372,0.797v0.719
                             v0.688l-0.156,0.938l-0.656,0.281h-2.25h-3.188h-0.375l-1.552-0.621l-0.948-0.379l-1.5-1.75l-1.49-0.349l-1.709-0.672l-0.261-0.436
@@ -456,7 +456,7 @@ class Map extends Component {
                                 c0,0-0.156,0.563-0.188,0.813s-0.313,0.531-0.313,0.531l-1.43-0.074l-1.695-0.239h-2.719h-0.875v1.469l-0.736,1.522l-0.759,1.622
                                 l-0.63,1.387l-1.999-0.846l-0.99-0.419l-4.136-0.985l-1.125,1.125l-2.656,0.706L474.875,821.75z"/>
                         </g>}
-                        {valueState[0] === "Telangana" ?
+                        {INstate[0] === "Telangana" ?
                         <g id="Telangana">
                         <path className={classes.selected} fill="#128832" d="M535.5,564.5l-2.125-1.958L529.25,561v3.25l-1.09,1.869l-0.66,1.131l-0.313,2.813l0.313,2.188
                             c0,0,0,1,0,1.313s-0.625,0.688-0.625,0.688s-0.525,0.825-0.7,0.912c-0.175,0.088-2.118,1.023-2.118,1.023l-1.474,0.68l-1.145,0.322
@@ -510,7 +510,7 @@ class Map extends Component {
                                 V579l-2.625-1.679l-1.775-2.396l-3.35-1.675l-4,0.25l-4,0.75l-4.738-2.708L556.5,574.5l-2-1h-3.333l-1.331-0.049l-2.336-0.867
                                 l-0.088-0.971l-1.39-2.184l-1.773-4.679l-3.75-1L535.5,564.5z"/>
                         </g>}
-                        {valueState[0] === "Mizoram" ?
+                        {INstate[0] === "Mizoram" ?
                         <g id="Mizoram">
                         <path className={classes.selected} fill="#FFFFFF" d="M966.333,411l-2.667,2.333L961,412.167h-2.333l-3,2.167l-2.333,5.042l-2,2.292l-2.667-2L945,419.333v6.333
                             l3.667,4.553v3.447l-3,1.667l5.333,3l2.667,9.333l-1.333,12l3.333,3.667c0,0,2.667,6.333,3,7.667
@@ -527,7 +527,7 @@ class Map extends Component {
                                 v-5.542v-6v-2v-2l-2.667-2l-1-5L980.333,424L977,421.333l-6-1l-2.333-1l-1-5.667L966.333,411z"/>
                         </g>
                         }
-                        {valueState[0] === "Manipur" ?
+                        {INstate[0] === "Manipur" ?
                         <g id="Manipur">
                         <polygon className={classes.selected} fill="#FFFFFF" points="1014.333,377.333 1012.667,377.333 1010,372.667 1010,371 1007,374.167 1007,376 1000.333,377.333
                             998.333,377.333 989.667,377.333 988,381 984.667,381.667 984.667,386 981.333,386 978.333,386 975.333,387.667 975.333,392.333
@@ -546,7 +546,7 @@ class Map extends Component {
                                 1013.667,384.333 1013,380 	"/>
                         </g>
                         }
-                        {valueState[0] === "Meghalaya" ?
+                        {INstate[0] === "Meghalaya" ?
                         <g id="Meghalaya">
                         <path className={classes.selected} fill="#FFFFFF" d="M889.333,368.667l-5.667,0.667L880.333,371h-3l-1.667,2.667V376l-2.486,2.667v2v3.667v2.333l4.153,2h3.924
                             c0,0,3.076-2.667,4.41,0c1.333,2.667,17,2,17,2L914,390.741h3.667H922v1.593h5h3.333h2.833h10.167l3.333,1.333H951h3l2.667-2.667
@@ -563,7 +563,7 @@ class Map extends Component {
                                 L889.333,368.667z"/>
                         </g>
                         }
-                        {valueState[0] === "Arunachai Pradesh" ?
+                        {INstate[0] === "Arunachai Pradesh" ?
                         <g id="Arunachai Pradesh">
                         <path className={classes.selected} fill="#FFFFFF" d="M939.574,336.616V333l-2.407-3l-1.333-3.333v-1.833c0,0,2.667,1.333,2.667,0c0-1.333-3.333-5.333-2.667-6
                             c0.667-0.667-0.833-1.5-0.833-1.5s-2.5,0-3,0.667s-4.5,1.333-4.5,1.333l-4.167-8.833l1.833-3l4.833,1.167l2.833,0.833l3.667-2.667
@@ -611,7 +611,7 @@ class Map extends Component {
                                 l1.368,0.186L998.667,314l-4,6.5l-5.651,2.223L986,328.667L983.833,330l-3.102,1.188l0,0l0,0L976,339.603l-10.5-0.186l-9.167-5.988
                                 l-3.77,0.37l-2.894,1.388L945,338l-2.667,1.603L939.574,336.616z"/>
                         </g>}
-                        {valueState[0] === "Tripura" ?
+                        {INstate[0] === "Tripura" ?
                         <g id="Tripura">
                         <path className={classes.selected} fill="#FFFFFF" d="M943.4,415.133L939.333,417L937,422.333h-4h-3l-2.667,3.333H924l-3.667,2v3.265l-2.667,4.401V438v4
                             c0,0,2.667,2,2.667,3.333c0,1.333,0.667,4.333,0.667,5.333s1,5,1,5l3.667-1.333L928,453l0.667,5.333l3.667,1.333l2.667-4l0,0
@@ -626,7 +626,7 @@ class Map extends Component {
                                 l-1.333-3.333l1.333-2.667l-0.94-2.292L943.4,415.133z"/>
                         </g>
                         }
-                        {valueState[0] === "Odisha" ?
+                        {INstate[0] === "Odisha" ?
                         <g id="Odisha">
                         <path className={classes.selected} fill="#FFFFFF" d="M703.833,480.25l-1.333,2.5v1.75l-0.333,1.583L700.5,485.5l-3.75,2l-1.667,2.5l-4.833,3.917L688,495
                             l0.583,3.417l1.645,2.612L689,502.5l-2.25,2.667l-1.667,3.5l-1.667,1.667l-0.25,6.917l-2.417,1.583l-2.583,0.917l-0.833,4.25
@@ -671,7 +671,7 @@ class Map extends Component {
                                 z"/>
                         </g>
                         }
-                        {valueState[0] === "Assam" ?
+                        {INstate[0] === "Assam" ?
                         <g id="Assam">
                         <path className={classes.selected} fill="#FFFFFF" d="M976.522,387.006l2.811-3.673v-4.5l-1.667-3.117l0,0l1.667-2.049l1.667-4l3.667-3.167L986,364h4l3.033,2.5
                             v-7.833v-5.333l5.3-3.333l2.667-3.667l4.667-2l3.667-3l3.667-3.667l6-3.667l1.167-3.167l6.167-4.5l5.667-5l3.333-3.667h7.333
@@ -700,7 +700,7 @@ class Map extends Component {
                                 L976.522,387.006z"/>
                         </g>
                         }
-                        {valueState[0] === "West Bengai" ?
+                        {INstate[0] === "West Bengai" ?
                         <g id="West Bengai">
                         <path className={classes.selected} fill="#870024" d="M845.125,343"/>
                         <path className={classes.selected} fill="#FFFFFF" d="M841.5,331.625l-2.875-0.25l-3.941-0.894L833,330l-1.5,2.875l-3,1.125l-0.75-1.375h-2.5
@@ -746,7 +746,7 @@ class Map extends Component {
                                 c1.889,0.5,5.389,2.75,5.389,2.75s2.5,0.25,3.5,0.5s3.25-1.75,3.25-1.75l1.75-3.167v-2.667l2.374-3.509l1.459-2.157v-4.25
                                 l1.347-3.917L870,343h-5.25l-5.75-2.25l-5-1.5c0,0-0.5,1.5-1.25,1.25s-3.5-1.25-3.5-1.25l-1.25-0.5l-4-4.75L841.5,331.625z"/>
                         </g>}
-                        {valueState[0] === "Jharkhand" ?
+                        {INstate[0] === "Jharkhand" ?
                         <g id="Jharkhand">
                         <path className={classes.selected} fill="#FFFFFF" d="M728,422.667l-1.667,1l-0.624,1.372l-2.359,1.133l-2.851-0.838h-3.167L717,422.667l1.667-1l-5.042-1.792
                             L711.75,421l-0.917,1.833L711.75,421l-4.417-0.667l-3.833-1.667l-1,1.667h-11.333l-1.75-3.667L687.5,418l-1.833,0.417v7.333
@@ -788,7 +788,7 @@ class Map extends Component {
                                 l-1.332-2.84l0.176-1.746l-3.484-0.333L766,416.167l-1.415-1.961l-0.751-2.039l-1.405,0.652l-4.095-0.152l-4.625-0.167
                                 l-0.375,1.625l-2.75-0.125l-1.917,2l2.167,2.167L749.167,420l-4.953,2.134l0,0l-4.88-0.134l-6.667,4.167l-2-2.833L728,422.667z"/>
                         </g>}
-                        {valueState[0] === "Chhattisgarh" ?
+                        {INstate[0] === "Chhattisgarh" ?
                         <g id="Chhattisgarh">
                         <path className={classes.selected} fill="#FFFFFF" d="M636.167,438.103l-0.296-0.082l-2.473-0.687l-4.064,1l0,0l2.833,6.769l-2.5,2.897l2.833,2.103l2.5,2.397
                             h2.667l0.167-1.397l3.333,0.333l2.167,1.5l3,3.5l1,0.833v4.897l-0.802,1.776l-1.865-0.507l-3.5,1v1.667l-2.333,1.833L636,469.667
@@ -854,7 +854,7 @@ class Map extends Component {
                                 l-0.75,2.417h-2.917l-3-1.083l-2.874-0.527l-2.693-0.846l-0.791-0.419l-2.423,2.593l-1.687,1.228l-2.635,0.804l-1.563,0.853
                                 l-2.833,0.064l-1.5-0.564l-3.315-0.301l-6.168-0.689l-5.457-0.672l-1.662-0.441l-1.324-1.324"/>
                         </g>}
-                        {valueState[0] === "Maharashtra" ?
+                        {INstate[0] === "Maharashtra" ?
                         <g id="Maharashtra">
                         <path className={classes.selected} fill="#FFFFFF" d="M362.587,538l-2.087,1.129h-2V543l-1.5,3v1.25v1l-1.25,5c0,0,0,2.75,0,4s-1.25,5.5,0,5.5s3.141-1,3.141-1
                             L357,564.5l1.891,4.5l-1.391,3l0.25,5.5h4.083l-2.943,1.75l1.359,3.75l-1.359,2v3.5l1.109,4.25V595l-1.109,4l2.943,4.5L360,605
@@ -911,7 +911,7 @@ class Map extends Component {
                                 c0,0.846-3.739,0-3.739,0L369.25,543l-3.998,1.398H364l-1.506-0.971l1.27-1.407l-1.178-2.891V538z"/>
                         </g>
                         }
-                        {valueState[0] === "Dadra and Nagar Haveli" ?
+                        {INstate[0] === "Dadra and Nagar Haveli" ?
                         <g id="Dadra and Nagar Haveli">
                         <polygon className={classes.selected} fill="#FFFFFF" points="370.333,542.333 370.333,542.333 372,540.667 370.917,538.583 369.667,539.129 367.739,539.333
                             365.5,541.107 363.167,542.333 361.833,544.5 361.833,546.833 363.167,547.833 365.203,549.667 367.739,548.333 369.667,548
@@ -924,7 +924,7 @@ class Map extends Component {
                                 371.667,547.333 373.667,545.167 374,543.333 	"/>
                         </g>
                         }
-                        {valueState[0] === "Daman and Diu" ?
+                        {INstate[0] === "Daman and Diu" ?
                         <g id="Daman and Diu">
                         <polygon className={classes.selected} fill="#FFFFFF" points="363.613,535.603 362.587,539.129 363.416,542.654 367.333,539.667 367.917,537.026 366.203,536.34
                                 "/>
@@ -935,7 +935,7 @@ class Map extends Component {
                                     "/>
                         </g>
                         }
-                        {valueState[0] === "Bihar" ?
+                        {INstate[0] === "Bihar" ?
                         <g id="Bihar">
                         <path className={classes.selected} fill="#FFFFFF" d="M700.333,322.333l-2,2.083l0.333,3.167l1,0.667l0.417,2.5l1.333,1L701,334.917l3,2.208l-0.167,4.542
                             l4.167,2.167l1.583,3.5l4,3.333l-6.75,1l-1.667-0.333L704,352.417l-2-0.917l-1.167,2.833l3.333,3.833l2.583,0.083l1.75,1.25
@@ -982,7 +982,7 @@ class Map extends Component {
                                 L700.333,322.333z"/>
                         </g>
                         }
-                        {valueState[0] === "Madhya Pradesh" ?
+                        {INstate[0] === "Madhya Pradesh" ?
                         <g id="Madhya Pradesh">
                         <path className={classes.selected} fill="#FFFFFF" d="M489.583,424.667l-1.181-0.175L488.167,422l-2.769-0.274l0.269-3.393l-10.167,1.75l-0.5-0.75l-6-0.833
                             l-1.5,6.167l-1.731,1.113l-2.435,5.053l-4.5,1l-2.5,2.333l-1.408-0.179l-0.759-1.821H453l0.5-2l-2,0.053l-0.411-0.306l1.249-3.049
@@ -1077,7 +1077,7 @@ class Map extends Component {
                                 L495,411.936l-1.333-1.269l-1.5,0.333l-0.333,7.769l0.833,3.5c0,0-1.316,2.206-1.667,2.397"/>
                         </g>
                     }
-                    {valueState[0] === "Gujarat" ?
+                    {INstate[0] === "Gujarat" ?
                     <g id="Gujarat">
                     <path className={classes.selected} fill="#FFFFFF" stroke="#000000" strokeMiterlimit="10" d="M417,460.667"/>
                     <path className={classes.selected} fill="#FFFFFF" d="M417,463.333v-2.667V458h-1.333l-2.333-5v-1.667h-3.667v-4.5l-1.5-1.667l-4-1.333l-2.5-1.5h-5.333l0.667-6
@@ -1128,7 +1128,7 @@ class Map extends Component {
                                 v-1.667l-4.667-1L403.667,471l4.667-0.667l2.333-1.417H414l1.784-2.725l1.216-1.858"/>
                         </g>
                     }
-                    {valueState[0] === "Sikkim" ?
+                    {INstate[0] === "Sikkim" ?
                     <g id="Sikkim">
                     <path className={classes.selected} fill="#FFFFFF" d="M836.375,298l-1.625,1.875l-1.125,2l-2.75,0.75l-3,1.375H825.5c0,0-3,0.5-3,0.875s0.625,3.5,0.625,3.5
                         l-0.625,2l-0.875,3l-1.125,2.875l-1.375,1.875l1,12l-1,2.5h3.75h4.875L828.5,334l3-1.125L833,330l2.625,0.75
@@ -1143,7 +1143,7 @@ class Map extends Component {
                                 l1.5-1.375l0.625-2.875v-2.875l1.375-1.75L844,306.125l-1-3.5l-1-1.5l-1.75-1.5l-2.125-0.25L838,298H836.375z"/>
                         </g>
                     }
-                    {valueState[0] === "Uttar Pradesh" ?
+                    {INstate[0] === "Uttar Pradesh" ?
                     <g id="Uttar Pradesh">
                     <path className={classes.selected} fill="#F79833" d="M531.167,230.5l-3.667-0.667h-1.167l-1.429-1.17l-2.834-1.474l-0.82,1.31h-1.083v1.5l-2.223,1.641
                         l-1.429,2.2l-1.289,2.568l-2.058,1.425l-2.137,1.986L510.5,240.5v1.167l-0.752,2.99L509.5,245.5l-1.667,0.5l-0.716,2.863
@@ -1250,7 +1250,7 @@ class Map extends Component {
                                 l0.188-0.188l0.667-0.667l0.467-0.775L531.167,230.5z"/>
                         </g>
                     }
-                    {valueState[0] === 'National Capital Territory of Delhi'?
+                    {INstate[0] === 'National Capital Territory of Delhi'?
                     <g id="National Capital Territory of Delhi">
                     <polygon className={classes.selected} fill="#F79833" points="506.5,274.333 504.167,274.333 502.333,275.167 501.333,277.333 501.137,278.586 500.167,280.667
                         499.633,281.9 499.633,281.9 500.167,282.167 501.167,284.167 504.167,283.833 506,285.333 511.167,285.833 511.167,281.667
@@ -1263,7 +1263,7 @@ class Map extends Component {
                                 511.167,279 509.5,278.333 509,277.333 509,276.167 	"/>
                         </g>
                     }
-                        {valueState[0] === "Rajasthan"?
+                        {INstate[0] === "Rajasthan"?
                         <g id="Rajasthan">
                         <path className={classes.selected} fill="#F79833" d="M331.88,396.344l-2.213-1.844V393h-3.333v-4.667h-2.167v-3h-1.5l-2-2.667v-3h-1.333V376H318v-4.333
                             L316.333,374v-4.333h-2.667v-12.333l-4.041,0.898l-1.959-2.565h-5.333v-2h-2v-4h-1.667L297,342.333l2-2.667h2.333l0.333-2.667
@@ -1342,7 +1342,7 @@ class Map extends Component {
                                 v3.333l-2.333-3.167l-8-0.5l-0.167-2l-5-0.667l0.5,4L331.88,396.344z"/>
                         </g>
                     }
-                    { valueState[0] === "Haryana"?
+                    { INstate[0] === "Haryana"?
                     <g id="Haryana">
                     <path className={classes.selected} fill="#F79833" d="M454.833,247.833L453,242.667l0.167-4L451,235.5l-3.5-0.833v-1.5l-1.083-0.667l-3.083-0.333L438,233.333
                         l-3.145,1.45L436,236v1.667l-1.833,0.5l-0.667,4l2.5,0.667V244v3.833v3.833v0.5l-2.5-0.333l0.167,1.5l1.072,0.766L436,255l1-0.5
@@ -1383,7 +1383,7 @@ class Map extends Component {
                                 L459,244l-0.833,0.833h-1.333l-1.333,1.333L454.833,247.833z"/>
                         </g>
                     }
-                       {valueState[0] ===  "Chandigarh" ?
+                       {INstate[0] ===  "Chandigarh" ?
                        <g id="Chandigarh">
                             <polygon className={classes.selected} fill="#F79833" points="502.5,203.667 499.012,203.667 497.167,206.5 497.167,206.5 497.833,209.167 498.833,210.5
                                 501.333,211.333 503.167,209.333 503.167,205.333 	"/>
@@ -1392,7 +1392,7 @@ class Map extends Component {
                             <polygon onClick={()=>{this.handleClick('Chandigarh')}} className={classes.unselected} fill="#F79833" points="502.5,203.667 499.012,203.667 497.167,206.5 497.167,206.5 497.833,209.167 498.833,210.5
                                 501.333,211.333 503.167,209.333 503.167,205.333 	"/>
                         </g>}
-                        {valueState[0] ===  "Uttarakhand"?
+                        {INstate[0] ===  "Uttarakhand"?
                         <g id="Uttarakhand">
                         <polyline className={classes.selected} fill="#F79833" points="562.333,202.667 560.167,202.333 559.417,200.75 558,200.257 557.167,199.5 554.167,198.583
                             551.827,198.692 546.5,196.833 544.917,196.25 544.167,198.167 537.333,198.583 535.5,200.257 533.833,200.257 531.25,201.917
@@ -1433,7 +1433,7 @@ class Map extends Component {
                                 565.833,189.833 564.667,191.333 563,192.833 563,194.667 563,198.167 562.694,201.043 	"/>
                         </g>
                         }
-                        {valueState[0] ===  "Punjab"?
+                        {INstate[0] ===  "Punjab"?
                         <g id="Punjab">
                         <path className={classes.selected} fill="#F79833" d="M475.667,156.833l2.117-0.601l0.216-1.107v-1.292l-2.314-1.152l-0.541,0.743c0,0-1.139,1.478-1.639,1.978
                             s-1.998,0.004-1.998,0.004s-3.385-1.531-2.343,1.427c0.124,0.352-3.5,0.667-3.5,0.667l-1.5,1.667v2.333l-2.667,0.833l-1.333,1.167
@@ -1471,7 +1471,7 @@ class Map extends Component {
                                 l0.167-2l-0.833-1.5l-1.167-5.833l-1.167-2.167l-1.333-1.167l-2.138-0.261l-3.837-0.637l1.725-1.685l0.874-2.621l0.542-2.462l0,0
                                 l1.8-0.5l0.7-1.667L475.667,156.833z"/>
                         </g>}
-                        {valueState[0] ===  "Himachal Pradesh"?
+                        {INstate[0] ===  "Himachal Pradesh"?
                         <g id="Himachal Pradesh">
                         <path className={classes.selected} fill="#F79833" d="M504.139,131.797L500,130.25l-5.95,1.294L490,133.25l-0.333,2.75H486.5l-2.75,2.25l-1.5,1.5l-1.625-1.125
                             l-1.875,0.25L478.583,141l2.167,3l-0.351,3.497L478,151.75v2.083l-0.216,2.399l-3.117,1.101l-1.366,0.839v1.161h-1.134l-0.816,1.18
@@ -1507,7 +1507,7 @@ class Map extends Component {
                                 l-0.145-1.6l1.056-0.88v-6l-1.96-0.28l-3.29,2.78l-5.08-0.929L537,149.25v-1.75l-0.603-0.991l-0.647-0.592v-1.667l-2-0.5
                                 l-2.11-2.426L529,140.75v1.167l-2.161,0.392l-3.761,0.102l-3.472-0.161l-0.759-1.328L517.75,139l-4.75-0.75l-2.25-2.75"/>
                         </g>}
-                        {valueState[0] ===  "Jammu and Kashmir"?
+                        {INstate[0] ===  "Jammu and Kashmir"?
                         <g id="Jammu and Kashmir">
                         <path className={classes.selected} fill="#F79833" d="M433.5,5.625l-2.57,1.365l1.32,1.76l3,1.75V13h-3l-3,1.25h-2.5v-2L416.25,12l-1.083,2.25H413v2.5
                             l-1.75,1.375l-1.5,0.625h-1.5v2.5L406,22.5l-1.994,1.855L401.25,24.5l-1.457,2.199l-1.293,2.926v5.125l1.25,1.75l2.125,0.625
@@ -1559,7 +1559,7 @@ class Map extends Component {
                     </svg>
                     </Col>
                     <Col xs="12" md="4">
-                        <Detail/>
+                        <Detail INstate={INstate} post={post}/>
                     </Col>
                     </Row>
                 </Home>
@@ -1571,4 +1571,18 @@ Map.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Map)
+const mapStateToProps = (state) => {
+    return {
+        INstate: state.app.stateOfIN,
+        searchState: state.app.searchState,
+        post: state.app.post,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeState: state => dispatch(changeState(state)),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Map))

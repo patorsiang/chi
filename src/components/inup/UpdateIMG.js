@@ -150,4 +150,4 @@ class UpdateIMG extends Component {
     }
 }
 
-export default withStyles(styles)(UpdateIMG);
+export default withStyles(styles, { withTheme: true })(UpdateIMG);

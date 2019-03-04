@@ -43,5 +43,5 @@ Cooperate.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Cooperate)
+export default withStyles(styles, { withTheme: true })(Cooperate)
 

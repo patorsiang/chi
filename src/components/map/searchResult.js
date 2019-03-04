@@ -1,14 +1,14 @@
-import React, {Component, Fragment} from 'react'
+import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types';
 //import map from '../assets/map.svg';
 import { withStyles } from '@material-ui/core/styles';
-import {Button} from 'reactstrap'
+import { Button } from 'reactstrap'
 // import { connect } from 'react-redux'
 import { scroller } from 'react-scroll'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const styles = theme => ({
-    state:{
+    state: {
         width: "100%",
         color: 'black',
         textAlign: 'right',
@@ -43,11 +43,11 @@ class Result extends Component {
         })
     }
     render() {
-        const { classes, valueState, search, Query} = this.props;
-        return(
+        const { classes, INstate, searchState } = this.props;
+        return (
             <Fragment>
-                {search ? <div className={classes.state}>
-                    Search = '{Query}' with {valueState[0] === '' ? 0 : valueState.length} Result(s) <Button color='link' onClick={()=>{this.handleClick()}}><FontAwesomeIcon icon={['fas', 'arrow-right']} /><br/></Button>
+                {searchState ? <div className={classes.state}>
+                    Search = '{searchState}' with {INstate[0] === '' ? 0 : INstate.length} Result(s) <Button color='link' onClick={() => { this.handleClick() }}><FontAwesomeIcon icon={['fas', 'arrow-right']} /><br /></Button>
                 </div> : null}
             </Fragment>
         )
@@ -58,4 +58,4 @@ Result.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Result)
+export default withStyles(styles, { withTheme: true })(Result)

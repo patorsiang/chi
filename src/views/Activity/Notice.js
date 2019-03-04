@@ -60,4 +60,4 @@ class Notice extends Component {
   }
 }
 
-export default withStyles(styles)(Notice)
+export default withStyles(styles, { withTheme: true })(Notice)

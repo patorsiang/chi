@@ -32,4 +32,4 @@ errMessage.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(errMessage)
+export default withStyles(styles, { withTheme: true })(errMessage)

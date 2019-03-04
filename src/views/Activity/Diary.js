@@ -92,4 +92,4 @@ class Diary extends Component {
     }
 }
 
-export default withStyles(styles)(Diary)
+export default withStyles(styles, { withTheme: true })(Diary)

@@ -53,4 +53,4 @@ class notiObj extends Component {
 
 }
 
-export default withStyles(styles)(notiObj)
+export default withStyles(styles, { withTheme: true })(notiObj)

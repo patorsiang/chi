@@ -212,4 +212,4 @@ class Profile extends Component {
     }
 }
 
-export default withStyles(styles)(Profile)
+export default withStyles(styles, { withTheme: true })(Profile)

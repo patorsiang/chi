@@ -81,4 +81,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Edit))
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Edit))

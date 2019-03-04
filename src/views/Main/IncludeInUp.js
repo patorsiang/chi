@@ -74,7 +74,7 @@ class InUp extends Component {
     const { classes } = this.props;
     const { err } = this.state;
     return (
-      <main className={classes.main}>e
+      <main className={classes.main}>
         <Header />
         <CssBaseline />
         <Paper className={classes.paper}>
@@ -85,7 +85,8 @@ class InUp extends Component {
           <Container>
             <Row>
               <Col>
-                <Button color="primary" className={classes.form} onClick={() => this.signinwithfb()}>Continue with Facebook</Button>
+                {/* <Button color="primary" className={classes.form} onClick={() => this.signinwithfb()}>Continue with Facebook</Button> */}
+                <Button color="primary" className={classes.form} >Continue with Facebook</Button>
               </Col>
             </Row>
             <ErrMessage err={err} />
@@ -121,4 +122,4 @@ InUp.propTypes = {
 };
 
 
-export default withStyles(styles)(InUp);
+export default withStyles(styles, { withTheme: true })(InUp);

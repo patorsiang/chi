@@ -102,18 +102,9 @@ const Acheive = Loadable({
     loading: LoadingComponant
 })
 
-const redirect = () => {
-    console.log(1);
-
-    // if (this.state.value !== window.location.pathname) {
-    //     return <Redirect to={this.state.value} />
-    // }
-}
-
 const Routes = props => {
     return (
-        <App>
-            {redirect()}
+        <App auth={props.auth}>
             <Router history={history}>
                 <Switch>
                     <Route exact path="/Privacy" component={Privacy} />

@@ -243,4 +243,4 @@ class PrivacyPolicy extends Component {
         )
     }
 }
-export default withStyles(styles)(PrivacyPolicy)
+export default withStyles(styles, { withTheme: true })(PrivacyPolicy)

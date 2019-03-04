@@ -8,9 +8,10 @@ import logo from '../../assets/logo.png'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Co from '../../components/main/cooperate'
-// import Avatar from 'react-avatar'
+import Avatar from 'react-avatar'
 import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
+import { connect } from 'react-redux'
 
 const drawerWidth = 240;
 
@@ -143,7 +144,7 @@ class Header extends Component {
   // }
 
   handleChange(event, t) {
-    this.setState({value: t})
+    this.setState({ value: t })
   }
 
   handleDrawerOpen = () => {
@@ -187,7 +188,7 @@ class Header extends Component {
   }
 
   render() {
-    const { classes, theme } = this.props;
+    const { classes, theme, profile, auth } = this.props;
     const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
 
@@ -217,8 +218,7 @@ class Header extends Component {
           })}
         >
           <Toolbar disableGutters={!this.state.open}>
-            {/* {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ? */}
-            {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
+            {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && auth.uid ?
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
@@ -251,11 +251,7 @@ class Header extends Component {
                 </Fragment>
                 : null}
             </div>
-            <Button color="inherit" className={classes.but}><Link to="/upin" style={{
-              fontWeight: "bold",
-              color: "white"
-            }}> Login </Link> </Button>
-            {/* {this.props.auth.uid ?
+            {auth.uid ?
               <IconButton
                 aria-owns={isMenuOpen ? 'material-appbar' : undefined}
                 aria-haspopup="true"
@@ -265,14 +261,14 @@ class Header extends Component {
               >
                 <Avatar name={profile.displayName} size="45" src={profile.Photo} round={true} />
               </IconButton>
-              : <Button color="inherit" className={classes.but}><Link to="/upin" style={{
-                fontWeight: "bold",
-                color: "white"
-              }}> Login </Link> </Button>} */}
+              : window.location.pathname.search('upin') === -1 ?
+                <Button color="inherit" className={classes.but}><Link to="/upin" style={{
+                  fontWeight: "bold",
+                  color: "white"
+                }}> Login </Link> </Button> : null}
           </Toolbar>
         </AppBar>
-        {/* {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && this.props.auth.uid ? */}
-        {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
+        {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && auth.uid ?
           <Drawer
             variant="permanent"
             className={classNames(classes.drawer, {
@@ -352,4 +348,11 @@ Header.propTypes = {
   valueSearch: PropTypes.string
 };
 
-export default withStyles(styles, { withTheme: true })(Header);
+const mapStateToProps = (state) => {
+  return {
+    auth: state.firebase.auth,
+    profile: state.firebase.profile,
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Header));

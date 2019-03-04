@@ -92,4 +92,4 @@ class Feed extends Component {
     }
 }
 
-export default withStyles(styles)(Feed)
+export default withStyles(styles, { withTheme: true })(Feed)

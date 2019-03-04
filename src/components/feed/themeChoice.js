@@ -163,4 +163,4 @@ class Choice extends Component {
     }
 }
 
-export default withStyles(styles)(Choice)
+export default withStyles(styles, { withTheme: true })(Choice)

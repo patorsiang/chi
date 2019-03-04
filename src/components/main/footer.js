@@ -4,8 +4,6 @@ import { withStyles } from '@material-ui/core/styles';
 import { Badge, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Redirect } from 'react-router-dom'
-// import { connect } from 'react-redux'
-// import Background from '../../assets/bg.jpg'
 
 const styles = {
     root: {
@@ -33,17 +31,12 @@ class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: this.props.Menu,
+            value: window.location.pathname,
         }
-    }
-
-    componentWillMount() {
-        this.props.getNotiNum()
     }
 
     handleChange = (event, value) => {
         this.setState({ value })
-        this.props.changeMenu(value)
     };
 
     renderRedirect = (value) => {
@@ -88,5 +81,5 @@ Footer.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Footer)
+export default withStyles(styles, { withTheme: true })(Footer)
 

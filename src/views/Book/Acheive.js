@@ -75,4 +75,4 @@ class Acheive extends Component {
     }
 }
 
-export default withStyles(styles)(Acheive)
+export default withStyles(styles, { withTheme: true })(Acheive)

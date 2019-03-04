@@ -134,4 +134,4 @@ class TermService extends Component {
         )
     }
 }
-export default withStyles(styles)(TermService)
+export default withStyles(styles, { withTheme: true })(TermService)

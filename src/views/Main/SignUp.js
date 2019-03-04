@@ -65,7 +65,7 @@ const styles = theme => ({
     },
   },
   cssOutlinedInput: {
-    '&$cssFocused $notchedOutline': {
+    '&$cssFocused': {
       borderColor: '#FF9933',
     },
   },
@@ -236,4 +236,4 @@ SignUp.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(SignUp);
+export default withStyles(styles, { withTheme: true })(SignUp);
