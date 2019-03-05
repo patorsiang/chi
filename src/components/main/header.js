@@ -12,7 +12,7 @@ import Avatar from 'react-avatar'
 import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
 import { connect } from 'react-redux'
-
+import { signout } from '../../store/actions/appAction'
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -124,6 +124,9 @@ const styles = theme => ({
     fontSize: '0.45em',
     width: 'auto',
     height: 'auto',
+  },
+  icons: {
+    marginRight: '2em'
   }
 });
 
@@ -136,11 +139,6 @@ class Header extends Component {
       anchorEl: null,
       value: this.props.Menu,
     };
-    this.handleChange = this.handleChange.bind(this);
-  }
-
-  handleChange(event, t) {
-    this.setState({ value: t })
   }
 
   handleDrawerOpen = () => {
@@ -169,7 +167,7 @@ class Header extends Component {
     }
   }
 
-  handleclick = () => {
+  signout = () => {
     this.props.signout();
     this.setState({ anchorEl: null });
   }
@@ -200,10 +198,10 @@ class Header extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={() => this.handleProfile('/profile')}>Profile</MenuItem>
-        <MenuItem onClick={() => this.handleProfile('/Privacy')}>Privacy Policy</MenuItem>
-        <MenuItem onClick={() => this.handleProfile('/Terms')}>Terms of Service</MenuItem>
-        <MenuItem onClick={this.handleclick}>Sign Out</MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><Link to={'/profile'}>Profile</Link></MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><Link to={'/Privacy'}>Privacy Policy</Link></MenuItem>
+        <MenuItem onClick={this.handleMenuClose}><Link to={'/Terms'}>Terms of Service</Link></MenuItem>
+        <MenuItem onClick={this.signout}>Sign Out</MenuItem>
       </Menu>
     );
 
@@ -306,34 +304,35 @@ class Header extends Component {
                 <ListItem button key={text} selected={window.location.pathname === text} onClick={(event) => this.handleChange(event, text)}>
                   <ListItemIcon>
                     {index === 0 ?
-                      <FontAwesomeIcon icon={['fas', 'map-marked-alt']} /> :
+                      <Link to={text}><FontAwesomeIcon icon={['fas', 'map-marked-alt']} className={classes.icons} /></Link> :
                       index === 1 ?
-                        <FontAwesomeIcon icon={['fas', 'file-signature']} /> :
+                        <Link to={text}><FontAwesomeIcon icon={['fas', 'file-signature']} className={classes.icons} /></Link> :
                         index === 2 ?
-                          <FontAwesomeIcon icon={['fas', 'newspaper']} /> :
+                          <Link to={text}><FontAwesomeIcon icon={['fas', 'newspaper']} className={classes.icons} /></Link> :
                           index === 3 ?
-                            <FontAwesomeIcon icon={['fas', 'bookmark']} /> :
-                            <Badge badgeContent={0} color="secondary">
-                              <FontAwesomeIcon icon={['fas', 'bell']} />
-                            </Badge>}
+                            <Link to={text}><FontAwesomeIcon icon={['fas', 'bookmark']} className={classes.icons} /></Link> :
+                            <Link to={text}>
+                              <Badge badgeContent={0} color="secondary" className={classes.icons}>
+                                <FontAwesomeIcon icon={['fas', 'bell']} />
+                              </Badge></Link>}
                   </ListItemIcon>
-                  {index === 0 ? <ListItemText primary={'map'} /> : <ListItemText primary={text.replace('/', '  ')} />}
+                  {index === 0 ? <Link to={text}><ListItemText primary={'map'} /></Link> : <Link to={text}><ListItemText primary={text.replace('/', '')} /></Link>}
                 </ListItem>
               ))}
             </List>
             <Divider />
             <List>
               {['/profile', '/Terms', '/Privacy'].map((text, index) => (
-                <ListItem button key={text} selected={this.props.Menu === text} onClick={(event) => this.handleChange(event, text)}>
+                <ListItem button key={text} selected={window.location.pathname === text} >
                   <ListItemIcon>
                     {index === 0 ?
-                      <Icon className={classes.icon}>Profile</Icon> :
+                      <Link to={text}><Icon className={classes.icon}>Profile</Icon></Link> :
                       index === 1 ?
-                        <Icon className={classes.icon}>Terms</Icon> :
-                        <Icon className={classes.icon}>Privacy</Icon>
+                        <Link to={text}><Icon className={classes.icon}>Terms</Icon></Link> :
+                        <Link to={text}><Icon className={classes.icon}>Privacy</Icon></Link>
                     }
                   </ListItemIcon>
-                  {index === 0 ? <ListItemText primary={'Profile'} /> : index === 1 ? <ListItemText primary={'Terms of Service'} /> : <ListItemText primary={'Privacy Policy'} />}
+                  {index === 0 ? <Link to={'/profile'}><ListItemText primary={'Profile'} /></Link> : index === 1 ? <Link to={'/Terms'}><ListItemText primary={'Terms of Service'} /></Link> : <Link to={'/Privacy'}><ListItemText primary={'Privacy Policy'} /></Link>}
                 </ListItem>
               ))}
             </List>
@@ -368,4 +367,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Header));
+const mapDispatchToProps = (dispatch) => {
+  return {
+    signout: () => dispatch(signout()),
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Header));

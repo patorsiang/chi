@@ -34,7 +34,7 @@ class Map extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentWillMount(){
+    componentDidMount(){
         this.props.changeState(['Andaman and Nicobar Islands'])
         this.props.loadPost()
     }

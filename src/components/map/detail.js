@@ -5,6 +5,8 @@ import { Element, scroller } from 'react-scroll'
 import Post from '../diary/pubpost'
 import { isMobile } from 'react-device-detect'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { changeState, loadPost } from '../../store/actions/appAction'
+import { connect } from 'react-redux'
 
 const styles = theme => ({
     state: {
@@ -35,7 +37,8 @@ class Detail extends Component {
     }
 
     handleClick(s) {
-        this.props.changeState(s);
+        this.props.changeState(s)
+        this.props.loadPost()
     }
 
     render() {
@@ -59,4 +62,11 @@ class Detail extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Detail)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        changeState: state => dispatch(changeState(state)),
+        loadPost: () => dispatch(loadPost()),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(null, mapDispatchToProps)(Detail))

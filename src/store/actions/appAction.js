@@ -12,6 +12,9 @@ export const changeState = (S) => {
         const searchState = firebase.functions().httpsCallable('searchPostByState')
         searchState({ state: S }).then(result => {
             const userInfo = firebase.functions().httpsCallable('getUser')
+            if (result.data.length === 0) {
+                return dispatch({ type: 'CHANGE_STATE', S, post: [] })
+            }
             result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
                 data.data.idWriter = data.data.writer
                 data.data.writer = writer.data
@@ -57,6 +60,38 @@ export const changeState = (S) => {
 export const loadPost = () => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         return dispatch({ type: 'LOAD_POST'})
+    }
+}
+
+export const signout = () => {
+    return (dispatch, getState, { getFirebase }) => {
+        const inDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        var openRequest = inDB.open('chi_db_book');
+        var openRequest2 = inDB.open('chi_db_noti');
+        openRequest.onsuccess = function (e) {
+            const db = e.target.result;
+            const transaction = db.transaction(['book'], 'readwrite');
+            const store = transaction.objectStore('book');
+            store.clear();
+        }
+        openRequest.onerror = function (e) {
+            console.log('onerror!');
+            console.dir(e);
+        };
+        openRequest2.onsuccess = function (e) {
+            const db = e.target.result;
+            const transaction = db.transaction(['noti'], 'readwrite');
+            const store = transaction.objectStore('noti');
+            store.clear();
+        }
+        openRequest2.onerror = function (e) {
+            console.log('onerror!');
+            console.dir(e);
+        };
+        const firebase = getFirebase()
+        firebase.auth().signOut().then(() => {
+            dispatch({ type: 'SIGNOUT_SUCCESS' })
+        })
     }
 }
 

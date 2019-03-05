@@ -103,8 +103,9 @@ const Acheive = Loadable({
 })
 
 const Routes = props => {
+    const { auth, profile } = props
     return (
-        <App auth={props.auth}>
+        <App auth={auth}>
             <Router history={history}>
                 <Switch>
                     <Route exact path="/Privacy" component={Privacy} />
@@ -129,20 +130,35 @@ const Routes = props => {
                             <InUp />
                             : <Redirect to='/' />
                     } />
-                    <Route exact path="/diary" render={() =>
+                    <Route exact path="/diary/edit" render={() =>
                         props.auth.uid ?
-                            <Diary />
-                            : <Unregist name='Diary' />
+                            <EditDiary />
+                            : <Redirect to='/' />
                     } />
                     <Route exact path="/diary/create" render={() =>
                         props.auth.uid ?
                             <CreateDiary />
-                            : <Unregist name='Create Diary' />
+                            : <Redirect to='/' />
                     } />
-                    <Route exact path="/diary/edit" render={() =>
+                    <Route exact path="/acheive" render={() =>
                         props.auth.uid ?
-                            <EditDiary />
-                            : <Unregist name='Edit Diary' />
+                            <Acheive />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/profile" render={() =>
+                        props.auth.uid ?
+                            <Profile auth={auth} profile={profile} />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/profile/img" render={() =>
+                        props.auth.uid ?
+                            <UpdateIMG />
+                            : <Redirect to='/' />
+                    } />
+                    <Route exact path="/diary" render={() =>
+                        props.auth.uid ?
+                            <Diary />
+                            : <Unregist name='Diary' />
                     } />
                     <Route exact path="/feed" render={() =>
                         props.auth.uid ?
@@ -154,25 +170,10 @@ const Routes = props => {
                             <Book />
                             : <Unregist name='Book' />
                     } />
-                    <Route exact path="/acheive" render={() =>
-                        props.auth.uid ?
-                            <Acheive />
-                            : <Unregist name='Acheive' />
-                    } />
                     <Route exact path="/notice" render={() =>
                         props.auth.uid ?
                             <Notice />
                             : <Unregist name='Notice' />
-                    } />
-                    <Route exact path="/profile" render={() =>
-                        props.auth.uid ?
-                            <Profile />
-                            : <Unregist name='Profile' />
-                    } />
-                    <Route exact path="/profile/img" render={() =>
-                        props.auth.uid ?
-                            <UpdateIMG />
-                            : <Unregist name='/profile/img' />
                     } />
                     <Route exact path="/" component={Map} />
                     <Route path="*" component={NotFound} />

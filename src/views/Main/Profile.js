@@ -4,7 +4,7 @@ import { Button, FormControl, Input, InputLabel, Paper, TextField } from '@mater
 import withStyles from '@material-ui/core/styles/withStyles';
 import { Container, Col, Row, Button as ButtomPW, Alert } from 'reactstrap'
 import Avatar from 'react-avatar'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import ErrMessage from '../../components/main/errMessage';
 import { Redirect, Link } from 'react-router-dom'
 import img from '../../assets/peacock.png';
@@ -74,6 +74,8 @@ const styles = theme => ({
 class Profile extends Component {
     constructor(props) {
         super(props);
+        console.log(this.props);
+        
         this.state = {
             newEmail: this.props.auth.email,
             uid: this.props.auth.uid,
@@ -85,10 +87,6 @@ class Profile extends Component {
         };
         this.handleChange = this.handleChange.bind(this);
         this.onDismiss = this.onDismiss.bind(this);
-    }
-
-    componentDidMount() {
-        this.props.initial()
     }
 
     handleChange = name => event => {
@@ -212,4 +210,11 @@ class Profile extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Profile)
+const mapStateToProps = (state) => {
+    return {
+        auth: state.firebase.auth,
+        profile: state.firebase.profile,
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Profile))

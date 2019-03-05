@@ -11,7 +11,7 @@ class Home extends Component {
                 <Header />
                 <Container>
                     {this.props.children}
-                    <ScrollUpButton />
+                    <ScrollUpButton style={{marginBottom: '10%'}}/>
                 </Container>
                 {isMobile ? <Footer /> : null}
             </Fragment>
