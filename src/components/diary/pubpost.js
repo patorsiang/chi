@@ -49,21 +49,22 @@ const styles = theme => ({
     backgroundColor: '#33CC33',
     border: '1.5px solid',
     fontSize: 12,
-    marginLeft: theme.spacing.unit * 11,
+    float: 'right'
+    // marginLeft: theme.spacing.unit * 11,
   },
   maybe: {
     borderColor: '#FFCC00',
     backgroundColor: '#FFCC00',
     border: '1.5px solid',
     fontSize: 12,
-    marginLeft: theme.spacing.unit * 11,
+    float: 'right'
   },
   bad: {
     borderColor: '#FF0000',
     backgroundColor: '#FF0000',
     border: '1.5px solid',
     fontSize: 12,
-    marginLeft: theme.spacing.unit * 11,
+    float: 'right'
   },
   chip: {
     margin: theme.spacing.unit,

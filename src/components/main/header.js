@@ -132,16 +132,12 @@ class Header extends Component {
     super(props);
     this.state = {
       open: false,
-      search: this.props.valueSearch,
+      search: this.props.search,
       anchorEl: null,
       value: this.props.Menu,
     };
     this.handleChange = this.handleChange.bind(this);
   }
-
-  // componentWillMount() {
-  //   this.props.getNotiNum()
-  // }
 
   handleChange(event, t) {
     this.setState({ value: t })
@@ -156,18 +152,22 @@ class Header extends Component {
   };
 
   handleChangeSearch = event => {
-    if (window.location.pathname.includes('feed')) {
-      this.setState({
-        search: event.target.value
-      })
-      this.props.searchElse(event.target.value)
-    } else {
-      this.setState({
-        search: event.target.value
-      })
-      this.props.searchMap(event.target.value)
-    }
+    this.setState({
+      search: event.target.value
+    })
   };
+
+  searchByState = (e) => {
+    if (e.key === 'Enter') {
+      console.log(this.state.search);
+    }
+  }
+
+  searchByTag = (e) => {
+    if (e.key === 'Enter') {
+      console.log(this.state.search);
+    }
+  }
 
   handleclick = () => {
     this.props.signout();
@@ -239,15 +239,27 @@ class Header extends Component {
                   <div className={classes.searchIcon}>
                     <SearchIcon />
                   </div>
-                  <InputBase
-                    placeholder="Search…"
-                    classes={{
-                      root: classes.inputRoot,
-                      input: classes.inputInput,
-                    }}
-                    value={this.state.search}
-                    onChange={this.handleChangeSearch}
-                  />
+                  {window.location.pathname.search('feed') === -1 ?
+                    <InputBase
+                      placeholder={'Search state ... '}
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                      value={this.state.search}
+                      onChange={this.handleChangeSearch}
+                      onKeyPress={this.searchByState}
+                    /> :
+                    <InputBase
+                      placeholder={'Search tag ... '}
+                      classes={{
+                        root: classes.inputRoot,
+                        input: classes.inputInput,
+                      }}
+                      value={this.state.search}
+                      onChange={this.handleChangeSearch}
+                      onKeyPress={this.searchByTag}
+                    />}
                 </Fragment>
                 : null}
             </div>
@@ -345,13 +357,14 @@ class Header extends Component {
 Header.propTypes = {
   classes: PropTypes.object.isRequired,
   theme: PropTypes.object.isRequired,
-  valueSearch: PropTypes.string
+  search: PropTypes.string
 };
 
 const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
     profile: state.firebase.profile,
+    search: state.app.search
   }
 }
 

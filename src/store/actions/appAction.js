@@ -46,10 +46,17 @@ export const changeState = (S) => {
                 }).then(obj => {
                     data.ProTag = [...new Set(obj.tags)]
                     data.ProTheme = [...new Set(obj.themes, data.theme)]
-                }).then(() => dispatch({ type: 'CHANGE_STATE', S, post: result.data.sort(compare) })))
+                }).then(() => {return dispatch({ type: 'CHANGE_STATE', S, post: result.data.sort(compare) })}))
             }))
         })
-            .catch(error => dispatch({ type: 'CHANGE_STATE', S, post: [] }))
-        dispatch({ type: 'CHANGE_STATE', S, post: [] })
+            .catch(error => {return dispatch({ type: 'CHANGE_STATE', S, post: [] })})
+        return dispatch({ type: 'CHANGE_STATE', S, post: [] })
     }
 }
+
+export const loadPost = () => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        return dispatch({ type: 'LOAD_POST'})
+    }
+}
+

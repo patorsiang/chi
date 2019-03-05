@@ -4,6 +4,8 @@ import { Button } from "@material-ui/core";
 import { Element, scroller } from 'react-scroll'
 import Post from '../diary/pubpost'
 import { isMobile } from 'react-device-detect'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 const styles = theme => ({
     state: {
         width: "100%",
@@ -38,12 +40,13 @@ class Detail extends Component {
 
     render() {
         // const { classes, post } = this.props;
-        const { classes, INstate, post } = this.props;
+        const { classes, INstate, post, isLoaded } = this.props;
         return (
             <Fragment>
                 <Element name="section_detail" />
                 <div className={classes.state}>
                     {INstate.map((s, i) => i === 0 ? <b key={i}>{s}<br /></b> : <Button color='link' key={i} onClick={() => { this.handleClick(s) }}>{s}<br /></Button>)}
+                    {isLoaded ? <Fragment><FontAwesomeIcon icon="spinner" spin /> Loading...</Fragment> : null}
                 </div>
                 {isMobile ?
                     <div className={classes.state}>

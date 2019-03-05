@@ -8,7 +8,7 @@ import { Row, Col } from 'reactstrap';
 import { connect } from 'react-redux'
 import { Element, scroller } from 'react-scroll'
 import Result from '../../components/map/searchResult'
-import { changeState } from '../../store/actions/appAction'
+import { changeState, loadPost } from '../../store/actions/appAction'
 
 const styles = theme => ({
     map:{
@@ -31,18 +31,17 @@ const styles = theme => ({
 class Map extends Component {
     constructor(props) {
         super(props);
-        this.state = { 
-            INstate: this.props.INstate
-        };
         this.handleClick = this.handleClick.bind(this);
     }
 
-    // componentWillMount(){
-    //     this.props.changeState(['Andaman and Nicobar Islands'])
-    // }
+    componentWillMount(){
+        this.props.changeState(['Andaman and Nicobar Islands'])
+        this.props.loadPost()
+    }
 
     handleClick(s) {
         this.props.changeState(s)
+        this.props.loadPost()
         scroller.scrollTo('section_detail', {
             duration: 1000,
             delay: 100,
@@ -52,11 +51,11 @@ class Map extends Component {
     }
 
     render() {
-        const { classes, searchState, post, INstate } = this.props;
+        const { classes, search, post, INstate, isLoaded } = this.props;
 
         return(
             <Home>
-                <Result searchState={searchState}/>
+                <Result searchState={search}/>
                     <Element name="section_map" />
                     <Row>
                     <Col xs="12" md="8">
@@ -1559,7 +1558,7 @@ class Map extends Component {
                     </svg>
                     </Col>
                     <Col xs="12" md="4">
-                        <Detail INstate={INstate} post={post}/>
+                        <Detail INstate={INstate} post={post} isLoaded={isLoaded}/>
                     </Col>
                     </Row>
                 </Home>
@@ -1574,14 +1573,16 @@ Map.propTypes = {
 const mapStateToProps = (state) => {
     return {
         INstate: state.app.stateOfIN,
-        searchState: state.app.searchState,
+        search: state.app.search,
         post: state.app.post,
+        isLoaded: state.app.isLoaded,
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         changeState: state => dispatch(changeState(state)),
+        loadPost: () => dispatch(loadPost()),
     }
 }
 
