@@ -45,10 +45,6 @@ class Diary extends Component {
         date: new Date(),
     }
 
-    componentWillMount() {
-        this.props.getDiary()
-    }
-
     onChange = date => this.setState({ date })
 
     render() {

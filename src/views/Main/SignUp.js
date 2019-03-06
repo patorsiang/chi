@@ -7,7 +7,8 @@ import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
 import { Link } from 'react-router-dom'
 import Co from '../../components/main/cooperate'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
+import { register } from '../../store/actions/appAction'
 import ErrMessage from '../../components/main/errMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -232,8 +233,20 @@ class SignUp extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    err: state.app.err,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    register: user => dispatch(register(user))
+  }
+}
+
 SignUp.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(SignUp);
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(SignUp));

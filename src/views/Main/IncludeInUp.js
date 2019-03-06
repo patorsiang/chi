@@ -6,7 +6,8 @@ import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
 import Co from '../../components/main/cooperate'
 import { Link } from 'react-router-dom'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
+import { signinwithfb } from '../../store/actions/appAction'
 import { Button, Container, Row, Col } from 'reactstrap';
 import ErrMessage from '../../components/main/errMessage';
 
@@ -60,19 +61,13 @@ const styles = theme => ({
 });
 
 class InUp extends Component {
-  constructor(props) {
-    super(props);
-    this.state = { err: null };
-  }
 
   signinwithfb = () => {
     this.props.signinwithfb()
-    this.setState({ err: this.props.err })
   }
 
   render() {
-    const { classes } = this.props;
-    const { err } = this.state;
+    const { classes, err } = this.props;
     return (
       <main className={classes.main}>
         <Header />
@@ -85,8 +80,7 @@ class InUp extends Component {
           <Container>
             <Row>
               <Col>
-                {/* <Button color="primary" className={classes.form} onClick={() => this.signinwithfb()}>Continue with Facebook</Button> */}
-                <Button color="primary" className={classes.form} >Continue with Facebook</Button>
+                <Button color="primary" className={classes.form} onClick={() => this.signinwithfb()}>Continue with Facebook</Button>
               </Col>
             </Row>
             <ErrMessage err={err} />
@@ -121,5 +115,16 @@ InUp.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
+const mapStateToProps = (state) => {
+  return {
+    err: state.app.err
+  }
+}
 
-export default withStyles(styles, { withTheme: true })(InUp);
+const mapDispatchToProps = (dispatch) => {
+    return {
+      signinwithfb: () => dispatch(signinwithfb()),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps,mapDispatchToProps)(InUp));

@@ -35,14 +35,6 @@ const styles = theme => ({
 });
 class Notice extends Component {
 
-  componentDidMount() {
-    this.props.changeMenu('/notice')
-  }
-
-  componentWillMount() {
-    this.props.initial()
-  }
-
   render() {
     const { classes, noti } = this.props
 

@@ -50,10 +50,6 @@ const styles = theme => ({
 });
 
 class Feed extends Component {
-    componentWillMount() {
-        this.props.chooseChoice(this.props.choice)
-    }
-
     render() {
         const { classes, post } = this.props
 

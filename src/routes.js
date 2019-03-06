@@ -111,67 +111,67 @@ const Routes = props => {
                     <Route exact path="/Privacy" component={Privacy} />
                     <Route exact path="/Terms" component={Term} />
                     <Route exact path="/upin" render={() =>
-                        !props.auth.uid ?
+                        !auth.uid ?
                             <InUp />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/up" render={() =>
-                        !props.auth.uid ?
+                        !auth.uid ?
                             <SignUp />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/in" render={() =>
-                        !props.auth.uid ?
+                        !auth.uid ?
                             <SignIn />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/upin" render={() =>
-                        !props.auth.uid ?
+                        !auth.uid ?
                             <InUp />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/diary/edit" render={() =>
-                        props.auth.uid ?
-                            <EditDiary />
+                        auth.uid ?
+                            <EditDiary auth={auth}/>
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/diary/create" render={() =>
-                        props.auth.uid ?
-                            <CreateDiary />
+                        auth.uid ?
+                            <CreateDiary auth={auth}/>
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/acheive" render={() =>
-                        props.auth.uid ?
-                            <Acheive />
+                        auth.uid ?
+                            <Acheive auth={auth}/>
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/profile" render={() =>
-                        props.auth.uid ?
+                        auth.uid ?
                             <Profile auth={auth} profile={profile} />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/profile/img" render={() =>
-                        props.auth.uid ?
-                            <UpdateIMG />
+                        auth.uid ?
+                            <UpdateIMG auth={auth}/>
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/diary" render={() =>
-                        props.auth.uid ?
+                        auth.uid ?
                             <Diary />
                             : <Unregist name='Diary' />
                     } />
                     <Route exact path="/feed" render={() =>
-                        props.auth.uid ?
+                        auth.uid ?
                             <Feed />
                             : <Unregist name='Feed' />
                     } />
                     <Route exact path="/bookmark" render={() =>
-                        props.auth.uid ?
+                        auth.uid ?
                             <Book />
                             : <Unregist name='Book' />
                     } />
                     <Route exact path="/notice" render={() =>
-                        props.auth.uid ?
+                        auth.uid ?
                             <Notice />
                             : <Unregist name='Notice' />
                     } />

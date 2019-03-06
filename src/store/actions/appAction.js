@@ -63,31 +63,131 @@ export const loadPost = () => {
     }
 }
 
+export const searchByState = (S) => {
+    return (dispatch, getState) => {
+        dispatch({ type: 'SEARCH_BY_STATE', S })
+    }
+}
+
+export const signinwithfb = () => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+        const firestore = getFirestore()
+
+        var provider = new firebase.auth.FacebookAuthProvider();
+        firebase.auth().useDeviceLanguage();
+        firebase.auth().signInWithPopup(provider).then(({ user }) => {
+            firestore.collection('user').doc(user.uid).get().then(u => {
+                if (!u.exists) {
+                    return firestore.collection('user').doc(user.uid).set({
+                        displayName: user.displayName,
+                        DOB: null,
+                        Photo: user.photoURL,
+                        created: Date(),
+                        token: 0
+                    })
+                }
+            })
+        }).then(() => {
+            var user = firebase.auth().currentUser;
+            if (!user.emailVerified) {
+                user.sendEmailVerification().then(function () {
+                    // Email sent.
+                }).catch(function (err) {
+                    // An error happened.
+                });
+            }
+            dispatch({ type: 'SIGNIN_SUCCESS' })
+        }).catch(err => {
+            dispatch({ type: 'SIGNIN_ERROR', err })
+        })
+    }
+}
+
+export const SigninByEmailNPWD = (U) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+
+        firebase.auth().signInWithEmailAndPassword(U.Email, U.Password).then(() => {
+            var user = firebase.auth().currentUser;
+            if (!user.emailVerified) {
+                user.sendEmailVerification().then(function () {
+                    // Email sent.
+                }).catch(function (err) {
+                    // An error happened.
+                });
+            }
+            dispatch({ type: 'SIGNIN_SUCCESS' })
+        }).catch(function (error) {
+            // Handle Errors here.
+            var errorMessage = error.message;
+            
+            dispatch({ type: 'SIGNIN_ERROR', err: errorMessage })
+        });
+    }
+}
+
+export const register = (U) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+        const firestore = getFirestore()
+
+        firebase.auth().createUserWithEmailAndPassword(
+            U.Email,
+            U.Password,
+        ).then((resp) => {
+            if (U.Photo) {
+                var storageRef = firebase.storage().ref(`profile/${resp.user.uid}` + U.Photo.name);
+
+                //Upload file
+                var task = storageRef.put(U.Photo);
+
+                return task.on('state_changed',
+                    function progress(snapshot) {
+
+                    },
+                    function error(err) {
+                        dispatch({ type: 'POSTING_ERROR', err })
+                    },
+                    function complete() {
+                        storageRef.getDownloadURL().then(function (url) {
+                            return firestore.collection('user').doc(resp.user.uid).set({
+                                displayName: U.Name,
+                                DOB: U.DOB,
+                                Photo: url,
+                                created: Date(),
+                                token: 0
+                            })
+                        })
+                    }
+                );
+            } else {
+                return firestore.collection('user').doc(resp.user.uid).set({
+                    displayName: U.Name,
+                    DOB: U.DOB,
+                    Photo: null,
+                    created: Date(),
+                    token: 0
+                })
+            }
+        }).then(() => {
+            var user = firebase.auth().currentUser;
+            if (!user.emailVerified) {
+                user.sendEmailVerification().then(function () {
+                    // Email sent.
+                }).catch(function (err) {
+                    // An error happened.
+                });
+            }
+            dispatch({ type: 'SIGNIN_SUCCESS' })
+        }).catch(err => {
+            dispatch({ type: 'SIGNIN_ERROR', err })
+        })
+    }
+}
+
 export const signout = () => {
     return (dispatch, getState, { getFirebase }) => {
-        const inDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-        var openRequest = inDB.open('chi_db_book');
-        var openRequest2 = inDB.open('chi_db_noti');
-        openRequest.onsuccess = function (e) {
-            const db = e.target.result;
-            const transaction = db.transaction(['book'], 'readwrite');
-            const store = transaction.objectStore('book');
-            store.clear();
-        }
-        openRequest.onerror = function (e) {
-            console.log('onerror!');
-            console.dir(e);
-        };
-        openRequest2.onsuccess = function (e) {
-            const db = e.target.result;
-            const transaction = db.transaction(['noti'], 'readwrite');
-            const store = transaction.objectStore('noti');
-            store.clear();
-        }
-        openRequest2.onerror = function (e) {
-            console.log('onerror!');
-            console.dir(e);
-        };
         const firebase = getFirebase()
         firebase.auth().signOut().then(() => {
             dispatch({ type: 'SIGNOUT_SUCCESS' })

@@ -43,11 +43,11 @@ class Result extends Component {
         })
     }
     render() {
-        const { classes, INstate, searchState } = this.props;
+        const { classes, INstate, search } = this.props;
         return (
             <Fragment>
-                {searchState ? <div className={classes.state}>
-                    Search = '{searchState}' with {INstate[0] === '' ? 0 : INstate.length} Result(s) <Button color='link' onClick={() => { this.handleClick() }}><FontAwesomeIcon icon={['fas', 'arrow-right']} /><br /></Button>
+                {search ? <div className={classes.state}>
+                    Search = '{search}' with {INstate[0] === '' ? 0 : INstate.length} Result(s) <Button color='link' onClick={() => { this.handleClick() }}><FontAwesomeIcon icon={['fas', 'arrow-right']} /><br /></Button>
                 </div> : null}
             </Fragment>
         )

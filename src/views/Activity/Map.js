@@ -34,7 +34,7 @@ class Map extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentDidMount(){
+    componentWillMount(){
         this.props.changeState(['Andaman and Nicobar Islands'])
         this.props.loadPost()
     }
@@ -55,7 +55,7 @@ class Map extends Component {
 
         return(
             <Home>
-                <Result searchState={search}/>
+                <Result search={search} INstate={INstate}/>
                     <Element name="section_map" />
                     <Row>
                     <Col xs="12" md="8">

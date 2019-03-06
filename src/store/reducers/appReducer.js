@@ -1,19 +1,73 @@
-// import stateSet from '../../models/state.json'
+import stateSet from '../../models/state.json'
 
 const initState = {
     stateOfIN: ['Andaman and Nicobar Islands'],
     search: '',
     post: [],
     isLoaded: false,
+    err: null
 }
+
+// In the following line, you should include the prefixes of implementations you want to test.
+const inDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+const bookDB = 'chi_db_book'
+const notiDB = 'chi_db_noti'
+const version = 1
 
 const appReducer = (state, action) => {
     switch (action.type) {
         case 'CHANGE_STATE':
-            state = { ...state, stateOfIN: [action.S], post: action.post, isLoaded: false}
+            state = { ...state, stateOfIN: [action.S], post: action.post, isLoaded: false, search: '', err: null }
             break;
         case 'LOAD_POST':
             state = { ...state, isLoaded: true }
+            break;
+        case 'SEARCH_BY_STATE':
+            const result = []
+            stateSet.state.sort();
+            stateSet.state.map(s => s.toUpperCase().search(action.S.toUpperCase()) > -1 ? result.push(s) : null)
+            if (result.length === 0) {
+                result.push('')
+            }
+            result.sort();
+            state = { ...state, search: action.S, stateOfIN: result, post: [], isLoaded: false }
+            break;
+        case 'SIGNIN_SUCCESS':
+            var Openreq = inDB.open(bookDB, version)
+            Openreq.onsuccess = function (e) {
+                // Get a reference to the DB.
+            };
+            Openreq = inDB.open(notiDB, version)
+            Openreq.onsuccess = function (e) {
+                // Get a reference to the DB.
+            };
+            state = { ...state, err: null }
+            break;
+        case 'SIGNIN_ERROR':
+            state = { ...state, err: action.err }
+            break;
+        case 'SIGNOUT_SUCCESS':
+            var Delreq = inDB.deleteDatabase(bookDB);
+            Delreq.onsuccess = function () {
+                console.log("Deleted database successfully");
+            };
+            Delreq.onerror = function () {
+                console.log("Couldn't delete database");
+            };
+            Delreq.onblocked = function () {
+                console.log("Couldn't delete database due to the operation being blocked");
+            };
+            Delreq = inDB.deleteDatabase(notiDB);
+            Delreq.onsuccess = function () {
+                console.log("Deleted database successfully");
+            };
+            Delreq.onerror = function () {
+                console.log("Couldn't delete database");
+            };
+            Delreq.onblocked = function () {
+                console.log("Couldn't delete database due to the operation being blocked");
+            };
+            state = { ...state, err: null }
             break;
         default:
             // state = {...state,

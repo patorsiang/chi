@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import { withStyles } from '@material-ui/core/styles';
-import { Button } from "@material-ui/core";
+import { Button } from 'reactstrap';
 import { Element, scroller } from 'react-scroll'
 import Post from '../diary/pubpost'
 import { isMobile } from 'react-device-detect'
@@ -50,6 +50,7 @@ class Detail extends Component {
                 <div className={classes.state}>
                     {INstate.map((s, i) => i === 0 ? <b key={i}>{s}<br /></b> : <Button color='link' key={i} onClick={() => { this.handleClick(s) }}>{s}<br /></Button>)}
                     {isLoaded ? <Fragment><FontAwesomeIcon icon="spinner" spin /> Loading...</Fragment> : null}
+                    {/* {["default","inherit","primary","secondary"].} */}
                 </div>
                 {isMobile ?
                     <div className={classes.state}>

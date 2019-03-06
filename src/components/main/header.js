@@ -12,7 +12,7 @@ import Avatar from 'react-avatar'
 import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
 import { connect } from 'react-redux'
-import { signout } from '../../store/actions/appAction'
+import { signout, searchByState } from '../../store/actions/appAction'
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -128,7 +128,7 @@ const styles = theme => ({
   icons: {
     marginRight: '2em'
   },
-  loglike:{
+  loglike: {
     fontWeight: "bold",
     color: "white !important"
   }
@@ -161,11 +161,12 @@ class Header extends Component {
 
   searchByState = (e) => {
     if (e.key === 'Enter') {
-      console.log(this.state.search);
+      this.props.searchByState(this.state.search)
     }
   }
 
   searchByTag = (e) => {
+    console.log('tag');
     if (e.key === 'Enter') {
       console.log(this.state.search);
     }
@@ -202,9 +203,9 @@ class Header extends Component {
         open={isMenuOpen}
         onClose={this.handleMenuClose}
       >
-        <MenuItem onClick={this.handleMenuClose}><Link to={'/profile'}>Profile</Link></MenuItem>
-        <MenuItem onClick={this.handleMenuClose}><Link to={'/Privacy'}>Privacy Policy</Link></MenuItem>
-        <MenuItem onClick={this.handleMenuClose}><Link to={'/Terms'}>Terms of Service</Link></MenuItem>
+        <Link to={'/profile'}><MenuItem onClick={this.handleMenuClose}>Profile</MenuItem></Link>
+        <Link to={'/Privacy'}><MenuItem onClick={this.handleMenuClose}>Privacy Policy</MenuItem></Link>
+        <Link to={'/Terms'}><MenuItem onClick={this.handleMenuClose}>Terms of Service</MenuItem></Link>
         <MenuItem onClick={this.signout}>Sign Out</MenuItem>
       </Menu>
     );
@@ -371,6 +372,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     signout: () => dispatch(signout()),
+    searchByState: state => dispatch(searchByState(state))
   }
 }
 

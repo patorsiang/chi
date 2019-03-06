@@ -6,8 +6,9 @@ import Logo from '../../assets/logo.png';
 import Header from '../../components/main/header'
 import Co from '../../components/main/cooperate'
 import { Link } from 'react-router-dom'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import ErrMessage from '../../components/main/errMessage';
+import { SigninByEmailNPWD } from '../../store/actions/appAction'
 
 const styles = theme => ({
   main: {
@@ -88,7 +89,7 @@ class SignIn extends Component {
 
   handleClick(e) {
     e.preventDefault()
-    this.props.signin(this.state)
+    this.props.SigninByEmailNPWD(this.state)
   }
 
   render() {
@@ -102,7 +103,7 @@ class SignIn extends Component {
           <Typography component="h6" variant="h6">
             Sign in
           </Typography>
-          <form className={classes.form} method="post" onSubmit={(event) => this.handleClick(event)}>
+          <form className={classes.form} onSubmit={(event) => this.handleClick(event)}>
             <FormControl margin="normal" required fullWidth>
               <InputLabel htmlFor="email" classes={{
                 root: classes.cssLabel,
@@ -153,4 +154,16 @@ SignIn.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(SignIn);
+const mapStateToProps = (state) => {
+  return {
+    err: state.app.err,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    SigninByEmailNPWD: user => dispatch(SigninByEmailNPWD(user))
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(SignIn));
