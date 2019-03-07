@@ -5,7 +5,8 @@ const initState = {
     search: '',
     post: [],
     isLoaded: false,
-    err: null
+    err: null,
+    success: null,
 }
 
 // In the following line, you should include the prefixes of implementations you want to test.
@@ -41,10 +42,28 @@ const appReducer = (state, action) => {
             Openreq.onsuccess = function (e) {
                 // Get a reference to the DB.
             };
-            state = { ...state, err: null }
+            state = { ...state, err: null, success: null }
             break;
         case 'SIGNIN_ERROR':
-            state = { ...state, err: action.err }
+            state = { ...state, err: action.err.message, success: null }
+            break;
+        case 'UPDATE_NAMEEMAILDOB_SUCCESS':
+            state = { ...state, err: null, success: 'this updating is completed, then you have to re-login to update you profile'}
+            break;
+        case 'UPDATE_NAMEEMAILDOB_ERROR':
+            state = { ...state, err: action.err.message, success: null}
+            break;
+        case 'UPDATE_PWD_SUCCESS':
+            state = { ...state, err: null, success: 'the reseting password email is already sent to your email., then you have to re-login to update you profile'}
+            break;
+        case 'UPDATE_PWD_ERROR':
+            state = { ...state, err: action.err.message, success: null }
+            break;
+        case 'UPDATE_PHOTO_SUCCESS':
+            state = { ...state, err: null, success: 'the profile photo updating is completed, then you have to re-login to update you profile' }
+            break;
+        case 'UPDATE_PHOTO_ERROR':
+            state = { ...state, err: action.err.message, success: null }
             break;
         case 'SIGNOUT_SUCCESS':
             var Delreq = inDB.deleteDatabase(bookDB);

@@ -118,11 +118,8 @@ export const SigninByEmailNPWD = (U) => {
                 });
             }
             dispatch({ type: 'SIGNIN_SUCCESS' })
-        }).catch(function (error) {
-            // Handle Errors here.
-            var errorMessage = error.message;
-            
-            dispatch({ type: 'SIGNIN_ERROR', err: errorMessage })
+        }).catch(function (err) {
+            dispatch({ type: 'SIGNIN_ERROR', err})
         });
     }
 }
@@ -183,6 +180,77 @@ export const register = (U) => {
         }).catch(err => {
             dispatch({ type: 'SIGNIN_ERROR', err })
         })
+    }
+}
+
+export const updateNameEmailDOB = (credentials) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+        const firestore = getFirestore()
+
+        firebase.auth().currentUser.updateEmail(credentials.newEmail).then(function () {
+            // Update successful.
+            firestore.collection('user').doc(credentials.uid).update({
+                displayName: credentials.displayName,
+                DOB: credentials.DOB,
+            })
+            dispatch({ type: 'UPDATE_NAMEEMAILDOB_SUCCESS' })
+        }).catch(function (err) {
+            // An error happened.
+            dispatch({ type: 'UPDATE_NAMEEMAILDOB_ERROR', err })
+        });
+    }
+}
+
+export const updatePWD = (credentials) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+        var auth = firebase.auth();
+        var emailAddress = credentials.newEmail;
+
+        auth.sendPasswordResetEmail(emailAddress).then(function () {
+            // Email sent.
+            dispatch({ type: 'UPDATE_PWD_SUCCESS' })
+        }).catch(function (err) {
+            // An error happened.
+            dispatch({ type: 'UPDATE_PWD_ERROR', err })
+        });
+    }
+}
+
+export const updateProImg = (S) => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+        const firestore = getFirestore()
+        const state = getState()
+        if (S.Photo) {
+            var storageRef = firebase.storage().ref(`profile/${state.firebase.auth.uid}` + S.Photo.name);
+
+            //Upload file
+            var task = storageRef.put(S.Photo);
+
+            return task.on('state_changed',
+                function progress(snapshot) {
+
+                },
+                function error(err) {
+                    dispatch({ type: 'UPDATE_PHOTO_ERROR', err })
+                },
+                function complete() {
+                    storageRef.getDownloadURL().then(function (url) {
+                        return firestore.collection('user').doc(state.firebase.auth.uid).update({
+                            Photo: url
+                        }).then(function () {
+                            // Email sent.
+                            dispatch({ type: 'UPDATE_PHOTO_SUCCESS' })
+                        }).catch(function (err) {
+                            // An error happened.
+                            dispatch({ type: 'UPDATE_PHOTO_ERROR', err })
+                        });
+                    })
+                }
+            );
+        }
     }
 }
 

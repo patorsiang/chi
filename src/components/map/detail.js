@@ -46,10 +46,11 @@ class Detail extends Component {
         const { classes, INstate, post, isLoaded } = this.props;
         return (
             <Fragment>
-                <Element name="section_detail" />
                 <div className={classes.state}>
                     {INstate.map((s, i) => i === 0 ? <b key={i}>{s}<br /></b> : <Button color='link' key={i} onClick={() => { this.handleClick(s) }}>{s}<br /></Button>)}
-                    {isLoaded ? <Fragment><FontAwesomeIcon icon="spinner" spin /> Loading...</Fragment> : null}
+                    {isLoaded ? 
+                        <Fragment><FontAwesomeIcon icon="spinner" spin /> Loading...</Fragment> : 
+                        post.length === 0 ? 'There is no post.': null}
                     {/* {["default","inherit","primary","secondary"].} */}
                 </div>
                 {isMobile ?
@@ -58,6 +59,7 @@ class Detail extends Component {
                     </div> :
                     post.map((postData, i) => <Post key={i} no={i} post={postData} />)
                 }
+                <Element name="section_detail" />
             </Fragment>
         )
     }

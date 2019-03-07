@@ -1,14 +1,14 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { Button, Paper } from '@material-ui/core';
 import { Container, Col, Row, CustomInput, FormGroup, Label, Button as ButtomPW } from 'reactstrap'
 import withStyles from '@material-ui/core/styles/withStyles';
 import Avatar from 'react-avatar'
 import ErrMessage from '../../components/main/errMessage';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { Redirect } from 'react-router-dom'
-
+import { updateProImg } from "../../store/actions/appAction";
+import { Link } from 'react-router-dom'
 const styles = theme => ({
     main: {
         width: '100%',
@@ -59,7 +59,6 @@ class UpdateIMG extends Component {
             filename: null,
             Photo: null,
             url: null,
-            menu: '/profile/img'
         }
     }
 
@@ -70,10 +69,6 @@ class UpdateIMG extends Component {
                 Photo
             })
         }
-        if (this.props.menu) {
-            this.props.changeMenu(this.props.menu);
-
-        }
     }
 
     handleChangePhoto(event) {
@@ -82,7 +77,6 @@ class UpdateIMG extends Component {
                 Photo: event.target.files[0],
                 filename: event.target.files[0].name,
                 url: URL.createObjectURL(event.target.files[0]),
-                show: false
             })
         }
     }
@@ -92,26 +86,19 @@ class UpdateIMG extends Component {
         this.props.updateProImg(this.state)
     }
 
-    renderRedirect = (value) => {
-        if (value !== window.location.pathname) {
-            this.props.changeMenu(value);
-            return <Redirect to={value} />
-        }
-    }
-
     render() {
-        const { classes, profile, errproimg, success } = this.props;
-        const { filename, Photo, menu, url } = this.state
+        const { classes, profile, err, success } = this.props;
+        const { filename, Photo, url } = this.state
         return (
             <Home>
-                {this.renderRedirect(menu)}
                 <Container>
                     <Paper className={classes.main}>
                         <Container>
                             <Row>
                                 <Col md='3' xs='12'>
                                     <Row>
-                                        <Col xs='1'><ButtomPW color="secondary" onClick={() => { this.setState({ menu: '/profile' }) }}><FontAwesomeIcon icon={['fas', 'chevron-left']} /></ButtomPW>
+                                        <Col xs='1'>
+                                            <Link to='/profile'><ButtomPW color="secondary"><FontAwesomeIcon icon={['fas', 'chevron-left']} /></ButtomPW></Link>
                                         </Col>
                                     </Row>
                                 </Col>
@@ -127,7 +114,7 @@ class UpdateIMG extends Component {
                                             <FormGroup className={classes.input}>
                                                 <CustomInput type="file" id="exampleCustomFileBrowser" accept="image/*" name="customFile" onChange={(event) => this.handleChangePhoto(event)} label={filename} />
                                             </FormGroup>
-                                            <ErrMessage err={errproimg} />
+                                            <ErrMessage err={err} />
                                             <ErrMessage suc={success} />
                                             <Button
                                                 type="submit"
@@ -150,4 +137,19 @@ class UpdateIMG extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(UpdateIMG);
+const mapStateToProps = (state) => {
+    return {
+        auth: state.firebase.auth,
+        profile: state.firebase.profile,
+        success: state.app.success,
+        err: state.app.err
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateProImg: state => dispatch(updateProImg(state)),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(UpdateIMG));

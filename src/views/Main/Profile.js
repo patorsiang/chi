@@ -6,8 +6,10 @@ import { Container, Col, Row, Button as ButtomPW, Alert } from 'reactstrap'
 import Avatar from 'react-avatar'
 import { connect } from 'react-redux'
 import ErrMessage from '../../components/main/errMessage';
-import { Redirect, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import img from '../../assets/peacock.png';
+import { updateNameEmailDOB, updatePWD } from "../../store/actions/appAction";
+
 const styles = theme => ({
     main: {
         width: '100%',
@@ -82,7 +84,6 @@ class Profile extends Component {
             DOB: this.props.profile.DOB,
             displayName: this.props.profile.displayName,
             visible: true,
-            success: this.props.success,
             click: 0
         };
         this.handleChange = this.handleChange.bind(this);
@@ -105,24 +106,8 @@ class Profile extends Component {
         this.setState({ visible: false });
     }
 
-
-    renderRedirect = () => {
-        if (!this.props.auth.uid) {
-            return <Redirect to={'/'} />
-        }
-    }
-
-    componentDidUpdate() {
-        if (this.props.success) {
-            this.setState({ success: this.props.success })
-        }
-        if (this.state.click === 1) {
-            this.props.changeMenu('/profile')
-        }
-    }
-
     render() {
-        const { classes, profile, errprofile, erremail, auth } = this.props;
+        const { classes, profile, err, auth, success } = this.props;
         return (
             <Home>
                 <Container fluid>
@@ -145,7 +130,7 @@ class Profile extends Component {
                                 </Row>
                                 <Row>
                                     <Col className={classes.row}>
-                                        <Link to='/profile/img'><ButtomPW onClick={() => this.props.changeMenu('/profile/img')} className={classes.button}>Edit profile image</ButtomPW></Link>
+                                        <Link to='/profile/img'><ButtomPW className={classes.button}>Edit profile image</ButtomPW></Link>
                                     </Col>
                                     {this.state.newEmail ?
                                         <Col className={classes.row}>
@@ -189,9 +174,8 @@ class Profile extends Component {
                                             onChange={this.handleChange('DOB')}
                                         />
                                     </div>
-                                    <ErrMessage err={errprofile} />
-                                    <ErrMessage err={erremail} />
-                                    <ErrMessage suc={this.state.success} path={'/profile'} />
+                                    <ErrMessage err={err} />
+                                    <ErrMessage suc={success} />
                                     <Button
                                         type="submit"
                                         variant="contained"
@@ -214,7 +198,16 @@ const mapStateToProps = (state) => {
     return {
         auth: state.firebase.auth,
         profile: state.firebase.profile,
+        success: state.app.success,
+        err: state.app.err
     }
 }
 
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Profile))
+const mapDispatchToProps = (dispatch) => {
+    return {
+        updateNameEmailDOB: state => dispatch(updateNameEmailDOB(state)),
+        updatePWD: state => dispatch(updatePWD(state))
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Profile))
