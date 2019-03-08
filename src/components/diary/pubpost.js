@@ -17,6 +17,7 @@ import {
   CarouselIndicators,
 } from 'reactstrap';
 import Avatar from 'react-avatar'
+import { like, book, report } from '../../store/actions/appAction'
 
 const styles = theme => ({
   root: {
@@ -255,4 +256,12 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(PubPost))
+const mapDispatchToProps = (dispatch) => {
+  return {
+    book: (id) => dispatch(book(id)),
+    like: (id) => dispatch(like(id)),
+    report: (id) => dispatch(report(id)),
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(PubPost))

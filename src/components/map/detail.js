@@ -55,7 +55,6 @@ class Detail extends Component {
                         INstate.length === 0 ?
                             'There are no matched state' :
                             INstate.length === 1 && search === '' && post.length === 0 ? 'There is no post.' : null}
-                    {/* {["default","inherit","primary","secondary"].} */}
                 </div>
                 <Element name="section_detail" />
                 {isMobile ?
