@@ -51,13 +51,21 @@ class Map extends Component {
         })
     }
 
+    componentDidUpdate(){
+        if (this.state.INstate !== this.props.INstate) {
+            this.setState({
+                INstate: this.props.INstate
+            })
+        }
+    }
+
     render() {
-        const { classes, search, post, isLoaded } = this.props;
+        const { classes, post, isLoaded } = this.props;
         const { INstate } = this.state
 
         return(
             <Home>
-                <Result search={search} INstate={INstate}/>
+                <Result />
                     <Element name="section_map" />
                     <Row>
                     <Col xs="12" md="8">

@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import PropTypes from 'prop-types';
-//import map from '../assets/map.svg';
 import { withStyles } from '@material-ui/core/styles';
 import { Button } from 'reactstrap'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { scroller } from 'react-scroll'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
@@ -58,4 +57,11 @@ Result.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Result)
+const mapStateToProps = (state) => {
+    return {
+        INstate: state.app.stateOfIN,
+        search: state.app.search,
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Result))

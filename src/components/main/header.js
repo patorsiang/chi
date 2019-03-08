@@ -12,7 +12,7 @@ import Avatar from 'react-avatar'
 import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
 import { connect } from 'react-redux'
-import { signout, searchByState } from '../../store/actions/appAction'
+import { signout, searchByState, searchByTag, loadPost } from '../../store/actions/appAction'
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -166,9 +166,9 @@ class Header extends Component {
   }
 
   searchByTag = (e) => {
-    console.log('tag');
     if (e.key === 'Enter') {
-      console.log(this.state.search);
+      this.props.searchByTag(this.state.search);
+      this.props.loadPost()
     }
   }
 
@@ -372,7 +372,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     signout: () => dispatch(signout()),
-    searchByState: state => dispatch(searchByState(state))
+    loadPost: () => dispatch(loadPost()),
+    searchByState: state => dispatch(searchByState(state)),
+    searchByTag: state => dispatch(searchByTag(state)),
   }
 }
 

@@ -25,14 +25,33 @@ const appReducer = (state, action) => {
             state = { ...state, isLoaded: true }
             break;
         case 'SEARCH_BY_STATE':
-            const result = []
-            stateSet.state.sort();
-            stateSet.state.map(s => s.toUpperCase().search(action.S.toUpperCase()) > -1 ? result.push(s) : null)
-            if (result.length === 0) {
-                result.push('')
-            }
-            result.sort();
-            state = { ...state, search: action.S, stateOfIN: result, post: [], isLoaded: false }
+            const INState = []
+            stateSet.state.forEach(st => {
+                if (st.toUpperCase().includes(action.S.toUpperCase())) {
+                    INState.push(st)
+                }
+            })
+            INState.sort();
+            state = { ...state, search: action.S, stateOfIN: INState, post: [], isLoaded: false }
+            break;
+        case 'SEARCH_BY_TAG':
+            const tagPost = []
+            // action.post.map(p => p.data.ProTag.includes(action.T) || p.data.tag.includes(action.T) ? tagPost.push(p) : null)
+            action.post.forEach(p => {
+                // console.log(p.data.tag.includes(action.T), p.data.ProTag.includes(action.T));
+                if (p.data.tag) {
+                    if (p.data.tag.toString().toUpperCase().includes(action.T.toUpperCase())) {
+                        tagPost.push(p)
+                    }
+                } else {
+                    if (p.data.ProTag) {
+                        if (p.data.ProTag.toString().toUpperCase().includes(action.T.toUpperCase())) {
+                            tagPost.push(p)
+                        }
+                    } 
+                }
+            });
+            state = { ...state, theme: 'ALL', post: tagPost, isLoaded: false, search: action.T, err: null }
             break;
         case 'SEARCH_BY_THEME':
             state = { ...state, theme: action.T, post: action.post, isLoaded: false, search: '', err: null}

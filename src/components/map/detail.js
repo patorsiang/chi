@@ -36,11 +36,6 @@ class Detail extends Component {
         })
     }
 
-    componentDidMount(){
-        this.props.changeState(this.props.INstate[0])
-        this.props.loadPost()
-    }
-
     handleClick(s) {
         this.props.changeState(s)
         this.props.loadPost()
@@ -48,25 +43,38 @@ class Detail extends Component {
 
     render() {
         // const { classes, post } = this.props;
-        const { classes, INstate, post, isLoaded } = this.props;
+        const { classes, INstate, post, isLoaded, search } = this.props;
         return (
             <Fragment>
                 <div className={classes.state}>
-                    {INstate.map((s, i) => i === 0 ? <b key={i}>{s}<br /></b> : <Button color='link' key={i} onClick={() => { this.handleClick(s) }}>{s}<br /></Button>)}
-                    {isLoaded ? 
-                        <Fragment><FontAwesomeIcon icon="spinner" spin /> Loading...</Fragment> : 
-                        post.length === 0 ? 'There is no post.': null}
+                    {INstate.map((s, i) => INstate.length === 1 && search === '' ?
+                        <b key={i}>{s}<br /></b>
+                        : <Button color='link' key={i} onClick={() => { this.handleClick(s) }}>{s}<br /></Button>)}
+                    {isLoaded ?
+                        <Fragment><FontAwesomeIcon icon="spinner" spin /> Loading...</Fragment> :
+                        INstate.length === 0 ?
+                            'There are no matched state' :
+                            INstate.length === 1 && search === '' && post.length === 0 ? 'There is no post.' : null}
                     {/* {["default","inherit","primary","secondary"].} */}
                 </div>
+                <Element name="section_detail" />
                 {isMobile ?
                     <div className={classes.state}>
                         {post.map((postData, i) => <Post key={i} no={i} post={postData} />)}
                     </div> :
                     post.map((postData, i) => <Post key={i} no={i} post={postData} />)
                 }
-                <Element name="section_detail" />
             </Fragment>
         )
+    }
+}
+
+const mapStateToProps = (state) => {
+    return {
+        INstate: state.app.stateOfIN,
+        search: state.app.search,
+        post: state.app.post,
+        isLoaded: state.app.isLoaded,
     }
 }
 
@@ -77,4 +85,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(connect(null, mapDispatchToProps)(Detail))
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Detail))
