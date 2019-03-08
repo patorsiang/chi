@@ -37,14 +37,6 @@ class Map extends Component {
         this.handleClick = this.handleClick.bind(this);
     }
 
-    componentWillMount(){
-        this.props.changeState(['Andaman and Nicobar Islands'])
-        this.setState({
-            INstate: ['Andaman and Nicobar Islands']
-        })
-        this.props.loadPost()
-    }
-
     handleClick(s) {
         this.props.changeState(s)
         this.setState({
@@ -105,7 +97,6 @@ class Map extends Component {
                         </g>}
                         {INstate[0] === "Andaman and Nicobar Islands" ?
                         <g id="Andaman and Nicobar Islands" >
-                                    {console.log(INstate[0])}
                             <polygon className={classes.selected} fill="#128832" points="1008.5,722 1005,722 1008.5,728.5 1011.5,725.25 	"/>
                             <polygon className={classes.selected} fill="#128832" points="986.5,762.5 983.5,768 983.5,778 990.5,775.5 990.5,766 	"/>
                             <polygon className={classes.selected} fill="#128832" points="980.5,793 980.5,798.5 987,806 987,796 990.5,790 987,783.5 	"/>

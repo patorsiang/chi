@@ -10,7 +10,8 @@ import OtherIcon from '@material-ui/icons/MoreHoriz';
 import Tooltip from '@material-ui/core/Tooltip';
 import img from '../../assets/world_her.png';
 import AllIcon from '@material-ui/icons/AllInclusive'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
+import { searchByTheme, loadPost } from "../../store/actions/appAction";
 
 const styles = theme => ({
     root: {
@@ -73,25 +74,25 @@ class Choice extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.searchByTheme(this.props.choice)
+        this.setState({
+            choice: this.props.choice
+        })
+        this.props.loadPost()
+    }
+
     changeChoice(choice) {
-        this.props.chooseChoice(choice)
+        this.props.searchByTheme(choice)
         this.setState({
             choice
         })
-    }
-
-    componentDidUpdate(){
-        if (this.props.choice !== this.state.choice) {
-            this.setState({
-                choice: this.props.choice
-            })
-        }
+        this.props.loadPost()
     }
 
     render() {
         const { classes, s } = this.props
         const { choice } = this.state
-        console.log(choice);
 
         return (
             <Grid item xs={12} align='center'>
@@ -163,4 +164,11 @@ class Choice extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Choice)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        searchByTheme: state => dispatch(searchByTheme(state)),
+        loadPost: () => dispatch(loadPost()),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(null, mapDispatchToProps)(Choice))

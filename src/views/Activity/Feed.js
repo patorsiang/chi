@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-// import { connect } from 'react-redux'
-import Unregist from '../../components/main/unregist'
+import { connect } from 'react-redux'
 import { Grid } from '@material-ui/core/'
 import { isMobileOnly, isTablet } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
 import Choice from '../../components/feed/themeChoice'
 import Post from '../../components/diary/pubpost'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const styles = theme => ({
     root: {
@@ -47,45 +47,67 @@ const styles = theme => ({
         maxWidth: '50%',
         maxHeight: '50%',
     },
+    text: {
+        color: '#000080'
+    }
 });
 
 class Feed extends Component {
     render() {
-        const { classes, post } = this.props
+        const { classes, post, isLoaded, theme } = this.props
 
         return (
             <Home>
-                {this.props.auth.uid ?
-                    isMobileOnly ?
+                {isMobileOnly ?
+                    <div className={classes.rootmod}>
+                        <Grid container spacing={16} className={classes.main}>
+                            <Choice s={"small"} choice={theme} />
+                        </Grid>
+                        <Grid container spacing={24} >
+                            {isLoaded ?
+                                <div className={classes.text}><FontAwesomeIcon icon="spinner" spin /> Loading...</div>
+                                : post.length === 0 ?
+                                    <div className={classes.text}>There is no post.</div> :
+                                    post.map((postData, i) => <Post key={i} no={i} sz={12} post={postData} />)}
+                        </Grid>
+                    </div> :
+                    isTablet ?
                         <div className={classes.rootmod}>
                             <Grid container spacing={16} className={classes.main}>
-                                <Choice s={"small"} />
+                                <Choice s={"small"} choice={theme} />
                             </Grid>
                             <Grid container spacing={24} >
-                                {post.map((postData, i) => <Post key={i} no={i} sz={12} post={postData} />)}
+                                {isLoaded ?
+                                    <div className={classes.text}><FontAwesomeIcon icon="spinner" spin /> Loading...</div>
+                                    : post.length === 0 ?
+                                        <div className={classes.text}>There is no post.</div>
+                                        : post.map((postData, i) => <Post key={i} no={i} sz={6} post={postData} />)}
                             </Grid>
                         </div> :
-                        isTablet ? 
-                            <div className={classes.rootmod}>
-                                <Grid container spacing={16} className={classes.main}>
-                                    <Choice s={"small"} />
-                                </Grid>
-                                <Grid container spacing={24} >
-                                    {post.map((postData, i) => <Post key={i} no={i} sz={6} post={postData} />)}
-                                </Grid>
-                            </div> :
                         <div className={classes.root}>
                             <Grid container spacing={24} className={classes.main}>
-                                <Choice s={"large"} />
+                                <Choice s={"large"} choice={theme} />
                             </Grid>
                             <Grid container spacing={24} >
-                                {post.map((postData, i) => <Post key={i} no={i} sz={4} post={postData} />)}
+                                {isLoaded ?
+                                    <div className={classes.text}><FontAwesomeIcon icon="spinner" spin /> Loading...</div>
+                                    : post.length === 0 ?
+                                        <div className={classes.text}>There is no post.</div>
+                                        : post.map((postData, i) => <Post key={i} no={i} sz={4} post={postData} />)}
                             </Grid>
-                        </div>
-                    : <Unregist name='Feed' />}
+                        </div>}
             </Home>
         )
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Feed)
+const mapStateToProps = (state) => {
+    return {
+        theme: state.app.theme,
+        search: state.app.search,
+        post: state.app.post,
+        isLoaded: state.app.isLoaded,
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Feed))

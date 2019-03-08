@@ -303,7 +303,7 @@ class Header extends Component {
             <Divider />
             <List>
               {['/', '/diary', '/feed', '/bookmark', '/notice'].map((text, index) => (
-                <ListItem button key={text} selected={window.location.pathname === text} onClick={(event) => this.handleChange(event, text)}>
+                <ListItem button key={text} selected={window.location.pathname === text}>
                   <ListItemIcon>
                     {index === 0 ?
                       <Link to={text}><FontAwesomeIcon icon={['fas', 'map-marked-alt']} className={classes.icons} /></Link> :

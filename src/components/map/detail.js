@@ -36,6 +36,11 @@ class Detail extends Component {
         })
     }
 
+    componentDidMount(){
+        this.props.changeState(this.props.INstate[0])
+        this.props.loadPost()
+    }
+
     handleClick(s) {
         this.props.changeState(s)
         this.props.loadPost()

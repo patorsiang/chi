@@ -7,6 +7,7 @@ const initState = {
     isLoaded: false,
     err: null,
     success: null,
+    theme: 'ALL'
 }
 
 // In the following line, you should include the prefixes of implementations you want to test.
@@ -32,6 +33,9 @@ const appReducer = (state, action) => {
             }
             result.sort();
             state = { ...state, search: action.S, stateOfIN: result, post: [], isLoaded: false }
+            break;
+        case 'SEARCH_BY_THEME':
+            state = { ...state, theme: action.T, post: action.post, isLoaded: false, search: '', err: null}
             break;
         case 'SIGNIN_SUCCESS':
             var Openreq = inDB.open(bookDB, version)
