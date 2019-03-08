@@ -8,7 +8,7 @@ exports.handler = (data, context) => {
             'while authenticated.');
     }
 
-    return admin.firestore().collection('notification').get().then(
+    return admin.firestore().collection('notification').orderBy("date", "desc").get().then(
         snapshot => {
             return snapshot.docs.filter(doc => {
                 if (doc.data().owner !== context.auth.uid) {

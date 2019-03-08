@@ -3,7 +3,7 @@ const admin = require('firebase-admin');
 exports.handler = (data, context) => {
     if (!context.auth) {
         // Throwing an HttpsError so that the client gets the error details.
-        return admin.firestore().collection('diary').get().then(
+        return admin.firestore().collection('diary').orderBy("date", "desc").get().then(
             snapshot => {
                 return snapshot.docs.filter(doc => {
                     if (!doc.data().public) {
@@ -18,8 +18,8 @@ exports.handler = (data, context) => {
             }
         )
     }
-    
-    return admin.firestore().collection('diary').get().then(
+
+    return admin.firestore().collection('diary').orderBy("date", "desc").get().then(
         snapshot => {
             return snapshot.docs.filter(doc => {
                 if (!doc.data().public) {
