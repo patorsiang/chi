@@ -124,23 +124,29 @@ class PubPost extends Component {
   }
 
   like(id) {
-    this.setState({
-      like: !this.state.like
-    })
+    if (window.navigator.onLine) {
+      this.setState({
+        like: !this.state.like
+      })
 
-    this.props.like(id)
+      this.props.like(id)
+    }
   }
 
   book(id) {
-    this.setState({
-      book: !this.state.book
-    })
-    this.props.book(id)
+    if (window.navigator.onLine) {
+      this.setState({
+        book: !this.state.book
+      })
+      this.props.book(id)
+    }
   }
 
   report(id) {
-    this.props.report(id)
-    this.setState({ open: false, report: true });
+    if (window.navigator.onLine) {
+      this.props.report(id)
+      this.setState({ open: false, report: true });
+    }
   };
 
   render() {

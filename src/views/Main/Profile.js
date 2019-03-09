@@ -76,8 +76,6 @@ const styles = theme => ({
 class Profile extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props);
-        
         this.state = {
             newEmail: this.props.auth.email,
             uid: this.props.auth.uid,

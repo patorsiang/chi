@@ -339,7 +339,7 @@ class Header extends Component {
               ))}
             </List>
             <Divider />
-            <ListItem button onClick={this.handleclick}>
+            <ListItem button onClick={() => this.props.signout()}>
               <ListItemIcon>
                 <FontAwesomeIcon icon={['fas', 'sign-out-alt']} />
               </ListItemIcon>

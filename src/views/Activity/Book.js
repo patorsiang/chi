@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
 import { isMobile } from "react-device-detect";
 import { withStyles } from '@material-ui/core/styles';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import { Link } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { getBook } from '../../store/actions/appAction'
+
 const styles = theme => ({
   root: {
     [theme.breakpoints.up('sm')]: {
@@ -44,25 +46,23 @@ const styles = theme => ({
 
 
 class Book extends Component {
-  componentWillMount() {
+
+  componentWillMount(){
     this.props.getBook()
   }
 
   render() {
-    // const { booklist } = this.state
-    const { classes, changeMenu, book } = this.props
-    // console.log(book);
+    const { classes, book } = this.props
 
     return (
       <Home>
-        {this.props.auth.uid ?
-          isMobile ?
+        {isMobile ?
             <div className={classes.rootmod}>
               <Grid container spacing={16}>
                 {book.map((b, i) =>
                   <Grid item xs={6} key={i}>
                     <Link to='/acheive'>
-                      <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
+                      <ButtonBase className={classes.button}>
                         <img className={classes.img} alt={b.data.title} src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
@@ -74,17 +74,28 @@ class Book extends Component {
                 {book.map((b, i) =>
                   <Grid item xs={3} key={i}>
                     <Link to='/acheive'>
-                      <ButtonBase className={classes.button} onClick={() => changeMenu('/acheive')}>
+                      <ButtonBase className={classes.button}>
                         <img className={classes.img} alt={b.data.title} src={b.data.photo[0]} />
                       </ButtonBase>
                     </Link>
                   </Grid>)}
               </Grid>
-            </div>
-          : <Unregist name='Book' />}
+            </div>}
       </Home>
     )
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Book)
+const mapStateToProps = (state) => {
+  return {
+    book: state.app.book,
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getBook: () => dispatch(getBook())
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Book))

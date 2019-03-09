@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react'
 import Home from '../../layouts/Home'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import Unregist from '../../components/main/unregist'
 import { Grid } from '@material-ui/core/'
 import { isMobile } from "react-device-detect";
@@ -44,9 +44,6 @@ const styles = theme => ({
 
 
 class Acheive extends Component {
-    componentWillMount() {
-        this.props.getBook()
-    }
     render() {
         const { classes, book } = this.props
         return (
@@ -75,4 +72,10 @@ class Acheive extends Component {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(Acheive)
+const mapStateToProps = (state) => {
+    return {
+        book: state.app.book,
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Acheive))

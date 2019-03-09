@@ -235,10 +235,11 @@ export const searchByTheme = (T) => {
                                     }
                                     return false
                                 }
-                            }).sort(compare) })
+                            }).sort(compare)
+                        })
                     }))
                 }))
-            }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })})
+            }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) })
             return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
         }
     }
@@ -289,6 +290,7 @@ export const like = (id) => {
 export const book = (id) => {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firestore = getFirestore()
+        const firebase = getFirebase()
         const state = getState()
         const uid = state.firebase.auth.uid
         const notid = uuidv1();
@@ -299,6 +301,69 @@ export const book = (id) => {
                 if (snapshot.data().book.includes(uid)) {
                     PostRef.update({
                         "book": firestore.FieldValue.arrayRemove(uid)
+                    }).then(() => {
+                        const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+                        BookRef().then(book => {
+                            const userInfo = firebase.functions().httpsCallable('getUser')
+                            if (book.data.length === 0) {
+                                return dispatch({ type: 'BOOK_SUCCESS', book: [] })
+                            }
+                            book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                                data.data.idWriter = data.data.writer
+                                data.data.writer = writer.data
+                                data.data.photo.forEach(photo => {
+                                    const httpsReference = firebase.storage().refFromURL(photo)
+                                    // Create file metadata to update
+                                    var newMetadata = {
+                                        cacheControl: 'public,max-age=10000000000',
+                                    }
+
+                                    // Update metadata properties
+                                    httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                                        // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                                        // console.log(metadata);
+                                    }).catch(function (error) {
+                                        // Uh-oh, an error occurred!
+                                    });
+                                })
+                                return data.data
+                            }).then(data => {
+                                const metadata = firebase.functions().httpsCallable('getMetadata')
+                                const safe = []
+                                const tags = []
+                                const themes = []
+
+                                data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                                    if (res.data.safe) {
+                                        safe.push(res.data.safe)
+                                        if (safe.includes("bad")) {
+                                            data.safe = "bad"
+                                        } else if (safe.includes("safe")) {
+                                            data.safe = "safe"
+                                        } else {
+                                            data.safe = "maybe"
+                                        }
+                                    } else {
+                                        data.safe = "maybe"
+                                    }
+
+                                    if (res.data.tags) {
+                                        res.data.tags.map(tag => tags.push(tag))
+                                    }
+
+                                    if (res.data.themes) {
+                                        res.data.themes.map(theme => themes.push(theme))
+                                    }
+                                    return { safe, tags, themes }
+                                }).then(obj => {
+                                    data.ProTag = [...new Set(obj.tags)]
+                                    data.ProTheme = [...new Set(obj.themes, data.theme)]
+                                    return data
+                                }).then(() => {
+                                    return dispatch({ type: 'BOOK_SUCCESS', book: book.data.sort(compare) })
+                                }))
+                            }))
+                        })
                     })
                 } else {
                     const name = state.firebase.profile.displayName
@@ -316,14 +381,209 @@ export const book = (id) => {
                     });
                     PostRef.update({
                         "book": firestore.FieldValue.arrayUnion(uid)
+                    }).then(() => {
+                        const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+                        BookRef().then(book => {
+                            const userInfo = firebase.functions().httpsCallable('getUser')
+                            if (book.data.length === 0) {
+                                return dispatch({ type: 'BOOK_SUCCESS', book: [] })
+                            }
+                            book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                                data.data.idWriter = data.data.writer
+                                data.data.writer = writer.data
+                                data.data.photo.forEach(photo => {
+                                    const httpsReference = firebase.storage().refFromURL(photo)
+                                    // Create file metadata to update
+                                    var newMetadata = {
+                                        cacheControl: 'public,max-age=10000000000',
+                                    }
+
+                                    // Update metadata properties
+                                    httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                                        // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                                        // console.log(metadata);
+                                    }).catch(function (error) {
+                                        // Uh-oh, an error occurred!
+                                    });
+                                })
+                                return data.data
+                            }).then(data => {
+                                const metadata = firebase.functions().httpsCallable('getMetadata')
+                                const safe = []
+                                const tags = []
+                                const themes = []
+
+                                data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                                    if (res.data.safe) {
+                                        safe.push(res.data.safe)
+                                        if (safe.includes("bad")) {
+                                            data.safe = "bad"
+                                        } else if (safe.includes("safe")) {
+                                            data.safe = "safe"
+                                        } else {
+                                            data.safe = "maybe"
+                                        }
+                                    } else {
+                                        data.safe = "maybe"
+                                    }
+
+                                    if (res.data.tags) {
+                                        res.data.tags.map(tag => tags.push(tag))
+                                    }
+
+                                    if (res.data.themes) {
+                                        res.data.themes.map(theme => themes.push(theme))
+                                    }
+                                    return { safe, tags, themes }
+                                }).then(obj => {
+                                    data.ProTag = [...new Set(obj.tags)]
+                                    data.ProTheme = [...new Set(obj.themes, data.theme)]
+                                    return data
+                                }).then(() => {
+                                    return dispatch({ type: 'BOOK_SUCCESS', book: book.data.sort(compare) })
+                                }))
+                            }))
+                        })
                     })
                 }
             } else {
                 PostRef.set({
                     "book": [uid]
-                }, { merge: true })
+                }, { merge: true }).then(() => {
+                    const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+                    BookRef().then(book => {
+                        const userInfo = firebase.functions().httpsCallable('getUser')
+                        if (book.data.length === 0) {
+                            return dispatch({ type: 'BOOK_SUCCESS', book: [] })
+                        }
+                        book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                            data.data.idWriter = data.data.writer
+                            data.data.writer = writer.data
+                            data.data.photo.forEach(photo => {
+                                const httpsReference = firebase.storage().refFromURL(photo)
+                                // Create file metadata to update
+                                var newMetadata = {
+                                    cacheControl: 'public,max-age=10000000000',
+                                }
+
+                                // Update metadata properties
+                                httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                                    // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                                    // console.log(metadata);
+                                }).catch(function (error) {
+                                    // Uh-oh, an error occurred!
+                                });
+                            })
+                            return data.data
+                        }).then(data => {
+                            const metadata = firebase.functions().httpsCallable('getMetadata')
+                            const safe = []
+                            const tags = []
+                            const themes = []
+
+                            data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                                if (res.data.safe) {
+                                    safe.push(res.data.safe)
+                                    if (safe.includes("bad")) {
+                                        data.safe = "bad"
+                                    } else if (safe.includes("safe")) {
+                                        data.safe = "safe"
+                                    } else {
+                                        data.safe = "maybe"
+                                    }
+                                } else {
+                                    data.safe = "maybe"
+                                }
+
+                                if (res.data.tags) {
+                                    res.data.tags.map(tag => tags.push(tag))
+                                }
+
+                                if (res.data.themes) {
+                                    res.data.themes.map(theme => themes.push(theme))
+                                }
+                                return { safe, tags, themes }
+                            }).then(obj => {
+                                data.ProTag = [...new Set(obj.tags)]
+                                data.ProTheme = [...new Set(obj.themes, data.theme)]
+                                return data
+                            }).then(() => {
+                                return dispatch({ type: 'BOOK_SUCCESS', book: book.data.sort(compare) })
+                            }))
+                        }))
+                    })
+                })
             }
-        });
+        })
+    }
+}
+
+export const getBook = () => {
+    return (dispatch, getState, { getFirebase, getFirestore }) => {
+        const firebase = getFirebase()
+        const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+        BookRef().then(book => {
+            const userInfo = firebase.functions().httpsCallable('getUser')
+            if (book.data.length === 0) {
+                return dispatch({ type: 'GET_BOOK_SUCCESS', book: [] })
+            }
+            book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                data.data.idWriter = data.data.writer
+                data.data.writer = writer.data
+                data.data.photo.forEach(photo => {
+                    const httpsReference = firebase.storage().refFromURL(photo)
+                    // Create file metadata to update
+                    var newMetadata = {
+                        cacheControl: 'public,max-age=10000000000',
+                    }
+
+                    // Update metadata properties
+                    httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                        // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                        // console.log(metadata);
+                    }).catch(function (error) {
+                        // Uh-oh, an error occurred!
+                    });
+                })
+                return data.data
+            }).then(data => {
+                const metadata = firebase.functions().httpsCallable('getMetadata')
+                const safe = []
+                const tags = []
+                const themes = []
+
+                data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                    if (res.data.safe) {
+                        safe.push(res.data.safe)
+                        if (safe.includes("bad")) {
+                            data.safe = "bad"
+                        } else if (safe.includes("safe")) {
+                            data.safe = "safe"
+                        } else {
+                            data.safe = "maybe"
+                        }
+                    } else {
+                        data.safe = "maybe"
+                    }
+
+                    if (res.data.tags) {
+                        res.data.tags.map(tag => tags.push(tag))
+                    }
+
+                    if (res.data.themes) {
+                        res.data.themes.map(theme => themes.push(theme))
+                    }
+                    return { safe, tags, themes }
+                }).then(obj => {
+                    data.ProTag = [...new Set(obj.tags)]
+                    data.ProTheme = [...new Set(obj.themes, data.theme)]
+                    return data
+                }).then(() => {
+                    return dispatch({ type: 'GET_BOOK_SUCCESS', book: book.data.sort(compare) })
+                }))
+            }))
+        })
+        return dispatch({ type: 'GET_BOOK_SUCCESS', book:[]})
     }
 }
 
@@ -393,9 +653,71 @@ export const signinwithfb = () => {
                     // An error happened.
                 });
             }
-            dispatch({ type: 'SIGNIN_SUCCESS' })
+            const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+            BookRef().then(book => {
+                const userInfo = firebase.functions().httpsCallable('getUser')
+                if (book.data.length === 0) {
+                    return dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
+                }
+                book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                    data.data.idWriter = data.data.writer
+                    data.data.writer = writer.data
+                    data.data.photo.forEach(photo => {
+                        const httpsReference = firebase.storage().refFromURL(photo)
+                        // Create file metadata to update
+                        var newMetadata = {
+                            cacheControl: 'public,max-age=10000000000',
+                        }
+
+                        // Update metadata properties
+                        httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                            // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                            // console.log(metadata);
+                        }).catch(function (error) {
+                            // Uh-oh, an error occurred!
+                        });
+                    })
+                    return data.data
+                }).then(data => {
+                    const metadata = firebase.functions().httpsCallable('getMetadata')
+                    const safe = []
+                    const tags = []
+                    const themes = []
+
+                    data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                        if (res.data.safe) {
+                            safe.push(res.data.safe)
+                            if (safe.includes("bad")) {
+                                data.safe = "bad"
+                            } else if (safe.includes("safe")) {
+                                data.safe = "safe"
+                            } else {
+                                data.safe = "maybe"
+                            }
+                        } else {
+                            data.safe = "maybe"
+                        }
+
+                        if (res.data.tags) {
+                            res.data.tags.map(tag => tags.push(tag))
+                        }
+
+                        if (res.data.themes) {
+                            res.data.themes.map(theme => themes.push(theme))
+                        }
+                        return { safe, tags, themes }
+                    }).then(obj => {
+                        data.ProTag = [...new Set(obj.tags)]
+                        data.ProTheme = [...new Set(obj.themes, data.theme)]
+                        return data
+                    }).then(() => {
+                        return dispatch({ type: 'SIGNIN_SUCCESS', book: book.data.sort(compare) })
+                    }))
+                }))
+            })
+            return dispatch({ type: 'SIGNIN_SUCCESS', book: book.data.sort(compare) })
         }).catch(err => {
-            dispatch({ type: 'SIGNIN_ERROR', err })
+            return dispatch({ type: 'SIGNIN_ERROR', err, book: [] })
         })
     }
 }
@@ -413,9 +735,71 @@ export const SigninByEmailNPWD = (U) => {
                     // An error happened.
                 });
             }
-            dispatch({ type: 'SIGNIN_SUCCESS' })
+            const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+            BookRef().then(book => {
+                const userInfo = firebase.functions().httpsCallable('getUser')
+                if (book.data.length === 0) {
+                    return dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
+                }
+                book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
+                    data.data.idWriter = data.data.writer
+                    data.data.writer = writer.data
+                    data.data.photo.forEach(photo => {
+                        const httpsReference = firebase.storage().refFromURL(photo)
+                        // Create file metadata to update
+                        var newMetadata = {
+                            cacheControl: 'public,max-age=10000000000',
+                        }
+
+                        // Update metadata properties
+                        httpsReference.updateMetadata(newMetadata).then(function (metadata) {
+                            // Updated metadata for 'images/forest.jpg' is returned in the Promise
+                            // console.log(metadata);
+                        }).catch(function (error) {
+                            // Uh-oh, an error occurred!
+                        });
+                    })
+                    return data.data
+                }).then(data => {
+                    const metadata = firebase.functions().httpsCallable('getMetadata')
+                    const safe = []
+                    const tags = []
+                    const themes = []
+
+                    data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                        if (res.data.safe) {
+                            safe.push(res.data.safe)
+                            if (safe.includes("bad")) {
+                                data.safe = "bad"
+                            } else if (safe.includes("safe")) {
+                                data.safe = "safe"
+                            } else {
+                                data.safe = "maybe"
+                            }
+                        } else {
+                            data.safe = "maybe"
+                        }
+
+                        if (res.data.tags) {
+                            res.data.tags.map(tag => tags.push(tag))
+                        }
+
+                        if (res.data.themes) {
+                            res.data.themes.map(theme => themes.push(theme))
+                        }
+                        return { safe, tags, themes }
+                    }).then(obj => {
+                        data.ProTag = [...new Set(obj.tags)]
+                        data.ProTheme = [...new Set(obj.themes, data.theme)]
+                        return data
+                    }).then(() => {
+                        return dispatch({ type: 'SIGNIN_SUCCESS', book: book.data.sort(compare) })
+                    }))
+                }))
+            })
+            return dispatch({ type: 'SIGNIN_SUCCESS', book: book.data.sort(compare) })
         }).catch(function (err) {
-            dispatch({ type: 'SIGNIN_ERROR', err })
+            dispatch({ type: 'SIGNIN_ERROR', err, book: [] })
         });
     }
 }
@@ -472,9 +856,9 @@ export const register = (U) => {
                     // An error happened.
                 });
             }
-            dispatch({ type: 'SIGNIN_SUCCESS' })
+            dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
         }).catch(err => {
-            dispatch({ type: 'SIGNIN_ERROR', err })
+            dispatch({ type: 'SIGNIN_ERROR', err, book: [] })
         })
     }
 }

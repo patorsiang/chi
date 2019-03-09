@@ -4,10 +4,11 @@ const initState = {
     stateOfIN: ['Andaman and Nicobar Islands'],
     search: '',
     post: [],
+    book: [],
     isLoaded: false,
     err: null,
     success: null,
-    theme: 'ALL'
+    theme: 'ALL',
 }
 
 // In the following line, you should include the prefixes of implementations you want to test.
@@ -48,36 +49,154 @@ const appReducer = (state, action) => {
                         if (p.data.ProTag.toString().toUpperCase().includes(action.T.toUpperCase())) {
                             tagPost.push(p)
                         }
-                    } 
+                    }
                 }
             });
             state = { ...state, theme: 'ALL', post: tagPost, isLoaded: false, search: action.T, err: null }
             break;
         case 'SEARCH_BY_THEME':
-            state = { ...state, theme: action.T, post: action.post, isLoaded: false, search: '', err: null}
+            state = { ...state, theme: action.T, post: action.post, isLoaded: false, search: '', err: null }
+            break;
+        case 'BOOK_SUCCESS':
+            var BookOpenreq = inDB.open(bookDB)
+            BookOpenreq.onupgradeneeded = function (e) {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('book')) {
+                    const storeOS = db.createObjectStore('book',
+                        { keyPath: 'id' });
+                    storeOS.createIndex("data", "data", { unique: false });
+                }
+            };
+            BookOpenreq.onsuccess = function (e) {
+                // Get a reference to the DB.
+                // console.log('running onsuccess');
+                const db = e.target.result;
+                const transaction = db.transaction(['book'], 'readwrite');
+                const store = transaction.objectStore('book');
+                store.clear();
+                if (action.book.length > 0) {
+                    action.book.forEach(element => {
+                        const item = {
+                            id: element.id,
+                            data: JSON.stringify(element.data)
+                        }
+                        store.add(item);
+                    });
+                }
+
+                const request = store.getAll();
+                // request.onerror = function (event) {
+                //     console.log("error fetching data");
+                // };
+                request.onsuccess = function (event) {
+                    initState.book = event.target.result.map(post => {
+                        return {
+                            id: post.id,
+                            data: JSON.parse(post.data)
+                        }
+                    })
+                };
+            };
+            state = { ...state, book: initState.book }
+            break;
+        case 'GET_BOOK_SUCCESS':
+            var getBookOpenreq = inDB.open(bookDB)
+            getBookOpenreq.onupgradeneeded = function (e) {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('book')) {
+                    const storeOS = db.createObjectStore('book',
+                        { keyPath: 'id' });
+                    storeOS.createIndex("data", "data", { unique: false });
+                }
+            };
+            getBookOpenreq.onsuccess = function (e) {
+                // Get a reference to the DB.
+                // console.log('running onsuccess');
+                const db = e.target.result;
+                const transaction = db.transaction(['book'], 'readwrite');
+                const store = transaction.objectStore('book');
+                if (action.book.length > 0) {
+                    store.clear();
+                    action.book.forEach(element => {
+                        const item = {
+                            id: element.id,
+                            data: JSON.stringify(element.data)
+                        }
+                        store.add(item);
+                    });
+                }
+
+                const request = store.getAll();
+                // request.onerror = function (event) {
+                //     console.log("error fetching data");
+                // };
+                request.onsuccess = function (event) {
+                    initState.book = event.target.result.map(post => {
+                        return {
+                            id: post.id,
+                            data: JSON.parse(post.data)
+                        }
+                    })
+                };
+            };
+            state = { ...state, book: initState.book }
             break;
         case 'SIGNIN_SUCCESS':
             var Openreq = inDB.open(bookDB, version)
+            Openreq.onupgradeneeded = function (e) {
+                const db = e.target.result;
+                if (!db.objectStoreNames.contains('book')) {
+                    const storeOS = db.createObjectStore('book',
+                        { keyPath: 'id' });
+                    storeOS.createIndex("data", "data", { unique: false });
+                }
+            };
             Openreq.onsuccess = function (e) {
                 // Get a reference to the DB.
+                // console.log('running onsuccess');
+                const db = e.target.result;
+                const transaction = db.transaction(['book'], 'readwrite');
+                const store = transaction.objectStore('book');
+                store.clear();
+                if (action.book.length > 0) {
+                    action.book.forEach(element => {
+                        const item = {
+                            id: element.id,
+                            data: JSON.stringify(element.data)
+                        }
+                        store.add(item);
+                    });
+                }
+
+                const request = store.getAll();
+                // request.onerror = function (event) {
+                //     console.log("error fetching data");
+                // };
+                request.onsuccess = function (event) {
+                    initState.book = event.target.result.map(post => {
+                        return {
+                            id: post.id,
+                            data: JSON.parse(post.data)
+                        }
+                    })
+                };
             };
             Openreq = inDB.open(notiDB, version)
             Openreq.onsuccess = function (e) {
                 // Get a reference to the DB.
-            };
-            state = { ...state, err: null, success: null }
+            }
             break;
         case 'SIGNIN_ERROR':
             state = { ...state, err: action.err.message, success: null }
             break;
         case 'UPDATE_NAMEEMAILDOB_SUCCESS':
-            state = { ...state, err: null, success: 'this updating is completed, then you have to re-login to update you profile'}
+            state = { ...state, err: null, success: 'this updating is completed, then you have to re-login to update you profile' }
             break;
         case 'UPDATE_NAMEEMAILDOB_ERROR':
-            state = { ...state, err: action.err.message, success: null}
+            state = { ...state, err: action.err.message, success: null }
             break;
         case 'UPDATE_PWD_SUCCESS':
-            state = { ...state, err: null, success: 'the reseting password email is already sent to your email., then you have to re-login to update you profile'}
+            state = { ...state, err: null, success: 'the reseting password email is already sent to your email., then you have to re-login to update you profile' }
             break;
         case 'UPDATE_PWD_ERROR':
             state = { ...state, err: action.err.message, success: null }
@@ -89,27 +208,23 @@ const appReducer = (state, action) => {
             state = { ...state, err: action.err.message, success: null }
             break;
         case 'SIGNOUT_SUCCESS':
-            var Delreq = inDB.deleteDatabase(bookDB);
-            Delreq.onsuccess = function () {
-                console.log("Deleted database successfully");
+            var req = indexedDB.open(bookDB, version);
+            req.onsuccess = function (e) {
+                // close the formerly blocked connection:
+                const db = e.target.result;
+                const transaction = db.transaction(['book'], 'readwrite');
+                const store = transaction.objectStore('book');
+                store.clear();
             };
-            Delreq.onerror = function () {
-                console.log("Couldn't delete database");
+            req = indexedDB.open(notiDB, version);
+            req.onsuccess = function (e) {
+                // close the formerly blocked connection:
+                const db = e.target.result;
+                const transaction = db.transaction(['noti'], 'readwrite');
+                const store = transaction.objectStore('noti');
+                store.clear();
             };
-            Delreq.onblocked = function () {
-                console.log("Couldn't delete database due to the operation being blocked");
-            };
-            Delreq = inDB.deleteDatabase(notiDB);
-            Delreq.onsuccess = function () {
-                console.log("Deleted database successfully");
-            };
-            Delreq.onerror = function () {
-                console.log("Couldn't delete database");
-            };
-            Delreq.onblocked = function () {
-                console.log("Couldn't delete database due to the operation being blocked");
-            };
-            state = { ...state, err: null }
+            state = initState
             break;
         default:
             // state = {...state,
