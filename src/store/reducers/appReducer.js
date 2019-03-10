@@ -5,6 +5,7 @@ const initState = {
     search: '',
     post: [],
     book: [],
+    noti: [],
     isLoaded: false,
     err: null,
     success: null,
@@ -14,7 +15,6 @@ const initState = {
 // In the following line, you should include the prefixes of implementations you want to test.
 const inDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 const bookDB = 'chi_db_book'
-const notiDB = 'chi_db_noti'
 const version = 1
 
 const appReducer = (state, action) => {
@@ -181,10 +181,6 @@ const appReducer = (state, action) => {
                     })
                 };
             };
-            Openreq = inDB.open(notiDB, version)
-            Openreq.onsuccess = function (e) {
-                // Get a reference to the DB.
-            }
             break;
         case 'SIGNIN_ERROR':
             state = { ...state, err: action.err.message, success: null }
@@ -216,16 +212,11 @@ const appReducer = (state, action) => {
                 const store = transaction.objectStore('book');
                 store.clear();
             };
-            req = indexedDB.open(notiDB, version);
-            req.onsuccess = function (e) {
-                // close the formerly blocked connection:
-                const db = e.target.result;
-                const transaction = db.transaction(['noti'], 'readwrite');
-                const store = transaction.objectStore('noti');
-                store.clear();
-            };
             state = initState
             break;
+        case 'GET_NOTIFICATION':
+            state = { ...state, noti: action.noti}
+        break;
         default:
             // state = {...state,
             //     stateOfIN: initState.stateOfIN,

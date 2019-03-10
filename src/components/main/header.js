@@ -12,7 +12,7 @@ import Avatar from 'react-avatar'
 import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
 import { connect } from 'react-redux'
-import { signout, searchByState, searchByTag, loadPost } from '../../store/actions/appAction'
+import { signout, searchByState, searchByTag, loadPost, getnoti } from '../../store/actions/appAction'
 const drawerWidth = 240;
 
 const styles = theme => ({
@@ -145,6 +145,10 @@ class Header extends Component {
     };
   }
 
+  componentDidMount() {
+    this.props.getnoti()
+  }
+
   handleDrawerOpen = () => {
     this.setState({ open: true });
   };
@@ -191,7 +195,7 @@ class Header extends Component {
   }
 
   render() {
-    const { classes, theme, profile, auth } = this.props;
+    const { classes, theme, profile, auth, noti } = this.props;
     const { anchorEl } = this.state;
     const isMenuOpen = Boolean(anchorEl);
 
@@ -314,7 +318,7 @@ class Header extends Component {
                           index === 3 ?
                             <Link to={text}><FontAwesomeIcon icon={['fas', 'bookmark']} className={classes.icons} /></Link> :
                             <Link to={text}>
-                              <Badge badgeContent={0} color="secondary" className={classes.icons}>
+                              <Badge badgeContent={noti.length} color="secondary" className={classes.icons}>
                                 <FontAwesomeIcon icon={['fas', 'bell']} />
                               </Badge></Link>}
                   </ListItemIcon>
@@ -365,7 +369,8 @@ const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
     profile: state.firebase.profile,
-    search: state.app.search
+    search: state.app.search,
+    noti: state.app.noti
   }
 }
 
@@ -375,6 +380,7 @@ const mapDispatchToProps = (dispatch) => {
     loadPost: () => dispatch(loadPost()),
     searchByState: state => dispatch(searchByState(state)),
     searchByTag: state => dispatch(searchByTag(state)),
+    getnoti: () => dispatch(getnoti()),
   }
 }
 

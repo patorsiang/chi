@@ -4,13 +4,20 @@ import NotiReportObj from './notificationReportObj'
 import NotiTokenObj from './notificationTokenObj'
 import NotiBookObj from './notificationBookObj'
 import NotiWelObj from './notificationWelcomeObj'
+import { withStyles } from '@material-ui/core/styles';
 
+const styles = theme => ({
+    no:{
+        color: 'black'
+    }
+})
 class notification extends Component {
     render() {
-        const { noti } = this.props
+        const { classes, noti } = this.props
+        
         return (
             <Fragment>
-                {noti.length === 0 ? <div>nothing</div> :
+                {noti.length === 0 ? <div className={classes.no}>nothing</div> :
                     noti.map(obj =>
                         obj.data.type === 'welcome' ? <NotiWelObj key={obj.id} data={obj}/> : 
                         obj.data.type === 'token' ? <NotiTokenObj key={obj.id} data={obj}/> : 
@@ -22,4 +29,4 @@ class notification extends Component {
     }
 }
 
-export default (notification)
+export default withStyles(styles, { withTheme: true })(notification)

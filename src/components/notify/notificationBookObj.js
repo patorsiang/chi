@@ -2,9 +2,10 @@ import React, { Component } from 'react'
 import { ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import BookmarkIcon from '@material-ui/icons/Bookmark';
 import { withStyles } from '@material-ui/core/styles';
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import Avatar from 'react-avatar'
 import { Link } from 'react-router-dom'
+import { checkRead } from "../../store/actions/appAction";
 
 const styles = theme => ({
     list: {
@@ -32,15 +33,10 @@ class notiObj extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {
-            value: this.props.Menu,
-        };
         this.handleChange = this.handleChange.bind(this);
     }
 
     handleChange(event, t, id) {
-        this.setState({ value: t });
-        this.props.changeMenu(t)
         this.props.checkRead(this.props.data.id)
     }
     
@@ -62,4 +58,16 @@ class notiObj extends Component {
 
 }
 
-export default withStyles(styles, { withTheme: true })(notiObj)
+const mapStateToProps = (state) => {
+    return {
+        profile: state.firebase.profile,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        checkRead: id => dispatch(checkRead(id)),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(notiObj))

@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
 import Home from '../../layouts/Home'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { withStyles } from '@material-ui/core/styles';
 import Notification from '../../components/notify/notification'
 import { isMobile } from 'react-device-detect'
 import { List, ListSubheader } from '@material-ui/core';
+import { getnoti } from '../../store/actions/appAction'
 
 const styles = theme => ({
   root: {
@@ -35,6 +36,10 @@ const styles = theme => ({
 });
 class Notice extends Component {
 
+  componentDidUpdate(){
+    this.props.getnoti()
+  }
+
   render() {
     const { classes, noti } = this.props
 
@@ -52,4 +57,16 @@ class Notice extends Component {
   }
 }
 
-export default withStyles(styles, { withTheme: true })(Notice)
+const mapStateToProps = (state) => {
+  return {
+    noti: state.app.noti
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getnoti: () => dispatch(getnoti()),
+  }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(Notice))

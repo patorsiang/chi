@@ -9,7 +9,7 @@ import Post from '../../components/diary/pubpost'
 const styles = theme => ({
     root: {
         [theme.breakpoints.up('sm')]: {
-            marginTop: '6%',
+            marginTop: '7.5%',
             marginBottom: '2.5%',
         },
         [theme.breakpoints.down('sm')]: {

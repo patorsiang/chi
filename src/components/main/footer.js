@@ -4,6 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Badge, BottomNavigation, BottomNavigationAction } from '@material-ui/core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { Redirect } from 'react-router-dom'
+import { connect } from "react-redux";
 
 const styles = {
     root: {
@@ -46,7 +47,7 @@ class Footer extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, noti } = this.props;
         const { value } = this.state;
         return (
             <BottomNavigation value={value} onChange={this.handleChange} className={classes.root} showLabels>
@@ -71,7 +72,7 @@ class Footer extends Component {
                 <BottomNavigationAction classes={{
                     root: classes.choice,
                     selected: classes.selected
-                }} label="Notice" value="/notice" icon={this.props.num > 0 ? <Badge badgeContent={this.props.num} color="secondary"><FontAwesomeIcon icon={['fas', 'bell']} /></Badge> : <FontAwesomeIcon icon={['fas', 'bell']} />} />
+                }} label="Notice" value="/notice" icon={noti.length > 0 ? <Badge badgeContent={noti.length} color="secondary"><FontAwesomeIcon icon={['fas', 'bell']} /></Badge> : <FontAwesomeIcon icon={['fas', 'bell']} />} />
             </BottomNavigation>
         )
     }
@@ -81,5 +82,11 @@ Footer.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(Footer)
+const mapStateToProps = (state) => {
+    return {
+        noti: state.app.noti
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Footer))
 
