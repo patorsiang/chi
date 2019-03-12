@@ -132,12 +132,12 @@ const Routes = props => {
                     } />
                     <Route exact path="/diary/edit" render={() =>
                         auth.uid ?
-                            <EditDiary auth={auth}/>
+                            <EditDiary />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/diary/create" render={() =>
                         auth.uid ?
-                            <CreateDiary auth={auth}/>
+                            <CreateDiary />
                             : <Redirect to='/' />
                     } />
                     <Route exact path="/acheive" render={() =>

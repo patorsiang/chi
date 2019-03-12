@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux'
 import Home from '../../layouts/Home'
-import Unregist from '../main/unregist'
 import { withStyles } from '@material-ui/core/styles';
 import { isMobile } from "react-device-detect";
 import PropTypes from 'prop-types';
@@ -22,7 +20,7 @@ const styles = theme => ({
         flexGrow: 1,
         marginLeft: '64px',
         alignItems: 'flex-start !important',
-        
+
     },
     rootmod: {
         flexGrow: 1,
@@ -54,17 +52,17 @@ class Edit extends Component {
     };
     render() {
         const { classes } = this.props
+        
         return (
             <Home>
-                {this.props.auth.uid ?
-                    isMobile ?
-                        <div className={classes.rootmod}>
-                            <EditForm/>
-                        </div> :
-                        <div className={classes.root}>
-                            <EditForm/>
-                        </div>
-                    : <Unregist name='Diary' />}
+                {isMobile ?
+                    <div className={classes.rootmod}>
+                        <EditForm />
+                    </div> :
+                    <div className={classes.root}>
+                        <EditForm />
+                    </div>
+                }
             </Home>
         )
     }
@@ -74,11 +72,4 @@ Edit.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-
-const mapStateToProps = (state) => {
-    return {
-        auth: state.firebase.auth,
-    }
-}
-
-export default withStyles(styles, { withTheme: true })(connect(mapStateToProps)(Edit))
+export default withStyles(styles, { withTheme: true })(Edit)

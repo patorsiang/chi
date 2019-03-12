@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { GridListTileBar, GridListTile, GridList, IconButton, Button, MenuItem, Paper, Grid, FormGroup, FormControlLabel, Switch, TextField } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -11,6 +11,8 @@ import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import uuidv1 from 'uuid/v1'
 import Typography from '@material-ui/core/Typography';
 import ErrMessage from '../main/errMessage'
+import { save } from '../../store/actions/appAction'
+
 const styles = theme => ({
     colorSwitchBase: {
         '&$colorChecked': {
@@ -203,7 +205,7 @@ class EditForm extends Component {
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography variant="title" align="center"> Add New Diary </Typography>
-                        <FormGroup row align>
+                        <FormGroup row >
                             <FormControlLabel
                                 style={{ margin: 2 }}
                                 control={
@@ -390,4 +392,17 @@ EditForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(EditForm)
+const mapStateToProps = (state) => {
+    return {
+        err: state.app.err,
+        success: state.app.success
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        save: page => dispatch(save(page)),
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(EditForm))

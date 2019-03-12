@@ -6,10 +6,13 @@ const initState = {
     post: [],
     book: [],
     noti: [],
+    diary: [],
+    edit: [],
     isLoaded: false,
     err: null,
     success: null,
     theme: 'ALL',
+    delete: false,
 }
 
 // In the following line, you should include the prefixes of implementations you want to test.
@@ -141,6 +144,30 @@ const appReducer = (state, action) => {
             };
             state = { ...state, book: initState.book }
             break;
+        case 'GET_ALL_DIARY':
+            state = { ...state, err: null, success: null, diary: action.result, isLoaded: false }
+            break;
+        case 'GET_DIARY':
+            state = { ...state, err: null, success: null, edit: action.result, isLoaded: false }
+            break;
+        case 'POSTING_ERROR':
+            state = { ...state, err: action.err.message, success: null }
+            break;
+        case 'POSTING_SUCCESS':
+            state = { ...state, err: null, success: 'The post is saved.' }
+            break;
+        case 'ROMOVE_SUCCESS':
+            state = { ...state, err: null, success: action.result, delete: true }
+            break;
+        case 'ROMOVE_ERROR':
+            state = { ...state, err: action.err.message, success: null }
+            break;
+        case 'EDIT_SUCCESS':
+            state = { ...state, err: null, success: action.result }
+            break;
+        case 'EDIT_ERROR':
+            state = { ...state, err: action.err.message, success: null }
+            break;
         case 'SIGNIN_SUCCESS':
             var Openreq = inDB.open(bookDB, version)
             Openreq.onupgradeneeded = function (e) {
@@ -215,8 +242,8 @@ const appReducer = (state, action) => {
             state = initState
             break;
         case 'GET_NOTIFICATION':
-            state = { ...state, noti: action.noti}
-        break;
+            state = { ...state, noti: action.noti }
+            break;
         default:
             // state = {...state,
             //     stateOfIN: initState.stateOfIN,

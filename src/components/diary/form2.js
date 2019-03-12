@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-// import { connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { GridListTileBar, GridListTile, GridList, IconButton, Button, MenuItem, Paper, Grid, FormGroup, FormControlLabel, Switch, TextField } from '@material-ui/core/'
 import { withStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
@@ -10,6 +10,9 @@ import { Col } from 'reactstrap'
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import Typography from '@material-ui/core/Typography';
 import ErrMessage from '../main/errMessage'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { deleteDiary, saveEdit } from "../../store/actions/appAction";
+
 const styles = theme => ({
     colorSwitchBase: {
         '&$colorChecked': {
@@ -19,11 +22,11 @@ const styles = theme => ({
             },
         },
     },
-    colorBar: {},
     colorChecked: {},
+    colorBar: {},
+    notchedOutline: {},
     root: {
         flexGrow: 1,
-
     },
     paper: {
         [theme.breakpoints.up('sm')]: {
@@ -48,18 +51,17 @@ const styles = theme => ({
             color: '#FF9933',
         },
     },
-    cssFocused: {},
     cssUnderline: {
         '&:after': {
             borderBottomColor: '#FF9933',
         },
     },
+    cssFocused: {},
     cssOutlinedInput: {
         '&$cssFocused $notchedOutline': {
             borderColor: '#FF9933',
         },
     },
-    notchedOutline: {},
     button: {
         color: '#FF9933',
     },
@@ -89,6 +91,10 @@ const styles = theme => ({
     icon: {
         color: 'white',
     },
+    text: {
+        color: '#000080',
+        margin: '1%'
+    }
 });
 
 class EditForm extends Component {
@@ -109,37 +115,29 @@ class EditForm extends Component {
             note: '',
             tag: [],
             tagString: '',
-            delete: this.props.deleted,
-            err: ''
+            err: '',
+            delete: false
         };
         this.handleButtonPress = this.handleButtonPress.bind(this)
     }
 
     componentDidUpdate() {
-        console.log(this.props.edit);
-        if (this.props.edit) {
-            if (this.props.edit.data.photo !== null) {
-                if (this.props.edit.data.photo.toString() !== this.state.uploaded.toString()) {
-                    this.setState({
-                        uploaded: this.props.edit.data.photo,
-                        uploadedfiles: this.props.edit.data.meta,
-                        id: this.props.edit.id,
-                        state: this.props.edit.data.state,
-                        tag: this.props.edit.data.tag,
-                        tagString: this.props.edit.data.tag.map(t => '#' + t).toString().replace(/,/g, ' '),
-                        title: this.props.edit.data.title,
-                        note: this.props.edit.data.note,
-                        public: this.props.edit.data.public,
-                    })
-                }
-            }
-            console.log(this.state);
+        if (this.props.edit.data && this.state.id === '') {
+            this.setState({
+                uploaded: this.props.edit.data.photo,
+                uploadedfiles: this.props.edit.data.meta,
+                id: this.props.edit.id,
+                state: this.props.edit.data.state,
+                tag: this.props.edit.data.tag,
+                tagString: this.props.edit.data.tag.map(t => '#' + t).toString().replace(/,/g, ' '),
+                title: this.props.edit.data.title,
+                note: this.props.edit.data.note,
+                public: this.props.edit.data.public,
+            })
         }
     }
 
     handleChange = name => event => {
-        console.log(event.target.checked);
-
         this.setState({ [name]: event.target.checked });
     };
 
@@ -169,6 +167,14 @@ class EditForm extends Component {
             diff.push(k);
         }
         // console.log(diff[diff.length-1]);
+    }
+
+    del = () => {
+        this.setState({
+            delete: true
+        })
+
+        this.props.deleteDiary(this.state.id)
     }
 
     save = () => {
@@ -223,14 +229,14 @@ class EditForm extends Component {
     }
 
     render() {
-        const { classes, err, success } = this.props
+        const { classes, err, success, isLoaded } = this.props
 
         return (
             <Grid container spacing={0}>
                 <Grid item xs={12}>
                     <Paper className={classes.paper}>
                         <Typography variant="title" align="center"> Edit Diary </Typography>
-                        <FormGroup row align>
+                        <FormGroup row>
                             <FormControlLabel
                                 style={{ margin: 2 }}
                                 control={
@@ -247,6 +253,11 @@ class EditForm extends Component {
                                 }
                                 label={this.state.public ? 'Public' : 'Private'}
                             />
+                            {isLoaded ?
+                                <div className={classes.text}>
+                                    <FontAwesomeIcon icon="spinner" spin /> Loading...
+                                </div>
+                                : null}
                             <div className={classes.root}>
                                 <GridList cellHeight={160} cols={3}>
                                     {this.state.uploaded.map(im => (
@@ -290,7 +301,7 @@ class EditForm extends Component {
                                 </GridList>
                             </div>
                             <p>{this.state.files[0] ? this.state.files[0].toString : null}</p>
-                            <input accept="image/*" required={this.state.public} className={classes.input} onChange={this.handleChangeImg.bind(this)} id="icon-button-file" type="file" multiple />
+                            <input accept="image/*" required={this.state.public && this.state.uploadedfiles.length === 0} className={classes.input} onChange={this.handleChangeImg.bind(this)} id="icon-button-file" type="file" multiple />
                             <label htmlFor="icon-button-file">
                                 <IconButton className={classes.button} component="span">
                                     <PhotoCamera />
@@ -316,7 +327,6 @@ class EditForm extends Component {
                                     classes: {
                                         root: classes.cssOutlinedInput,
                                         focused: classes.cssFocused,
-                                        notchedOutline: classes.notchedOutline,
                                     },
                                 }}
                                 required={this.state.public}
@@ -423,7 +433,7 @@ class EditForm extends Component {
                             </Col>
                             <Col xs='7'></Col>
                             <Col xs='5' align="right">
-                                <Button size="small" className={classes.button} onClick={() => this.props.delete(this.state.id)}>
+                                <Button size="small" className={classes.button} onClick={() => this.del()}>
                                     <DeleteOutlineIcon />
                                     Delete
                                 </Button>
@@ -444,4 +454,21 @@ EditForm.propTypes = {
     classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles, { withTheme: true })(EditForm)
+const mapStateToProps = (state) => {
+    return {
+        edit: state.app.edit,
+        err: state.app.err,
+        success: state.app.success,
+        isLoaded: state.app.isLoaded,
+        delete: state.app.delete,
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        saveEdit: (diary) => dispatch(saveEdit(diary)),
+        deleteDiary: (id) => dispatch(deleteDiary(id))
+    }
+}
+
+export default withStyles(styles, { withTheme: true })(connect(mapStateToProps, mapDispatchToProps)(EditForm))
