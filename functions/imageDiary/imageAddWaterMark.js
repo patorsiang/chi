@@ -22,7 +22,7 @@ exports.handler = (object) => {
     const storage = new Storage();
     const bucket = storage.bucket(bucketName)
 
-    if (!filePath.startsWith('F95sBazTNBW3nJMJFLzPDo2Nocs2/')) {
+    if (!filePath.startsWith('pbsCo6zuo2TSqgNkDOMhJJPpgE73/')) {
         if (!object.contentType.startsWith('image/')) {
             console.log('This is not an image.')
             return null
