@@ -58,7 +58,6 @@ export function handler(T) {
                     }))
                 }))
             }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) })
-            return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
         } else {
             const searchAllPost = firebase.functions().httpsCallable('getAllPost')
             searchAllPost().then(result => {
@@ -121,7 +120,6 @@ export function handler(T) {
                     }))
                 }))
             }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) })
-            return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
         }
     }
 }

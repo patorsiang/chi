@@ -323,9 +323,9 @@ class Header extends Component {
                           index === 3 ?
                             <Link to={text}><FontAwesomeIcon icon={['fas', 'bookmark']} className={classes.icons} /></Link> :
                             <Link to={text}>
-                              {noti.length === 0 ? <Badge badgeContent={noti.length} color="secondary" className={classes.icons}>
+                              {noti.length !== 0 && auth.uid ? <Badge badgeContent={noti.length} color="secondary" className={classes.icons}>
                                 <FontAwesomeIcon icon={['fas', 'bell']} />
-                              </Badge> : <FontAwesomeIcon icon={['fas', 'bell']} />}</Link>}
+                              </Badge> : <FontAwesomeIcon icon={['fas', 'bell']} className={classes.icons}/>}</Link>}
                   </ListItemIcon>
                   <Link to={text}><ListItemText primary={text.replace('/', '')} /></Link>
                 </ListItem>

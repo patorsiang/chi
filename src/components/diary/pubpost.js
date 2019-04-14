@@ -151,7 +151,7 @@ class PubPost extends Component {
 
   render() {
     const { activeIndex } = this.state;
-    const { classes, sz, post, auth, no } = this.props
+    const { classes, sz, post, auth, no, profile } = this.props
     const { book, like, report } = this.state
 
     const slides = post.data.photo.map((item, i) => {
@@ -177,9 +177,9 @@ class PubPost extends Component {
                   </Fragment>
                 }
                 action={
-                  <IconButton>
+                  auth.uid ?<IconButton>
                     <ReportIcon onClick={this.handleClickOpen} />
-                  </IconButton>
+                  </IconButton> : null
                 }
                 title={post.data.title}
                 subheader={post.data.date}
@@ -201,7 +201,7 @@ class PubPost extends Component {
                     Cancel
             </Button>
                   <Button onClick={() => this.report(post.id)} color="primary" autoFocus>
-                    Report
+                    {profile.admin ? "Delete" : "Report"}
             </Button>
                 </DialogActions>
               </Dialog>
@@ -259,6 +259,7 @@ class PubPost extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.firebase.auth,
+    profile: state.firebase.profile,
   }
 }
 
