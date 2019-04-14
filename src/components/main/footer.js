@@ -52,19 +52,19 @@ class Footer extends Component {
         return (
             <BottomNavigation value={value} onChange={this.handleChange} className={classes.root} showLabels>
                 {this.renderRedirect(value)}
-                <BottomNavigationAction
-                    classes={{
-                        root: classes.choice,
-                        selected: classes.selected
-                    }} label="Map" value="/" icon={<FontAwesomeIcon icon={['fas', 'map-marked-alt']} />} />
-                <BottomNavigationAction classes={{
-                    root: classes.choice,
-                    selected: classes.selected
-                }} label="Diary" value="/diary" icon={<FontAwesomeIcon icon={['fas', 'file-signature']} />} />
                 <BottomNavigationAction classes={{
                     root: classes.choice,
                     selected: classes.selected
                 }} label="Feed" value="/feed" icon={<FontAwesomeIcon icon={['fas', 'newspaper']} />} />
+                <BottomNavigationAction
+                    classes={{
+                        root: classes.choice,
+                        selected: classes.selected
+                    }} label="Map" value="/map" icon={<FontAwesomeIcon icon={['fas', 'map-marked-alt']} />} />
+                <BottomNavigationAction classes={{
+                    root: classes.choice,
+                    selected: classes.selected
+                }} label="Diary" value="/diary" icon={<FontAwesomeIcon icon={['fas', 'file-signature']} />} />
                 <BottomNavigationAction classes={{
                     root: classes.choice,
                     selected: classes.selected

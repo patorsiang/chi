@@ -47,7 +47,7 @@ const styles = theme => ({
 
 class Book extends Component {
 
-  componentWillMount(){
+  componentWillMount() {
     this.props.getBook()
   }
 
@@ -56,7 +56,7 @@ class Book extends Component {
 
     return (
       <Home>
-        {isMobile ?
+          {isMobile ?
             <div className={classes.rootmod}>
               <Grid container spacing={16}>
                 {book.map((b, i) =>

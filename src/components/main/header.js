@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { withStyles } from '@material-ui/core/styles';
+// eslint-disable-next-line no-unused-vars
 import { Badge, Icon, Drawer, MenuItem, Menu, AppBar, Toolbar, List, CssBaseline, Typography, Divider, IconButton, ListItem, ListItemIcon, ListItemText, InputBase, Button } from '@material-ui/core';
 import { Menu as MenuIcon, ChevronLeft as ChevronLeftIcon, ChevronRight as ChevronRightIcon, Search as SearchIcon } from '@material-ui/icons';
 import logo from '../../assets/logo.png'
@@ -13,8 +14,9 @@ import { isMobile, isTablet } from "react-device-detect";
 import Background from '../../assets/bg.jpg'
 import { connect } from 'react-redux'
 import { signout, searchByState, searchByTag, loadPost, getnoti } from '../../store/actions/appAction'
-const drawerWidth = 240;
+import PageTitle from "./pageTitle";
 
+const drawerWidth = 240;
 const styles = theme => ({
   but: {
     marginRight: 12,
@@ -131,6 +133,9 @@ const styles = theme => ({
   loglike: {
     fontWeight: "bold",
     color: "white !important"
+  },
+  step: {
+    marginTop: '50%',
   }
 });
 
@@ -196,7 +201,7 @@ class Header extends Component {
 
   render() {
     const { classes, theme, profile, auth, noti } = this.props;
-    const { anchorEl } = this.state;
+    const { anchorEl, open } = this.state;
     const isMenuOpen = Boolean(anchorEl);
 
     const renderMenu = (
@@ -225,7 +230,7 @@ class Header extends Component {
           })}
         >
           <Toolbar disableGutters={!this.state.open}>
-            {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && auth.uid ?
+            {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
               <IconButton
                 color="inherit"
                 aria-label="Open drawer"
@@ -241,7 +246,7 @@ class Header extends Component {
               <Link to="/"><img src={logo} alt='CHI' className={classes.logo} /></Link>
             </Typography>
             <div className={classes.search} style={{ width: '100%', marginLeft: 0 }}>
-              {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
+              {window.location.pathname.search('Privacy') === -1 && window.location.pathname.search('Terms') === -1 && window.location.pathname.search('notice') === -1 && window.location.pathname.search('bookmark') === -1 && window.location.pathname.search('diary') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && window.location.pathname.search('profile') === -1 ?
                 <Fragment>
                   <div className={classes.searchIcon}>
                     <SearchIcon />
@@ -279,12 +284,12 @@ class Header extends Component {
                 className={classes.but}
               >
                 <Avatar name={profile.displayName} size="45" src={profile.Photo} round={true} />
-              </IconButton>
-              : window.location.pathname.search('upin') === -1 ?
+              </IconButton> : window.location.pathname.search('upin') === -1 ?
                 <Button color="inherit" className={classes.but}><Link to="/upin" className={classes.loglike}> Login </Link> </Button> : null}
           </Toolbar>
+          <PageTitle />
         </AppBar>
-        {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 && auth.uid ?
+        {!isTablet && !isMobile && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
           <Drawer
             variant="permanent"
             className={classNames(classes.drawer, {
@@ -304,29 +309,29 @@ class Header extends Component {
                 {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
               </IconButton>
             </div>
-            <Divider />
+            {!open ? <Divider className={classes.step} /> : <Divider />}
             <List>
-              {['/', '/diary', '/feed', '/bookmark', '/notice'].map((text, index) => (
+              {['/feed', '/map', '/diary', '/bookmark', '/notice'].map((text, index) => (
                 <ListItem button key={text} selected={window.location.pathname === text}>
                   <ListItemIcon>
                     {index === 0 ?
-                      <Link to={text}><FontAwesomeIcon icon={['fas', 'map-marked-alt']} className={classes.icons} /></Link> :
+                      <Link to={text}><FontAwesomeIcon icon={['fas', 'newspaper']} className={classes.icons} /></Link> :
                       index === 1 ?
-                        <Link to={text}><FontAwesomeIcon icon={['fas', 'file-signature']} className={classes.icons} /></Link> :
+                        <Link to={text}><FontAwesomeIcon icon={['fas', 'map-marked-alt']} className={classes.icons} /></Link> :
                         index === 2 ?
-                          <Link to={text}><FontAwesomeIcon icon={['fas', 'newspaper']} className={classes.icons} /></Link> :
+                          <Link to={text}><FontAwesomeIcon icon={['fas', 'file-signature']} className={classes.icons} /></Link> :
                           index === 3 ?
                             <Link to={text}><FontAwesomeIcon icon={['fas', 'bookmark']} className={classes.icons} /></Link> :
                             <Link to={text}>
-                              <Badge badgeContent={noti.length} color="secondary" className={classes.icons}>
+                              {noti.length === 0 ? <Badge badgeContent={noti.length} color="secondary" className={classes.icons}>
                                 <FontAwesomeIcon icon={['fas', 'bell']} />
-                              </Badge></Link>}
+                              </Badge> : <FontAwesomeIcon icon={['fas', 'bell']} />}</Link>}
                   </ListItemIcon>
-                  {index === 0 ? <Link to={text}><ListItemText primary={'map'} /></Link> : <Link to={text}><ListItemText primary={text.replace('/', '')} /></Link>}
+                  <Link to={text}><ListItemText primary={text.replace('/', '')} /></Link>
                 </ListItem>
               ))}
             </List>
-            <Divider />
+            {/* <Divider />
             <List>
               {['/profile', '/Terms', '/Privacy'].map((text, index) => (
                 <ListItem button key={text} selected={window.location.pathname === text} >
@@ -348,7 +353,7 @@ class Header extends Component {
                 <FontAwesomeIcon icon={['fas', 'sign-out-alt']} />
               </ListItemIcon>
               <ListItemText primary={'Sign Out'} />
-            </ListItem>
+            </ListItem> */}
             <Divider />
             <Co />
           </Drawer>

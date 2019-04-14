@@ -102,6 +102,11 @@ const Acheive = Loadable({
     loading: LoadingComponant
 })
 
+const Landing = Loadable({
+    loader: () => import('./views/Landing/index'),
+    loading: LoadingComponant
+})
+
 const Routes = props => {
     const { auth, profile } = props
     return (
@@ -113,57 +118,52 @@ const Routes = props => {
                     <Route exact path="/upin" render={() =>
                         !auth.uid ?
                             <InUp />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed"/>
                     } />
                     <Route exact path="/up" render={() =>
                         !auth.uid ?
                             <SignUp />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/in" render={() =>
                         !auth.uid ?
                             <SignIn />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/upin" render={() =>
                         !auth.uid ?
                             <InUp />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/diary/edit" render={() =>
                         auth.uid ?
                             <EditDiary />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/diary/create" render={() =>
                         auth.uid ?
                             <CreateDiary />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/acheive" render={() =>
                         auth.uid ?
-                            <Acheive auth={auth}/>
-                            : <Redirect to='/' />
+                            <Acheive auth={auth} />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/profile" render={() =>
                         auth.uid ?
                             <Profile auth={auth} profile={profile} />
-                            : <Redirect to='/' />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/profile/img" render={() =>
                         auth.uid ?
-                            <UpdateIMG auth={auth}/>
-                            : <Redirect to='/' />
+                            <UpdateIMG auth={auth} />
+                            : <Redirect to="/feed" />
                     } />
                     <Route exact path="/diary" render={() =>
                         auth.uid ?
                             <Diary />
                             : <Unregist name='Diary' />
-                    } />
-                    <Route exact path="/feed" render={() =>
-                        auth.uid ?
-                            <Feed />
-                            : <Unregist name='Feed' />
                     } />
                     <Route exact path="/bookmark" render={() =>
                         auth.uid ?
@@ -175,7 +175,13 @@ const Routes = props => {
                             <Notice />
                             : <Unregist name='Notice' />
                     } />
-                    <Route exact path="/" component={Map} />
+                    <Route exact path="/" render={() =>
+                        auth.uid ?
+                            <Redirect to="/feed" />
+                            : <Landing />
+                    } />
+                    <Route exact path="/feed" component={Feed} />
+                    <Route exact path="/map" component={Map} />
                     <Route path="*" component={NotFound} />
                 </Switch>
             </Router>
