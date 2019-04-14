@@ -13,7 +13,7 @@ const styles = theme => ({
         width: "100%",
         color: 'black',
         [theme.breakpoints.up('sm')]: {
-            marginTop: '30%',
+            marginTop: '40%',
             width: 'auto',
             marginBottom: '15%',
         },
