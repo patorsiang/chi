@@ -3,7 +3,12 @@ export function handler(D) {
         const firebase = getFirebase()
         const firestore = getFirestore()
         const user = firebase.auth().currentUser;
-
+        const state = getState()
+        const writer = {
+            User_UID: user.uid,
+            displayName: state.firebase.profile.displayName,
+            Photo: state.firebase.profile.Photo
+        }
         while (D.tag.indexOf("") > -1) {
             D.tag.splice(D.tag.indexOf(""), 1);
         }
@@ -31,7 +36,7 @@ export function handler(D) {
                             photoMeta.push(file.name);
                             // Add a new document in collection "cities"
                             firestore.collection('diary').doc(D.id).set({
-                                writer: user.uid,
+                                writer: writer,
                                 title: D.title,
                                 public: D.public,
                                 state: D.state,
@@ -51,7 +56,7 @@ export function handler(D) {
             })
         } else {
             firestore.collection('diary').doc(D.id).set({
-                writer: user.uid,
+                writer: writer,
                 title: D.title,
                 public: D.public,
                 state: D.state,

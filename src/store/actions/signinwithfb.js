@@ -20,6 +20,7 @@ export function handler() {
                         displayName: user.displayName,
                         DOB: null,
                         Photo: user.photoURL,
+                        admin: false,
                         created: Date(),
                         token: 0
                     })
@@ -98,7 +99,7 @@ export function handler() {
             })
             return dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
         }).catch(err => {
-            return dispatch({ type: 'SIGNIN_ERROR', err, book: [] })
+            return dispatch({ type: 'SIGNIN_ERROR', err})
         })
     }
 }

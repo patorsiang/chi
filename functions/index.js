@@ -38,8 +38,8 @@ exports.callCloudNaturalLanguage = functions.storage.object().onFinalize(callTra
 const diaryThemeModule = require('./diary/themeOfTag')
 exports.UpdateThemeDiaryActivity = functions.firestore.document('diary/{diaryID}').onWrite(diaryThemeModule.handler)
 
-const diaryRemoveModule = require('./diary/themeOfTag')
-exports.removeDiary = functions.firestore.document('diary/{diaryID}').onWrite(diaryRemoveModule.handler)
+const diaryRemoveModule = require('./diary/removeDiary')
+exports.removeDiaryByAdmin = functions.firestore.document('diary/{diaryID}').onWrite(diaryRemoveModule.handler)
 
 // notification
 const notificationTokenModule = require('./notification/notificationTokenActivity')
@@ -99,3 +99,13 @@ exports.searchPostByNote = functions.https.onCall(searchPostByNoteModule.handler
 
 const searchPostByDateModule = require('./api/searchPostByDate')
 exports.searchPostByDate = functions.https.onCall(searchPostByDateModule.handler)
+
+//database trigger to fix the old format from firebase cloud firestore
+const fixUserModule = require('./trigger/user')
+exports.fixUser = functions.firestore.document('user/{userId}').onWrite(fixUserModule.handler)
+
+const fixDiaryModule = require('./trigger/diary')
+exports.fixDiary = functions.firestore.document('diary/{diaryId}').onWrite(fixDiaryModule.handler)
+
+const fixNotificationModule = require('./trigger/notification')
+exports.fixNotification = functions.firestore.document('notification/{notificationId}').onWrite(fixNotificationModule.handler)

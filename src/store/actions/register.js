@@ -18,7 +18,14 @@ export function handler(U) {
 
                     },
                     function error(err) {
-                        dispatch({ type: 'POSTING_ERROR', err })
+                        var user = firebase.auth().currentUser;
+
+                        user.delete().then(function () {
+                            // User deleted.
+                            return dispatch({ type: 'SIGNIN_ERROR', err })
+                        }).catch(function (error) {
+                            // An error happened.
+                        });
                     },
                     function complete() {
                         storageRef.getDownloadURL().then(function (url) {
@@ -26,6 +33,7 @@ export function handler(U) {
                                 displayName: U.Name,
                                 DOB: U.DOB,
                                 Photo: url,
+                                admin: false,
                                 created: Date(),
                                 token: 0
                             })
@@ -37,6 +45,7 @@ export function handler(U) {
                     displayName: U.Name,
                     DOB: U.DOB,
                     Photo: null,
+                    admin: false,
                     created: Date(),
                     token: 0
                 })
@@ -52,7 +61,7 @@ export function handler(U) {
             }
             dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
         }).catch(err => {
-            dispatch({ type: 'SIGNIN_ERROR', err, book: [] })
+            dispatch({ type: 'SIGNIN_ERROR', err})
         })
     }
 }

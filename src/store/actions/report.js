@@ -20,7 +20,7 @@ export function handler(id) {
                     notiRef.set({
                         owner: snapshot.data().writer,
                         type: 'report',
-                        content: `your diary was reported, ${snapshot.data().title} of ${new Date()}`,
+                        content: `your diary was reported, ${snapshot.data().title}`,
                         read: false,
                         linked: '/diary',
                         date: Date()

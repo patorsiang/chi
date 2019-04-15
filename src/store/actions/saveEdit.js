@@ -2,6 +2,13 @@ export function handler(diary) {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firestore = getFirestore();
         const firebase = getFirebase()
+        const user = firebase.auth().currentUser;
+        const state = getState()
+        const writer = {
+            User_UID: user.uid,
+            displayName: state.firebase.profile.displayName,
+            Photo: state.firebase.profile.Photo
+        }
 
         while (diary.tag.indexOf("") > -1) {
             diary.tag.splice(diary.tag.indexOf(""), 1);
@@ -9,8 +16,6 @@ export function handler(diary) {
 
         var photoURL = new Set(diary.uploaded);
         var photoMeta = new Set(diary.uploadedfiles);
-
-        const user = firebase.auth().currentUser;
 
         if (diary.delete) {
             if (diary.files.length > 0) {
@@ -35,7 +40,7 @@ export function handler(diary) {
                                 photoMeta = [...photoMeta.add(file.name)];
                                 // Add a new document in collection "cities"
                                 firestore.collection('diary').doc(diary.id).set({
-                                    writer: user.uid,
+                                    writer: writer,
                                     title: diary.title,
                                     public: diary.public,
                                     state: diary.state,
@@ -55,7 +60,7 @@ export function handler(diary) {
                 })
             } else {
                 firestore.collection('diary').doc(diary.id).set({
-                    writer: user.uid,
+                    writer: writer,
                     title: diary.title,
                     public: diary.public,
                     state: diary.state,
@@ -97,7 +102,7 @@ export function handler(diary) {
                                 photoMeta = [...photoMeta.add(file.name)];
 
                                 firestore.collection('diary').doc(diary.id).update({
-                                    writer: user.uid,
+                                    writer: writer,
                                     title: diary.title,
                                     public: diary.public,
                                     state: diary.state,
@@ -114,7 +119,7 @@ export function handler(diary) {
                 })
             } else {
                 firestore.collection('diary').doc(diary.id).update({
-                    writer: user.uid,
+                    writer: writer,
                     title: diary.title,
                     public: diary.public,
                     state: diary.state,

@@ -83,7 +83,7 @@ export function handler(U) {
             })
             return dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
         }).catch(function (err) {
-            dispatch({ type: 'SIGNIN_ERROR', err, book: [] })
+            dispatch({ type: 'SIGNIN_ERROR', err})
         });
     }
 }
