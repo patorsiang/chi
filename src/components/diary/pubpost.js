@@ -218,7 +218,7 @@ class PubPost extends Component {
                       {like ? <LoveIcon color="secondary" /> : <FavIcon color="secondary" />}
                     </IconButton>
                     <IconButton onClick={() => { this.book(post.id) }}>
-                      {book ? <BookedIcon color="disabled" /> : <BookmarkIcon color="disabled" />}
+                      {book ? <BookedIcon color="secondary" /> : <BookmarkIcon color="disabled" />}
                     </IconButton>
                   </Fragment> : null}
 

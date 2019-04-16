@@ -3,7 +3,7 @@
 // Flag for enabling cache in production
 var doCache = false;
 
-var CACHE_NAME = 'pwa-app-cache';
+var CACHE_NAME = 'CHI-app-cache';
 
 // Delete old caches
 self.addEventListener('activate', event => {
