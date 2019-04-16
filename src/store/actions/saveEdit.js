@@ -36,8 +36,7 @@ export function handler(diary) {
                         },
                         function complete() {
                             storageRef.getDownloadURL().then(function (url) {
-                                photoURL = [...photoURL.add(url)];
-                                photoMeta = [...photoMeta.add(file.name)];
+                                photoURL = new Set([...photoURL.add(url)]);
                                 // Add a new document in collection "cities"
                                 firestore.collection('diary').doc(diary.id).set({
                                     writer: writer,
@@ -48,7 +47,6 @@ export function handler(diary) {
                                     tag: diary.tag,
                                     photo: photoURL,
                                     date: Date(),
-                                    meta: photoMeta,
                                     like: [],
                                     book: [],
                                     report: [],
@@ -68,7 +66,6 @@ export function handler(diary) {
                     tag: diary.tag,
                     photo: diary.uploaded,
                     date: Date(),
-                    meta: diary.uploadedfiles,
                     like: [],
                     book: [],
                     report: [],
@@ -98,8 +95,7 @@ export function handler(diary) {
                         function complete() {
                             storageRef.getDownloadURL().then(function (url) {
                                 // Add a new document in collection "cities"
-                                photoURL = [...photoURL.add(url)];
-                                photoMeta = [...photoMeta.add(file.name)];
+                                photoURL = new Set([...photoURL.add(url)]);
 
                                 firestore.collection('diary').doc(diary.id).update({
                                     writer: writer,
@@ -110,7 +106,6 @@ export function handler(diary) {
                                     tag: diary.tag,
                                     photo: photoURL,
                                     date: Date(),
-                                    meta: photoMeta
                                 }).catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
                             }).then(() => dispatch({ type: 'POSTING_SUCCESS' }))
                                 .catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
@@ -127,7 +122,6 @@ export function handler(diary) {
                     tag: diary.tag,
                     photo: diary.uploaded,
                     date: Date(),
-                    meta: diary.uploadedfiles
                 }).then(() => dispatch({ type: 'EDIT_SUCCESS', result: "success" }))
                     .catch((err) => dispatch({ type: 'EDIT_ERROR', err }))
             }

@@ -229,12 +229,66 @@ const appReducer = (state, action) => {
                 // console.log(p.data.tag.includes(action.T), p.data.ProTag.includes(action.T));
                 if (p.data.tag) {
                     if (p.data.tag.toString().toUpperCase().includes(action.T.toUpperCase())) {
-                        tagPost.push(p)
+                        if (p.data.theme) {
+                            if (p.data.theme.toUpperCase().includes(state.theme.toUpperCase())) {
+                                tagPost.push(p)
+                            } else {
+                                if (p.data.ProTheme) {
+                                    if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                                        tagPost.push(p)
+                                    }
+                                } 
+                            }
+                        } else {
+                            if (p.data.ProTheme) {
+                                if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                                    tagPost.push(p)
+                                }
+                            } 
+                        }
+                    } else {
+                        if (p.data.ProTag) {
+                            if (p.data.ProTag.toString().toUpperCase().includes(action.T.toUpperCase())) {
+                                if (p.data.theme) {
+                                    if (p.data.theme.toUpperCase().includes(state.theme.toUpperCase())) {
+                                        tagPost.push(p)
+                                    } else {
+                                        if (p.data.ProTheme) {
+                                            if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                                                tagPost.push(p)
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    if (p.data.ProTheme) {
+                                        if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                                            tagPost.push(p)
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 } else {
                     if (p.data.ProTag) {
                         if (p.data.ProTag.toString().toUpperCase().includes(action.T.toUpperCase())) {
-                            tagPost.push(p)
+                            if (p.data.theme) {
+                                if (p.data.theme.toUpperCase().includes(state.theme.toUpperCase())) {
+                                    tagPost.push(p)
+                                } else {
+                                    if (p.data.ProTheme) {
+                                        if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                                            tagPost.push(p)
+                                        }
+                                    }
+                                }
+                            } else {
+                                if (p.data.ProTheme) {
+                                    if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                                        tagPost.push(p)
+                                    }
+                                }
+                            }
                         }
                     }
                 }

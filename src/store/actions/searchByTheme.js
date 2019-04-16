@@ -13,21 +13,15 @@ export function handler(T) {
         if (T === "ALL") {
             const searchAllPost = firebase.functions().httpsCallable('getAllPost')
             searchAllPost().then(result => {
-                const userInfo = firebase.functions().httpsCallable('getUser')
                 if (result.data.length === 0) {
                     return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
                 }
-                result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
-                    data.data.idWriter = data.data.writer
-                    data.data.writer = writer.data
-                    return data.data
-                }).then(data => {
+                result.data.map(data => {
                     const metadata = firebase.functions().httpsCallable('getMetadata')
                     const safe = []
                     const tags = []
                     const themes = []
-
-                    data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                    return data.photo.map(file => metadata({ file }).then(res => {
                         if (res.data.safe) {
                             safe.push(res.data.safe)
                             if (safe.includes("bad")) {
@@ -56,26 +50,20 @@ export function handler(T) {
                     }).then(() => {
                         return dispatch({ type: 'SEARCH_BY_THEME', T, post: result.data.sort(compare) })
                     }))
-                }))
+                })
             }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) })
         } else {
-            const searchAllPost = firebase.functions().httpsCallable('getAllPost')
+           const searchAllPost = firebase.functions().httpsCallable('getAllPost')
             searchAllPost().then(result => {
-                const userInfo = firebase.functions().httpsCallable('getUser')
                 if (result.data.length === 0) {
                     return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
                 }
-                result.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
-                    data.data.idWriter = data.data.writer
-                    data.data.writer = writer.data
-                    return data.data
-                }).then(data => {
+                result.data.map(data => {
                     const metadata = firebase.functions().httpsCallable('getMetadata')
                     const safe = []
                     const tags = []
                     const themes = []
-
-                    data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                    return data.photo.map(file => metadata({ file }).then(res => {
                         if (res.data.safe) {
                             safe.push(res.data.safe)
                             if (safe.includes("bad")) {
@@ -118,8 +106,8 @@ export function handler(T) {
                             }).sort(compare)
                         })
                     }))
-                }))
-            }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) })
+                })
+            }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) }) 
         }
     }
 }

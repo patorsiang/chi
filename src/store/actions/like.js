@@ -17,16 +17,19 @@ export function handler(id) {
                     })
                 } else {
                     const name = state.firebase.profile.displayName
-                    const photo = state.firebase.profile.Photo
+                    const Photo = state.firebase.profile.Photo
                     const notiRef = firestore.collection('notification').doc(notid);
                     notiRef.set({
                         owner: snapshot.data().writer,
                         type: 'like',
-                        content: `${name} save your diary, ${snapshot.data().title}`,
+                        content: `save your diary, ${snapshot.data().title}`,
                         read: false,
                         linked: '/diary',
-                        name: name,
-                        photo: photo,
+                        participant: {
+                            User_UID: uid,
+                            name: name,
+                            Photo: Photo
+                        },
                         date: Date()
                     });
                     PostRef.update({

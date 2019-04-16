@@ -15,6 +15,13 @@ exports.handler = (change, context) => {
           }
         }, {merge: true});
       })
-  } 
+  }
+
+  if (data.meta) {
+      return change.after.ref.update({
+        meta: firebase.firestore.FieldValue.delete()
+      })
+  }
+
   return null
 }

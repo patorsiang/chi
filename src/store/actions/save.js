@@ -13,7 +13,6 @@ export function handler(D) {
             D.tag.splice(D.tag.indexOf(""), 1);
         }
         var photoURL = []
-        var photoMeta = []
         if (D.files.length > 0) {
             D.files.map((file, i) => {
 
@@ -33,7 +32,6 @@ export function handler(D) {
                     function complete() {
                         storageRef.getDownloadURL().then(function (url) {
                             photoURL.push(url);
-                            photoMeta.push(file.name);
                             // Add a new document in collection "cities"
                             firestore.collection('diary').doc(D.id).set({
                                 writer: writer,
@@ -47,7 +45,6 @@ export function handler(D) {
                                 like: [],
                                 book: [],
                                 report: [],
-                                meta: photoMeta
                             }).catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
                         }).then(() => dispatch({ type: 'POSTING_SUCCESS' }))
                             .catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
@@ -67,7 +64,6 @@ export function handler(D) {
                 like: [],
                 book: [],
                 report: [],
-                meta: []
             }).then(() => dispatch({ type: 'POSTING_SUCCESS' }))
                 .catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
         }

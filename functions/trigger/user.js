@@ -17,32 +17,48 @@ exports.handler = (change, context) => {
       .where("owner.User_UID", "==", context.params.userId)
       .get().then(querySnapshot => {
         return querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            admin.firestore().collection('notification').doc(doc.id).set({
-              owner: {
-                User_UID: context.params.userId,
-                displayName: data.displayName,
-                Photo: data.Photo
-              }
-            }, {merge: true})
+          // doc.data() is never undefined for query doc snapshots
+          admin.firestore().collection('notification').doc(doc.id).set({
+            owner: {
+              User_UID: context.params.userId,
+              displayName: data.displayName,
+              Photo: data.Photo
+            }
+          }, { merge: true })
         });
       }).then(() => {
         // eslint-disable-next-line promise/no-nesting
-        return admin.firestore().collection('diary')
-        .where("writer.User_UID", "==", context.params.userId)
-        .get().then(querySnapshot => {
-          return querySnapshot.forEach((doc) => {
-            // doc.data() is never undefined for query doc snapshots
-            admin.firestore().collection('notification').doc(doc.id).set({
-              writer: {
-                User_UID: context.params.userId,
-                displayName: data.displayName,
-                Photo: data.Photo
-              }
-            }, { merge: true })
-          });
-        })})
-  }
-
-  return null;
+        return admin.firestore().collection('notification')
+          .where("participant.User_UID", "==", context.params.userId)
+          .get().then(querySnapshot => {
+            return querySnapshot.forEach((doc) => {
+              // doc.data() is never undefined for query doc snapshots
+              admin.firestore().collection('notification').doc(doc.id).set({
+                participant: {
+                  User_UID: context.params.userId,
+                  displayName: data.displayName,
+                  Photo: data.Photo
+                }
+              }, { merge: true })
+            });
+          }).then(() => {
+            // eslint-disable-next-line promise/no-nesting
+            return admin.firestore().collection('diary')
+              .where("writer.User_UID", "==", context.params.userId)
+              .get().then(querySnapshot => {
+                return querySnapshot.forEach((doc) => {
+                  // doc.data() is never undefined for query doc snapshots
+                  admin.firestore().collection('diary').doc(doc.id).set({
+                    writer: {
+                      User_UID: context.params.userId,
+                      displayName: data.displayName,
+                      Photo: data.Photo
+                    }
+                  }, { merge: true })
+                });
+              })
+          })
+      })
+    }
+    return null
 }

@@ -1,8 +1,7 @@
-const { Storage } = require('@google-cloud/storage');
-const storage = new Storage();
+const functions = require('firebase-functions')
 
 exports.handler = (data, context) => {
-    const ref = storage.bucket('app-chi.appspot.com').file(`${data.id}/${data.file}`)
+    const ref = functions.storage().refFromURL(data.file)
     // Get metadata properties
     return ref.getMetadata().then((metadata) => {
         // Metadata now contains the metadata for 'images/forest.jpg'

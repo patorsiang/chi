@@ -33,7 +33,6 @@ const getBookModule = require('./getBook')
 export const getBook = getBookModule.handler
 
 //diary
-
 const getDiaryModule = require('./getDiary')
 export const getDiary = getDiaryModule.handler
 

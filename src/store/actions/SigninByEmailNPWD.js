@@ -19,38 +19,21 @@ export function handler(U) {
                     // An error happened.
                 });
             }
+            
             const BookRef = firebase.functions().httpsCallable('getAllBookPost')
+
             BookRef().then(book => {
-                const userInfo = firebase.functions().httpsCallable('getUser')
                 if (book.data.length === 0) {
                     return dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
                 }
-                book.data.map(data => userInfo({ id: data.data.writer }).then(writer => {
-                    data.data.idWriter = data.data.writer
-                    data.data.writer = writer.data
-                    data.data.photo.forEach(photo => {
-                        const httpsReference = firebase.storage().refFromURL(photo)
-                        // Create file metadata to update
-                        var newMetadata = {
-                            cacheControl: 'public,max-age=10000000000',
-                        }
 
-                        // Update metadata properties
-                        httpsReference.updateMetadata(newMetadata).then(function (metadata) {
-                            // Updated metadata for 'images/forest.jpg' is returned in the Promise
-                            // console.log(metadata);
-                        }).catch(function (error) {
-                            // Uh-oh, an error occurred!
-                        });
-                    })
-                    return data.data
-                }).then(data => {
-                    const metadata = firebase.functions().httpsCallable('getMetadata')
-                    const safe = []
-                    const tags = []
-                    const themes = []
+                const metadata = firebase.functions().httpsCallable('getMetadata')
+                const safe = []
+                const tags = []
+                const themes = []
 
-                    data.meta.map(file => metadata({ id: data.idWriter, file }).then(res => {
+                book.data.map(data => {
+                    return data.photo.map(file => metadata({file}).then(res => {
                         if (res.data.safe) {
                             safe.push(res.data.safe)
                             if (safe.includes("bad")) {
@@ -79,11 +62,12 @@ export function handler(U) {
                     }).then(() => {
                         return dispatch({ type: 'SIGNIN_SUCCESS', book: book.data.sort(compare) })
                     }))
-                }))
+                })
             })
+
             return dispatch({ type: 'SIGNIN_SUCCESS', book: [] })
         }).catch(function (err) {
-            dispatch({ type: 'SIGNIN_ERROR', err})
+            dispatch({ type: 'SIGNIN_ERROR', err })
         });
     }
 }

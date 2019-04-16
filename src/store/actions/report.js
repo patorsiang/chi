@@ -17,17 +17,31 @@ export function handler(id) {
                     })
                 } else {
                     const notiRef = firestore.collection('notification').doc(notid);
-                    notiRef.set({
-                        owner: snapshot.data().writer,
-                        type: 'report',
-                        content: `your diary was reported, ${snapshot.data().title}`,
-                        read: false,
-                        linked: '/diary',
-                        date: Date()
-                    });
-                    PostRef.update({
-                        "report": firestore.FieldValue.arrayUnion(uid)
-                    })
+                    if (state.firebase.profile.admin) {
+                        notiRef.set({
+                            owner: snapshot.data().writer,
+                            type: 'report',
+                            content: `the admin deleted your diary, ${snapshot.data().title} because it is not appropriate for other user`,
+                            read: false,
+                            linked: '/diary',
+                            date: Date()
+                        });
+                        PostRef.update({
+                            "report": firestore.FieldValue.arrayUnion(uid)
+                        })
+                    } else {
+                        notiRef.set({
+                            owner: snapshot.data().writer,
+                            type: 'report',
+                            content: `your diary was reported, ${snapshot.data().title}`,
+                            read: false,
+                            linked: '/diary',
+                            date: Date()
+                        });
+                        PostRef.update({
+                            "report": firestore.FieldValue.arrayUnion(uid)
+                        }) 
+                    }
                 }
             } else {
                 PostRef.set({
