@@ -1,4 +1,5 @@
 import uuidv1 from 'uuid/v1';
+import FBRoot from "../../configs/fbConfig"
 
 function compare(a, b) {
     if (a.data.date > b.date)
@@ -46,41 +47,60 @@ export function handler(id) {
                                 })
                                 return data.data
                             })
-                        }).then(data => {
-                            const metadata = firebase.functions().httpsCallable('getMetadata')
-                            const safe = []
-                            const tags = []
-                            const themes = []
-
-                            data.photo.map(file => metadata({ file }).then(res => {
-                                if (res.data.safe) {
-                                    safe.push(res.data.safe)
-                                    if (safe.includes("bad")) {
-                                        data.safe = "bad"
-                                    } else if (safe.includes("safe")) {
-                                        data.safe = "safe"
-                                    } else {
-                                        data.safe = "maybe"
-                                    }
-                                } else {
-                                    data.safe = "maybe"
+                        }).then(() => {
+                            BookRef().then(book => {
+                                if (book.data.length === 0) {
+                                    return dispatch({ type: 'BOOK_SUCCESS', book: [] })
                                 }
 
-                                if (res.data.tags) {
-                                    res.data.tags.map(tag => tags.push(tag))
-                                }
+                                book.data.map(posts => {
+                                    const safe = []
+                                    const tags = []
+                                    const themes = []
+                                    return posts.data.photo.map(file => FBRoot.storage().refFromURL(file).getMetadata().then(
+                                        meta => {
+                                            if (meta.customMetadata.safeAdult) {
+                                                safe.push(meta.customMetadata.safeAdult.includes('UNLIKELY') ? 'safe' : meta.customMetadata.safeAdult.includes('LIKELY') ? 'bad' : 'maybe')
+                                            }
 
-                                if (res.data.themes) {
-                                    res.data.themes.map(theme => themes.push(theme))
-                                }
-                                return { safe, tags, themes }
-                            }).then(obj => {
-                                data.ProTag = [...new Set(obj.tags)]
-                                data.ProTheme = [...new Set(obj.themes, data.theme)]
-                                return data
-                            }).then(book => {
-                                return dispatch({ type: 'BOOK_SUCCESS', book: book.data.sort(compare) })
-                            }))
+                                            if (meta.customMetadata.tags) {
+                                                meta.customMetadata.tags.split(',').map(tag => tag.replace(" ", "_")).map(tag => tags.push(tag))
+                                            }
+
+                                            if (meta.customMetadata.themes) {
+                                                meta.customMetadata.themes.split(',').map(theme => themes.push(theme))
+                                            }
+                                            return { safe, tags, themes }
+                                        }).then(data => {
+                                            if (data.safe) {
+                                                if (data.safe.includes("bad")) {
+                                                    posts.data.safe = "bad"
+                                                } else if (data.safe.includes("safe")) {
+                                                    posts.data.safe = "safe"
+                                                } else {
+                                                    posts.data.safe = "maybe"
+                                                }
+                                            } else {
+                                                posts.data.safe = "maybe"
+                                            }
+
+                                            data.tags.map(
+                                                tag => posts.data.tag.push(tag)
+                                            )
+
+                                            data.themes.map(
+                                                theme => posts.data.theme ? posts.data.theme.includes(',') ? posts.data.theme.split(',').push(theme) : [posts.data.theme].push(theme) : posts.data.theme = [theme]
+                                            )
+                                            return posts.data
+                                        })
+                                    )
+                                })
+                                return book.data
+                            }).then(data => {
+                                return dispatch({ type: 'BOOK_SUCCESS', book: data.sort(compare) })
+                            }).catch(err => {
+                                return dispatch({ type: 'BOOK_SUCCESS', book: [] })
+                            })
                         })
                     })
                 }
@@ -105,40 +125,59 @@ export function handler(id) {
                     "book": firestore.FieldValue.arrayUnion(uid)
                 }).then(() => {
                     const BookRef = firebase.functions().httpsCallable('getAllBookPost')
-                    BookRef().then(data => {
-                        if (data.data.length === 0) {
+                    
+                    BookRef().then(book => {
+                        if (book.data.length === 0) {
                             return dispatch({ type: 'BOOK_SUCCESS', book: [] })
                         }
 
-                        const metadata = firebase.functions().httpsCallable('getMetadata')
-                        const safe = []
-                        const tags = []
-                        const themes = []
-                        return data.data.map(book => {
-                            return book.photo.map(file => metadata({ file }).then(res => {
-                                if (res.data.safe) {
-                                    safe.push(res.data.safe)
-                                    if (safe.includes("bad")) {
-                                        book.data.safe = "bad"
-                                    } else if (safe.includes("safe")) {
-                                        book.safe = "safe"
-                                    } else {
-                                        book.safe = "maybe"
+                        book.data.map(posts => {
+                            const safe = []
+                            const tags = []
+                            const themes = []
+                            return posts.data.photo.map(file => FBRoot.storage().refFromURL(file).getMetadata().then(
+                                meta => {
+                                    if (meta.customMetadata.safeAdult) {
+                                        safe.push(meta.customMetadata.safeAdult.includes('UNLIKELY') ? 'safe' : meta.customMetadata.safeAdult.includes('LIKELY') ? 'bad' : 'maybe')
                                     }
-                                } else {
-                                    book.safe = "maybe"
-                                }
 
-                                if (res.data.tags) {
-                                    res.data.tags.map(tag => tags.push(tag))
-                                }
+                                    if (meta.customMetadata.tags) {
+                                        meta.customMetadata.tags.split(',').map(tag => tag.replace(" ", "_")).map(tag => tags.push(tag))
+                                    }
 
-                                if (res.data.themes) {
-                                    res.data.themes.map(theme => themes.push(theme))
-                                }
-                                return { safe, tags, themes }
-                            }))
+                                    if (meta.customMetadata.themes) {
+                                        meta.customMetadata.themes.split(',').map(theme => themes.push(theme))
+                                    }
+                                    return { safe, tags, themes }
+                                }).then(data => {
+                                    if (data.safe) {
+                                        if (data.safe.includes("bad")) {
+                                            posts.data.safe = "bad"
+                                        } else if (data.safe.includes("safe")) {
+                                            posts.data.safe = "safe"
+                                        } else {
+                                            posts.data.safe = "maybe"
+                                        }
+                                    } else {
+                                        posts.data.safe = "maybe"
+                                    }
+
+                                    data.tags.map(
+                                        tag => posts.data.tag.push(tag)
+                                    )
+
+                                    data.themes.map(
+                                        theme => posts.data.theme ? posts.data.theme.includes(',') ? posts.data.theme.split(',').push(theme) : [posts.data.theme].push(theme) : posts.data.theme = [theme]
+                                    )
+                                    return posts.data
+                                })
+                            )
                         })
+                        return book.data
+                    }).then(data => {
+                        return dispatch({ type: 'BOOK_SUCCESS', book: data.sort(compare) })
+                    }).catch(err => {
+                        return dispatch({ type: 'BOOK_SUCCESS', book: [] })
                     })
                 })
             }

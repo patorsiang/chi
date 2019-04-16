@@ -227,76 +227,42 @@ const appReducer = (state, action) => {
             // action.post.map(p => p.data.ProTag.includes(action.T) || p.data.tag.includes(action.T) ? tagPost.push(p) : null)
             action.post.forEach(p => {
                 // console.log(p.data.tag.includes(action.T), p.data.ProTag.includes(action.T));
-                if (p.data.tag) {
-                    if (p.data.tag.toString().toUpperCase().includes(action.T.toUpperCase())) {
-                        if (p.data.theme) {
-                            if (p.data.theme.toUpperCase().includes(state.theme.toUpperCase())) {
-                                tagPost.push(p)
-                            } else {
-                                if (p.data.ProTheme) {
-                                    if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
-                                        tagPost.push(p)
-                                    }
-                                } 
-                            }
-                        } else {
-                            if (p.data.ProTheme) {
-                                if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
-                                    tagPost.push(p)
-                                }
-                            } 
-                        }
-                    } else {
-                        if (p.data.ProTag) {
-                            if (p.data.ProTag.toString().toUpperCase().includes(action.T.toUpperCase())) {
-                                if (p.data.theme) {
-                                    if (p.data.theme.toUpperCase().includes(state.theme.toUpperCase())) {
-                                        tagPost.push(p)
-                                    } else {
-                                        if (p.data.ProTheme) {
-                                            if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
-                                                tagPost.push(p)
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    if (p.data.ProTheme) {
-                                        if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
-                                            tagPost.push(p)
-                                        }
-                                    }
-                                }
-                            }
+                if (state.theme === "ALL") {
+                    if (p.data.tag) {
+                        if (p.data.tag.toString().toUpperCase().includes(action.T.toUpperCase())) {
+                            tagPost.push(p)
                         }
                     }
                 } else {
-                    if (p.data.ProTag) {
-                        if (p.data.ProTag.toString().toUpperCase().includes(action.T.toUpperCase())) {
-                            if (p.data.theme) {
-                                if (p.data.theme.toUpperCase().includes(state.theme.toUpperCase())) {
+                    if (p.data.theme) {
+                        if (p.data.theme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
+                            if (p.data.tag) {
+                                if (p.data.tag.toString().toUpperCase().includes(action.T.toUpperCase())) {
                                     tagPost.push(p)
-                                } else {
-                                    if (p.data.ProTheme) {
-                                        if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
-                                            tagPost.push(p)
-                                        }
-                                    }
-                                }
-                            } else {
-                                if (p.data.ProTheme) {
-                                    if (p.data.ProTheme.toString().toUpperCase().includes(state.theme.toUpperCase())) {
-                                        tagPost.push(p)
-                                    }
                                 }
                             }
                         }
                     }
                 }
-            });
+            })
             state = { ...state, theme: 'ALL', post: tagPost, isLoaded: false, search: action.T, err: null }
             break;
         case 'SEARCH_BY_THEME':
-            state = { ...state, theme: action.T, post: action.post, isLoaded: false, search: '', err: null }
+            const themePost = []
+            // action.post.map(p => p.data.ProTag.includes(action.T) || p.data.tag.includes(action.T) ? tagPost.push(p) : null)
+            action.post.forEach(p => {
+                // console.log(p.data.tag.includes(action.T), p.data.ProTag.includes(action.T));
+                if (action.T.toUpperCase() === "ALL") {
+                    themePost.push(p)
+                } else {
+                    if (p.data.theme) {
+                        if (p.data.theme.toString().toUpperCase().includes(action.T.toUpperCase())) {
+                            themePost.push(p)
+                        }
+                    }
+                }
+            })
+            state = { ...state, theme: action.T, post: themePost, isLoaded: false, search: '', err: null }
             break;
         default:
             // state = {...state,

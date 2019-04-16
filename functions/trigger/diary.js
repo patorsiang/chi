@@ -10,18 +10,11 @@ exports.handler = (change, context) => {
         return change.after.ref.set({
           writer: {
             User_UID: data.writer,
-            displayName: writer.displayName,
-            Photo: writer.Photo
+            displayName: writer.data().displayName,
+            Photo: writer.data().Photo
           }
         }, {merge: true});
       })
   }
-
-  if (data.meta) {
-      return change.after.ref.update({
-        meta: firebase.firestore.FieldValue.delete()
-      })
-  }
-
   return null
 }

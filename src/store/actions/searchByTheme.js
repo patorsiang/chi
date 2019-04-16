@@ -1,3 +1,4 @@
+import FBRoot from "../../configs/fbConfig"
 function compare(a, b) {
     if (a.data.date > b.date)
         return -1;
@@ -10,104 +11,58 @@ export function handler(T) {
     return (dispatch, getState, { getFirebase, getFirestore }) => {
         const firebase = getFirebase()
 
-        if (T === "ALL") {
-            const searchAllPost = firebase.functions().httpsCallable('getAllPost')
-            searchAllPost().then(result => {
-                if (result.data.length === 0) {
-                    return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
-                }
-                result.data.map(data => {
-                    const metadata = firebase.functions().httpsCallable('getMetadata')
-                    const safe = []
-                    const tags = []
-                    const themes = []
-                    return data.photo.map(file => metadata({ file }).then(res => {
-                        if (res.data.safe) {
-                            safe.push(res.data.safe)
-                            if (safe.includes("bad")) {
-                                data.safe = "bad"
-                            } else if (safe.includes("safe")) {
-                                data.safe = "safe"
-                            } else {
-                                data.safe = "maybe"
-                            }
-                        } else {
-                            data.safe = "maybe"
+        const searchAllPost = firebase.functions().httpsCallable('getAllPost')
+        searchAllPost().then(result => {
+            if (result.data.length === 0) {
+                return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
+            }
+            result.data.map(posts => {
+                const safe = []
+                const tags = []
+                const themes = []
+                return posts.data.photo.map(file => FBRoot.storage().refFromURL(file).getMetadata().then(
+                    meta => {
+                        if (meta.customMetadata.safeAdult) {
+                            safe.push(meta.customMetadata.safeAdult.includes('UNLIKELY') ? 'safe' : meta.customMetadata.safeAdult.includes('LIKELY') ? 'bad' : 'maybe')
                         }
 
-                        if (res.data.tags) {
-                            res.data.tags.map(tag => tags.push(tag))
+                        if (meta.customMetadata.tags) {
+                            meta.customMetadata.tags.split(',').map(tag => tag.replace(" ", "_")).map(tag => tags.push(tag))
                         }
 
-                        if (res.data.themes) {
-                            res.data.themes.map(theme => themes.push(theme))
+                        if (meta.customMetadata.themes) {
+                            meta.customMetadata.themes.split(',').map(theme => themes.push(theme))
                         }
                         return { safe, tags, themes }
-                    }).then(obj => {
-                        data.ProTag = [...new Set(obj.tags)]
-                        data.ProTheme = [...new Set(obj.themes, data.theme)]
-                        return data
-                    }).then(() => {
-                        return dispatch({ type: 'SEARCH_BY_THEME', T, post: result.data.sort(compare) })
-                    }))
-                })
-            }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) })
-        } else {
-           const searchAllPost = firebase.functions().httpsCallable('getAllPost')
-            searchAllPost().then(result => {
-                if (result.data.length === 0) {
-                    return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
-                }
-                result.data.map(data => {
-                    const metadata = firebase.functions().httpsCallable('getMetadata')
-                    const safe = []
-                    const tags = []
-                    const themes = []
-                    return data.photo.map(file => metadata({ file }).then(res => {
-                        if (res.data.safe) {
-                            safe.push(res.data.safe)
-                            if (safe.includes("bad")) {
-                                data.safe = "bad"
-                            } else if (safe.includes("safe")) {
-                                data.safe = "safe"
+                    }).then(data => {
+                        if (data.safe) {
+                            if (data.safe.includes("bad")) {
+                                posts.data.safe = "bad"
+                            } else if (data.safe.includes("safe")) {
+                                posts.data.safe = "safe"
                             } else {
-                                data.safe = "maybe"
+                                posts.data.safe = "maybe"
                             }
                         } else {
-                            data.safe = "maybe"
+                            posts.data.safe = "maybe"
                         }
 
-                        if (res.data.tags) {
-                            res.data.tags.map(tag => tags.push(tag))
-                        }
+                        data.tags.map(
+                            tag => posts.data.tag.push(tag)
+                        )
 
-                        if (res.data.themes) {
-                            res.data.themes.map(theme => themes.push(theme))
-                        }
-                        return { safe, tags, themes }
-                    }).then(obj => {
-                        data.ProTag = [...new Set(obj.tags)]
-                        data.ProTheme = [...new Set(obj.themes, data.theme)]
-                        return data
-                    }).then(() => {
-                        return dispatch({
-                            type: 'SEARCH_BY_THEME', T, post: result.data.filter(data => {
-                                if (data.data.ProTheme) {
-                                    if (!data.data.ProTheme.includes(T)) {
-                                        return false
-                                    }
-                                    return true
-                                } else {
-                                    if (T === "OTHER") {
-                                        return true
-                                    }
-                                    return false
-                                }
-                            }).sort(compare)
-                        })
-                    }))
-                })
-            }).catch(error => { return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] }) }) 
-        }
+                        data.themes.map(
+                            theme => posts.data.theme ? posts.data.theme.includes(',') ? posts.data.theme.split(',').push(theme) : [posts.data.theme].push(theme) : posts.data.theme = [theme]
+                        )
+                        return posts.data
+                    })
+                )
+            })
+            return result.data
+        }).then(data => {
+            return dispatch({ type: 'SEARCH_BY_THEME', T, post: data.sort(compare) })
+        }).catch(err => {
+            return dispatch({ type: 'SEARCH_BY_THEME', T, post: [] })
+        })
     }
 }

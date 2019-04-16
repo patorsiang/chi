@@ -67,8 +67,8 @@ exports.getAllPost = functions.https.onCall(allPostModule.handler)
 const allNotiModule = require('./api/allNoti')
 exports.getAllNoti = functions.https.onCall(allNotiModule.handler)
 
-const UserModule = require('./api/User')
-exports.getUser = functions.https.onCall(UserModule.handler)
+// const UserModule = require('./api/User')
+// exports.getUser = functions.https.onCall(UserModule.handler)
 
 const metadataPhotoModule = require('./api/metadata')
 exports.getMetadata = functions.https.onCall(metadataPhotoModule.handler)
@@ -76,29 +76,29 @@ exports.getMetadata = functions.https.onCall(metadataPhotoModule.handler)
 const allBookPostModule = require('./api/allBookPost')
 exports.getAllBookPost = functions.https.onCall(allBookPostModule.handler)
 
-const allPostByWritertModule = require('./api/allPostByWriter')
-exports.getAllPostByWriter = functions.https.onCall(allPostByWritertModule.handler)
+// const allPostByWritertModule = require('./api/allPostByWriter')
+// exports.getAllPostByWriter = functions.https.onCall(allPostByWritertModule.handler)
 
-const userIDByNameModule = require('./api/userIDByName')
-exports.searchUserByName = functions.https.onCall(userIDByNameModule.handler)
+// const userIDByNameModule = require('./api/userIDByName')
+// exports.searchUserByName = functions.https.onCall(userIDByNameModule.handler)
 
 const searchPostByThemeModule = require('./api/searchPostByTheme')
 exports.searchPostByTheme = functions.https.onCall(searchPostByThemeModule.handler)
 
-const searchPostByTagModule = require('./api/searchPostByTag')
-exports.searchPostByTag = functions.https.onCall(searchPostByTagModule.handler)
+// const searchPostByTagModule = require('./api/searchPostByTag')
+// exports.searchPostByTag = functions.https.onCall(searchPostByTagModule.handler)
 
 const searchPostByStateModule = require('./api/searchPostByState')
 exports.searchPostByState = functions.https.onCall(searchPostByStateModule.handler)
 
-const searchPostByTitleModule = require('./api/searchPostByTitle')
-exports.searchPostByTitle = functions.https.onCall(searchPostByTitleModule.handler)
+// const searchPostByTitleModule = require('./api/searchPostByTitle')
+// exports.searchPostByTitle = functions.https.onCall(searchPostByTitleModule.handler)
 
-const searchPostByNoteModule = require('./api/searchPostByNote')
-exports.searchPostByNote = functions.https.onCall(searchPostByNoteModule.handler)
+// const searchPostByNoteModule = require('./api/searchPostByNote')
+// exports.searchPostByNote = functions.https.onCall(searchPostByNoteModule.handler)
 
-const searchPostByDateModule = require('./api/searchPostByDate')
-exports.searchPostByDate = functions.https.onCall(searchPostByDateModule.handler)
+// const searchPostByDateModule = require('./api/searchPostByDate')
+// exports.searchPostByDate = functions.https.onCall(searchPostByDateModule.handler)
 
 //database trigger to fix the old format from firebase cloud firestore
 const fixUserModule = require('./trigger/user')

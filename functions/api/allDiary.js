@@ -11,7 +11,7 @@ exports.handler = (data, context) => {
     return admin.firestore().collection('diary').orderBy("date", "desc").get().then(
         snapshot => {
             return snapshot.docs.filter(doc => {
-                if (doc.data().writer !== context.auth.uid) {
+                if (doc.data().writer.User_UID !== context.auth.uid) {
                     return false
                 }
                 return true
