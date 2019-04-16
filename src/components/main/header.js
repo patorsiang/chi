@@ -325,7 +325,8 @@ class Header extends Component {
                             <Link to={text}>
                               {noti.length !== 0 && auth.uid ? <Badge badgeContent={noti.length} color="secondary" className={classes.icons}>
                                 <FontAwesomeIcon icon={['fas', 'bell']} />
-                              </Badge> : <FontAwesomeIcon icon={['fas', 'bell']} className={classes.icons}/>}</Link>}
+                              </Badge> : <FontAwesomeIcon icon={['fas', 'bell']} className={classes.icons} />}
+                            </Link>}
                   </ListItemIcon>
                   <Link to={text}><ListItemText primary={text.replace('/', '')} /></Link>
                 </ListItem>

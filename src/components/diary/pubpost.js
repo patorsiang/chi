@@ -177,7 +177,7 @@ class PubPost extends Component {
                   </Fragment>
                 }
                 action={
-                  auth.uid ?<IconButton>
+                  auth.uid ? <IconButton>
                     <ReportIcon onClick={this.handleClickOpen} />
                   </IconButton> : null
                 }
@@ -190,10 +190,10 @@ class PubPost extends Component {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
               >
-                <DialogTitle id="alert-dialog-title">{"This content is inappropriate or incorrect."}</DialogTitle>
+                <DialogTitle id="alert-dialog-title">{"This content is inappropriate or incorrect?"}</DialogTitle>
                 <DialogContent>
                   <DialogContentText id="alert-dialog-description">
-                    Do you want to report it?
+                    Do you want to {profile.admin ? <em>"Delete"</em> : <em>"Report"</em>} it?
             </DialogContentText>
                 </DialogContent>
                 <DialogActions>
@@ -202,7 +202,7 @@ class PubPost extends Component {
             </Button>
                   <Button onClick={() => this.report(post.id)} color="primary" autoFocus>
                     {profile.admin ? "Delete" : "Report"}
-            </Button>
+                  </Button>
                 </DialogActions>
               </Dialog>
               <Carousel key={no} activeIndex={activeIndex} next={this.next} previous={this.previous}>
@@ -245,9 +245,13 @@ class PubPost extends Component {
               <CardContent>
                 <Typography component="p" align="left">{post.data.note}</Typography>
                 <Typography variant="caption" align="right">  <Location /> {post.data.state} </Typography>
-                <Typography variant="caption" align="right">  {post.data.tag.map(tag => ' #' + tag)} </Typography>
-                <Typography variant="caption" align="right">  {post.data.ProTag ? post.data.ProTag.map(tag => ' #' + tag) : null} </Typography>
-                {post.data.ProTheme ? post.data.ProTheme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.ProTheme.map((theme, i) => theme === "ORGANIZATION" ? <Chip key={i} label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip key={i} label={theme} className={classes.chip} align="left" />) : null}
+                <Typography variant="caption" align="right">  {[...new Set(post.data.tag)].map(tag => ' #' + tag)} </Typography>
+                {/* {post.data.theme ? post.data.theme.length === 0 ? <Chip label="OTHER" className={classes.chip} align="left" /> : post.data.theme.map((theme, i) => theme === "ORGANIZATION" ? <Chip key={i} label="WORLD_HERITAGE" className={classes.chip} align="left" /> : <Chip key={i} label={theme} className={classes.chip} align="left" />) : <Chip label="OTHER" className={classes.chip} align="left" />} */}
+                {post.data.theme ?
+                  post.data.theme.includes(',') ?
+                    post.data.theme.split(',').map(th => <Chip label={th} className={classes.chip} align="left" />)
+                    : <Chip label={post.data.theme} className={classes.chip} align="left" />
+                  : <Chip label="OTHER" className={classes.chip} align="left" />}
               </CardContent>
             </Card>
           </Grid> : null}

@@ -11,7 +11,7 @@ exports.handler = (data, context) => {
     return admin.firestore().collection('notification').orderBy("date", "desc").get().then(
         snapshot => {
             return snapshot.docs.filter(doc => {
-                if (doc.data().owner !== context.auth.uid && !doc.data().read) {
+                if (doc.data().owner.User_UID !== context.auth.uid && !doc.data().read) {
                     return false
                 }
                 return true

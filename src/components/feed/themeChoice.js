@@ -74,10 +74,10 @@ class Choice extends Component {
         }
     }
 
-    componentDidMount() {
-        this.props.searchByTheme(this.props.choice)
+    componentWillMount() {
+        this.props.searchByTheme("ALL")
         this.setState({
-            choice: this.props.choice
+            choice: "ALL"
         })
         this.props.loadPost()
     }

@@ -70,8 +70,8 @@ exports.getAllNoti = functions.https.onCall(allNotiModule.handler)
 // const UserModule = require('./api/User')
 // exports.getUser = functions.https.onCall(UserModule.handler)
 
-const metadataPhotoModule = require('./api/metadata')
-exports.getMetadata = functions.https.onCall(metadataPhotoModule.handler)
+// const metadataPhotoModule = require('./api/metadata')
+// exports.getMetadata = functions.https.onCall(metadataPhotoModule.handler)
 
 const allBookPostModule = require('./api/allBookPost')
 exports.getAllBookPost = functions.https.onCall(allBookPostModule.handler)
@@ -82,8 +82,8 @@ exports.getAllBookPost = functions.https.onCall(allBookPostModule.handler)
 // const userIDByNameModule = require('./api/userIDByName')
 // exports.searchUserByName = functions.https.onCall(userIDByNameModule.handler)
 
-const searchPostByThemeModule = require('./api/searchPostByTheme')
-exports.searchPostByTheme = functions.https.onCall(searchPostByThemeModule.handler)
+// const searchPostByThemeModule = require('./api/searchPostByTheme')
+// exports.searchPostByTheme = functions.https.onCall(searchPostByThemeModule.handler)
 
 // const searchPostByTagModule = require('./api/searchPostByTag')
 // exports.searchPostByTag = functions.https.onCall(searchPostByTagModule.handler)

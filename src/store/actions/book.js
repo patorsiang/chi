@@ -2,9 +2,9 @@ import uuidv1 from 'uuid/v1';
 import FBRoot from "../../configs/fbConfig"
 
 function compare(a, b) {
-    if (a.data.date > b.date)
+    if (a.data.date > b.data.date)
         return -1;
-    if (a.data.date < b.date)
+    if (a.data.date < b.data.date)
         return 1;
     return 0;
 }
@@ -111,12 +111,12 @@ export function handler(id) {
                 notiRef.set({
                     owner: snapshot.data().writer,
                     type: 'book',
-                    content: `save your diary, ${snapshot.data().title}`,
+                    content: `saves your diary, ${snapshot.data().title}`,
                     read: false,
                     linked: '/diary',
                     participant: {
                         User_UID: uid,
-                        name: name,
+                        displayName: name,
                         Photo: Photo
                     },
                     date: Date()

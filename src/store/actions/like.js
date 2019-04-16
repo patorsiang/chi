@@ -22,12 +22,12 @@ export function handler(id) {
                     notiRef.set({
                         owner: snapshot.data().writer,
                         type: 'like',
-                        content: `save your diary, ${snapshot.data().title}`,
+                        content: `likes your diary, ${snapshot.data().title}`,
                         read: false,
                         linked: '/diary',
                         participant: {
                             User_UID: uid,
-                            name: name,
+                            displayName: name,
                             Photo: Photo
                         },
                         date: Date()

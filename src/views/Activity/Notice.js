@@ -42,7 +42,7 @@ class Notice extends Component {
 
   render() {
     const { classes, noti } = this.props
-
+    
     return (
       <Home>
         {isMobile ?

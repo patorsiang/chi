@@ -1,9 +1,9 @@
 import FBRoot from "../../configs/fbConfig"
 
 function compare(a, b) {
-    if (a.data.date > b.date)
+    if (a.data.date > b.data.date)
         return -1;
-    if (a.data.date < b.date)
+    if (a.data.date < b.data.date)
         return 1;
     return 0;
 }

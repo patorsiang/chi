@@ -51,14 +51,6 @@ class Map extends Component {
         })
     }
 
-    componentDidUpdate(){
-        if (this.state.INstate !== this.props.INstate) {
-            this.setState({
-                INstate: this.props.INstate
-            })
-        }
-    }
-
     render() {
         const { classes, post, isLoaded } = this.props;
         const { INstate } = this.state

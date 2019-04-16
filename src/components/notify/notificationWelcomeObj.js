@@ -34,6 +34,8 @@ class notiObj extends Component {
 
     render() {
         const { classes, data, profile } = this.props
+        console.log(data.data.type);
+        
         return (
             <Link to={data.data.linked} className={classes.dec}>
                 <ListItem button className={classes.list} key={data.id} onClick={(event) => this.handleChange(event, data.data.linked)}>

@@ -49,8 +49,8 @@ class notiObj extends Component {
                     <ListItemIcon>
                         <FavIcon />
                     </ListItemIcon>
-                    <ListItemText primary={data.data.content} secondary={data.data.date} />
-                    <Avatar name={data.data.name} size="40" src={data.data.photo} />
+                    <ListItemText primary={`${data.data.participant.displayName} ${data.data.content}`} secondary={data.data.date} />
+                    <Avatar name={data.data.participant.displayName} size="40" src={data.data.participant.Photo} />
                 </ListItem>
             </Link>
         )
