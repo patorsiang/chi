@@ -56,7 +56,7 @@ Nodejs - as the server in Firebase Cloud Functions
 
 ## Path Explanation
 |           path           |                                            Explanation                                                     |
-|           :---:          |                                                :---:                                                       |
+|           :---:          |                                                :---                                                        |
 |functions                 | to contain files which are used in CHI server or firebase cloud function                                   |
 |functions/accountsPrize   | to contain files used in CHI server for increasing the token to whose diary object or user info object     |
 |functions/api             | to contain files which CHI front-end can call to use in the purpose                                        |
