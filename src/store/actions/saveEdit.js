@@ -15,12 +15,10 @@ export function handler(diary) {
         }
 
         var photoURL = new Set(diary.uploaded);
-        var photoMeta = new Set(diary.uploadedfiles);
 
         if (diary.delete) {
             if (diary.files.length > 0) {
                 diary.files.map((file, i) => {
-
                     var storageRef = firebase.storage().ref(user.uid + "/" + file.name);
 
                     //Upload file
@@ -36,7 +34,7 @@ export function handler(diary) {
                         },
                         function complete() {
                             storageRef.getDownloadURL().then(function (url) {
-                                photoURL = new Set([...photoURL.add(url)]);
+                                photoURL = [...photoURL.add(url)];
                                 // Add a new document in collection "cities"
                                 firestore.collection('diary').doc(diary.id).set({
                                     writer: writer,
@@ -50,7 +48,7 @@ export function handler(diary) {
                                     like: [],
                                     book: [],
                                     report: [],
-                                }, { merge: true }).catch((err) => dispatch({ type: 'EDIT_ERROR', err }))
+                                }).catch((err) => dispatch({ type: 'EDIT_ERROR', err }))
                             }).then(() => dispatch({ type: 'EDIT_SUCCESS', result: "success" }))
                                 .catch((err) => dispatch({ type: 'EDIT_ERROR', err }))
                         }
@@ -76,9 +74,6 @@ export function handler(diary) {
             if (diary.files.length > 0) {
                 diary.files.map((file, i) => {
 
-                    if (photoMeta.has(file.name)) {
-                        return false
-                    }
                     var storageRef = firebase.storage().ref(user.uid + "/" + file.name);
 
                     //Upload file
@@ -95,9 +90,9 @@ export function handler(diary) {
                         function complete() {
                             storageRef.getDownloadURL().then(function (url) {
                                 // Add a new document in collection "cities"
-                                photoURL = new Set([...photoURL.add(url)]);
+                                photoURL = [...photoURL.add(url)];
 
-                                firestore.collection('diary').doc(diary.id).update({
+                                firestore.collection('diary').doc(diary.id).set({
                                     writer: writer,
                                     title: diary.title,
                                     public: diary.public,
@@ -106,14 +101,14 @@ export function handler(diary) {
                                     tag: diary.tag,
                                     photo: photoURL,
                                     date: Date(),
-                                }).catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
+                                }, {merge : true}).catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
                             }).then(() => dispatch({ type: 'POSTING_SUCCESS' }))
                                 .catch((err) => dispatch({ type: 'POSTING_ERROR', err }))
                         }
                     );
                 })
             } else {
-                firestore.collection('diary').doc(diary.id).update({
+                firestore.collection('diary').doc(diary.id).set({
                     writer: writer,
                     title: diary.title,
                     public: diary.public,
@@ -122,9 +117,11 @@ export function handler(diary) {
                     tag: diary.tag,
                     photo: diary.uploaded,
                     date: Date(),
-                }).then(() => dispatch({ type: 'EDIT_SUCCESS', result: "success" }))
+                }, { merge: true }).then(() => dispatch({ type: 'EDIT_SUCCESS', result: "success" }))
                     .catch((err) => dispatch({ type: 'EDIT_ERROR', err }))
             }
         }
+
+        console.log(diary);
     }
 }

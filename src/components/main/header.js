@@ -150,11 +150,6 @@ class Header extends Component {
     };
   }
 
-  componentWillUpdate(){
-    console.log(window.location.pathname.toLowerCase().replace('/', ''));
-    
-  }
-
   componentDidMount() {
     this.props.getnoti()
   }
@@ -208,8 +203,6 @@ class Header extends Component {
     const { classes, theme, profile, auth, noti } = this.props;
     const { anchorEl, open } = this.state;
     const isMenuOpen = Boolean(anchorEl);
-
-    console.log(window.location.pathname.toLowerCase().replace('/', ''));
     
     const renderMenu = (
       <Menu

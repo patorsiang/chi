@@ -10,7 +10,7 @@ exports.handler = (data, context) => {
 
     return admin.firestore().collection('diary').doc(data.id).get().then(
         snapshot => {
-            if (snapshot.data().writer !== context.auth.uid) {
+            if (snapshot.data().writer.User_UID !== context.auth.uid) {
                 return false
             } else {
                 return {

@@ -22,16 +22,18 @@ export function handler(T) {
                 const themes = []
                 return posts.data.photo.map(file => FBRoot.storage().refFromURL(file).getMetadata().then(
                     meta => {
-                        if (meta.customMetadata.safeAdult) {
-                            safe.push(meta.customMetadata.safeAdult.includes('UNLIKELY') ? 'safe' : meta.customMetadata.safeAdult.includes('LIKELY') ? 'bad' : 'maybe')
-                        }
+                        if (meta.customMetadata) {
+                            if (meta.customMetadata.safeAdult) {
+                                safe.push(meta.customMetadata.safeAdult.includes('UNLIKELY') ? 'safe' : meta.customMetadata.safeAdult.includes('LIKELY') ? 'bad' : 'maybe')
+                            }
 
-                        if (meta.customMetadata.tags) {
-                            meta.customMetadata.tags.split(',').map(tag => tag.replace(" ", "_")).map(tag => tags.push(tag))
-                        }
+                            if (meta.customMetadata.tags) {
+                                meta.customMetadata.tags.split(',').map(tag => tag.replace(" ", "_")).map(tag => tags.push(tag))
+                            }
 
-                        if (meta.customMetadata.themes) {
-                            meta.customMetadata.themes.split(',').map(theme => themes.push(theme))
+                            if (meta.customMetadata.themes) {
+                                meta.customMetadata.themes.split(',').map(theme => themes.push(theme))
+                            }
                         }
                         return { safe, tags, themes }
                     }).then(data => {

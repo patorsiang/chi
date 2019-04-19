@@ -107,7 +107,6 @@ class EditForm extends Component {
             imgfile: [],
             files: [],
             uploaded: [],
-            uploadedfiles: [],
             hide: true,
             id: '',
             title: '',
@@ -125,7 +124,6 @@ class EditForm extends Component {
         if (this.props.edit.data && this.state.id === '') {
             this.setState({
                 uploaded: this.props.edit.data.photo,
-                uploadedfiles: this.props.edit.data.meta,
                 id: this.props.edit.id,
                 state: this.props.edit.data.state,
                 tag: this.props.edit.data.tag,
@@ -179,7 +177,7 @@ class EditForm extends Component {
 
     save = () => {
         if (this.state.public) {
-            if ((this.state.files.length > 0 || this.state.uploadedfiles.length > 0) && this.state.title !== '' && this.state.state !== '' && this.state.note !== '' && this.state.tag.length > 0) {
+            if ((this.state.uploaded.length > 0) && this.state.title !== '' && this.state.state !== '' && this.state.note !== '' && this.state.tag.length > 0) {
                 this.setState({
                     err: ''
                 })
@@ -215,9 +213,7 @@ class EditForm extends Component {
     imageClickUrl = (im) => {
         const i = this.state.uploaded.indexOf(im)
         this.state.uploaded.splice(i, 1)
-        this.state.uploadedfiles.splice(i, 1)
         this.setState({ uploaded: this.state.uploaded })
-        this.setState({ uploadedfiles: this.state.uploadedfiles })
     }
 
     imageClick = (im) => {
@@ -230,7 +226,6 @@ class EditForm extends Component {
 
     render() {
         const { classes, err, success, isLoaded } = this.props
-
         return (
             <Grid container spacing={0}>
                 <Grid item xs={12}>
@@ -301,7 +296,7 @@ class EditForm extends Component {
                                 </GridList>
                             </div>
                             <p>{this.state.files[0] ? this.state.files[0].toString : null}</p>
-                            <input accept="image/*" required={this.state.public && this.state.uploadedfiles.length === 0} className={classes.input} onChange={this.handleChangeImg.bind(this)} id="icon-button-file" type="file" multiple />
+                            <input accept="image/*" required={this.state.public && this.state.uploaded.length < 0} className={classes.input} onChange={this.handleChangeImg.bind(this)} id="icon-button-file" type="file" multiple />
                             <label htmlFor="icon-button-file">
                                 <IconButton className={classes.button} component="span">
                                     <PhotoCamera />
