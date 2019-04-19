@@ -13,7 +13,12 @@ import { changeState, loadPost } from '../../store/actions/appAction'
 const styles = theme => ({
     map:{
         width: '100%',
-        marginTop: '10%',
+        [theme.breakpoints.up('sm')]: {
+            marginTop: '15%',
+        },
+        [theme.breakpoints.down('sm')]: {
+            marginTop: '5%',
+        },
         display: 'block',
         margin: 'auto'
     },

@@ -24,11 +24,11 @@ const styles = theme => ({
     },
     main: {
         [theme.breakpoints.up('sm')]: {
-            marginTop: '6%',
+            marginTop: '15%',
             marginBottom: '2.5%',
         },
         [theme.breakpoints.down('sm')]: {
-            marginTop: '20%',
+            marginTop: '30%',
             marginBottom: '20%',
         },
     },

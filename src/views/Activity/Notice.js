@@ -10,11 +10,11 @@ import { getnoti } from '../../store/actions/appAction'
 const styles = theme => ({
   root: {
     [theme.breakpoints.up('sm')]: {
-      marginTop: '6%',
+      marginTop: '15%',
       marginBottom: '2.5%',
     },
     [theme.breakpoints.down('sm')]: {
-      marginTop: '20%',
+      marginTop: '30%',
       marginBottom: '20%',
     },
     width: '70%',
@@ -59,7 +59,7 @@ class Notice extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    noti: state.app.noti
+    noti: state.app.noti,
   }
 }
 

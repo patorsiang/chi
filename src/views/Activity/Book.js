@@ -11,11 +11,11 @@ import { getBook } from '../../store/actions/appAction'
 const styles = theme => ({
   root: {
     [theme.breakpoints.up('sm')]: {
-      marginTop: '10%',
+      marginTop: '15%',
       marginBottom: '2.5%',
     },
     [theme.breakpoints.down('sm')]: {
-      marginTop: '25%',
+      marginTop: '30%',
       marginBottom: '20%',
     },
     marginTop: '3%',

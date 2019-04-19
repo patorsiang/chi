@@ -17,16 +17,18 @@ const styles = theme => ({
 })
 
 class pageTitle extends Component {
+
     render() {
         const { classes } = this.props
+        
         return (
             <Fragment>
                 <Container fluid className={classes.pageTilte}>
                     <Row>
                         <Col>
                             {['/feed', '/map', '/diary', '/bookmark', '/notice'].map(text =>
-                                text.toUpperCase() === window.location.pathname.toUpperCase() ?
-                                    window.location.pathname.toLowerCase().replace('/', '')
+                                window.location.pathname.toUpperCase().includes(text.toUpperCase()) ?
+                                    text.toLowerCase().replace('/', '')
                                     : null)}
                         </Col>
                         <Col />

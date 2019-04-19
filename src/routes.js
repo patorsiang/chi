@@ -1,8 +1,7 @@
 import React from "react";
 import Loadable from 'react-loadable'
 
-import App from "./layouts/App";
-import Unregist from './components/main/unregist'
+import App from "./layouts/App"
 
 import { connect } from 'react-redux'
 import { Route, Switch, Router, Redirect } from "react-router-dom";
@@ -44,6 +43,11 @@ const Map = Loadable({
 
 const Diary = Loadable({
     loader: () => import('./views/Activity/Diary'),
+    loading: LoadingComponant
+})
+
+const Unregist = Loadable({
+    loader: () => import('./components/main/unregist'),
     loading: LoadingComponant
 })
 
@@ -163,18 +167,22 @@ const Routes = props => {
                     <Route exact path="/diary" render={() =>
                         auth.uid ?
                             <Diary />
-                            : <Unregist name='Diary' />
+                            : <Redirect to="/unregist/Diary" />
                     } />
                     <Route exact path="/bookmark" render={() =>
                         auth.uid ?
                             <Book />
-                            : <Unregist name='Book' />
+                            : <Redirect to="/unregist/Bookmark" />
                     } />
                     <Route exact path="/notice" render={() =>
                         auth.uid ?
                             <Notice />
-                            : <Unregist name='Notice' />
+                            : <Redirect to="/unregist/Notice" />
                     } />
+                    <Route path="/unregist/:func" component={Unregist} />
+                    <Route exact path="/diary" component={Diary}/>
+                    <Route exact path="/bookmark" component={Book}/>
+                    <Route exact path="/notice" component={Notice}/>
                     <Route exact path="/" render={() =>
                         auth.uid ?
                             <Redirect to="/feed" />

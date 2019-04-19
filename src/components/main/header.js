@@ -150,6 +150,11 @@ class Header extends Component {
     };
   }
 
+  componentWillUpdate(){
+    console.log(window.location.pathname.toLowerCase().replace('/', ''));
+    
+  }
+
   componentDidMount() {
     this.props.getnoti()
   }
@@ -204,6 +209,8 @@ class Header extends Component {
     const { anchorEl, open } = this.state;
     const isMenuOpen = Boolean(anchorEl);
 
+    console.log(window.location.pathname.toLowerCase().replace('/', ''));
+    
     const renderMenu = (
       <Menu
         anchorEl={anchorEl}
@@ -312,7 +319,7 @@ class Header extends Component {
             {!open ? <Divider className={classes.step} /> : <Divider />}
             <List>
               {['/feed', '/map', '/diary', '/bookmark', '/notice'].map((text, index) => (
-                <ListItem button key={text} selected={window.location.pathname === text}>
+                <ListItem button key={text} selected={window.location.pathname.toUpperCase().includes(text.toUpperCase())}>
                   <ListItemIcon>
                     {index === 0 ?
                       <Link to={text}><FontAwesomeIcon icon={['fas', 'newspaper']} className={classes.icons} /></Link> :
