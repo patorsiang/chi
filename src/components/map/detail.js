@@ -36,6 +36,11 @@ class Detail extends Component {
         })
     }
 
+    componentDidMount(){
+        this.props.changeState(this.props.INstate)
+        this.props.loadPost()
+    }
+
     handleClick(s) {
         this.props.changeState(s)
         this.props.loadPost()
@@ -58,9 +63,11 @@ class Detail extends Component {
                 </div>
                 <Element name="section_detail" />
                 {isMobile ?
+                    isLoaded ? null :
                     <div className={classes.state}>
                         {post.map((postData, i) => <Post key={i} no={i} post={postData} />)}
                     </div> :
+                    isLoaded ? null :
                     post.map((postData, i) => <Post key={i} no={i} post={postData} />)
                 }
             </Fragment>

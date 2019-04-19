@@ -149,7 +149,7 @@ const Routes = props => {
                             <CreateDiary />
                             : <Redirect to="/feed" />
                     } />
-                    <Route exact path="/acheive" render={() =>
+                    <Route exact path="/diary/acheive" render={() =>
                         auth.uid ?
                             <Acheive auth={auth} />
                             : <Redirect to="/feed" />

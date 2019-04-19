@@ -30,10 +30,10 @@ const styles = theme => ({
     },
     paper: {
         [theme.breakpoints.up('sm')]: {
-            marginTop: '8.5%',
+            marginTop: '10%',
         },
         [theme.breakpoints.down('sm')]: {
-            margin: '27.5% 0',
+            margin: '30% 0',
         },
         padding: theme.spacing.unit * 2,
         textAlign: 'center',

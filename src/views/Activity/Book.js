@@ -61,7 +61,7 @@ class Book extends Component {
               <Grid container spacing={16}>
                 {book.map((b, i) =>
                   <Grid item xs={6} key={i}>
-                    <Link to='/acheive'>
+                    <Link to='/diary/acheive'>
                       <ButtonBase className={classes.button}>
                         <img className={classes.img} alt={b.data.title} src={b.data.photo[0]} />
                       </ButtonBase>
@@ -73,7 +73,7 @@ class Book extends Component {
               <Grid container spacing={24}>
                 {book.map((b, i) =>
                   <Grid item xs={3} key={i}>
-                    <Link to='/acheive'>
+                    <Link to='/diary/acheive'>
                       <ButtonBase className={classes.button}>
                         <img className={classes.img} alt={b.data.title} src={b.data.photo[0]} />
                       </ButtonBase>
