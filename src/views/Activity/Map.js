@@ -17,7 +17,7 @@ const styles = theme => ({
             marginTop: '15%',
         },
         [theme.breakpoints.down('sm')]: {
-            marginTop: '5%',
+            marginTop: '0%',
         },
         display: 'block',
         margin: 'auto'

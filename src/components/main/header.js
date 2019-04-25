@@ -284,7 +284,7 @@ class Header extends Component {
                 className={classes.but}
               >
                 <Avatar name={profile.displayName} size="45" src={profile.Photo} round={true} />
-              </IconButton> : window.location.pathname.search('upin') === -1 ?
+              </IconButton> : window.location.pathname.search('upin') === -1 && window.location.pathname.search('in') === -1 && window.location.pathname.search('up') === -1 ?
                 <Button color="inherit" className={classes.but}><Link to="/upin" className={classes.loglike}> Login </Link> </Button> : null}
           </Toolbar>
           <PageTitle />

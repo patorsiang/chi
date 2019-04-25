@@ -124,10 +124,10 @@ class Choice extends Component {
                         <Fab variant="round" color="secondary" size={s} className={classes.fab}> <EventIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'WORK_OF_ART' ?
-                    <Tooltip title="Art" aria-label="Art" >
+                    <Tooltip title="Work_of_Art" aria-label="Work_of_Art" >
                         <Fab variant="round" color="secondary" size={s} className={classes.active}> <ArtIcon /> </Fab>
                     </Tooltip>
-                    : <Tooltip title="Art" aria-label="Art" onClick={() => this.changeChoice("WORK_OF_ART")}>
+                    : <Tooltip title="Work_of_Art" aria-label="Work_of_Art" onClick={() => this.changeChoice("WORK_OF_ART")}>
                         <Fab variant="round" color="secondary" size={s} className={classes.fab}> <ArtIcon /> </Fab>
                     </Tooltip>}
                 {choice === 'CONSUMER_GOOD' ?

@@ -1,5 +1,5 @@
-export function handle(S) {
+export function handler(S) {
     return (dispatch, getState) => {
-        dispatch({ type: 'SEARCH_BY_STATE', S })
+        return dispatch({ type: 'SEARCH_BY_STATE', S })
     }
 }
