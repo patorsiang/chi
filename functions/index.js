@@ -10,13 +10,13 @@ admin.initializeApp(functions.config().firebase);
 //     response.send("Hello from Chi!");
 // });
 
-exports.Chi = functions.https.onCall((request, response) => {
-    return 'Hello from Chi!';
-});
+// exports.Chi = functions.https.onCall((request, response) => {
+//     return 'Hello from Chi!';
+// });
 
-//update prize
-const profileModule = require('./accountsPrize/profileActivity')
-exports.UpdateToken = functions.firestore.document('user/{userID}').onUpdate(profileModule.handler)
+// //update prize
+// const profileModule = require('./accountsPrize/profileActivity')
+// exports.UpdateToken = functions.firestore.document('user/{userID}').onUpdate(profileModule.handler)
 
 const diaryModule = require('./accountsPrize/diaryActivity')
 exports.UpdateTokenDiaryActivity = functions.firestore.document('diary/{diaryID}').onWrite(diaryModule.handler)
