@@ -1,4 +1,5 @@
 // deploy: firebase deploy --only functions
+// firebase deploy --only functions:UpdateTokenDiaryActivity
 // local test: firebase functions:shell
 // run serve: firebase serve --only functions
 // remove: firebase functions:delete Chi UpdateToken UpdateTokenDiaryActivity modifiedBasicImage addWaterMarkImage callCloudVision callCloudNaturalLanguage UpdateThemeDiaryActivity notifyToken notifyNewUser notificationRemove getAllDiary getDiary removeDiary getAllPost getAllNoti getUser getMetadata getAllBookPost getAllPostByWriter searchUserByName searchPostByTheme searchPostByTag searchPostByState searchPostByTitle searchPostByNote

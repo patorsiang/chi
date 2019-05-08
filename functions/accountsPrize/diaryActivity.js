@@ -3,7 +3,7 @@ const admin = require('firebase-admin')
 exports.handler = (change, context) => {
     // console.log('userid: ', context.params.userID, ' diaryid: ', context.params.diaryID);
     const data = change.after.data();
-    const userID = data.writer.User_UID;
+    const userID = data.writer.User_UID
     
     const userRef = admin.firestore().collection('user').doc(userID);
 
