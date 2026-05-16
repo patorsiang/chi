@@ -5,12 +5,12 @@ import 'firebase/storage'
 import 'firebase/functions'
 
 var config = {
-  apiKey: "AIzaSyBTUnNEmwbU3WQa-dKzhz95MtKIiLkqiWE",
-  authDomain: "app-chi.firebaseapp.com",
-  databaseURL: "https://app-chi.firebaseio.com",
-  projectId: "app-chi",
-  storageBucket: "app-chi.appspot.com",
-  messagingSenderId: "165755328510"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: ""
 };
 firebase.initializeApp(config);
 firebase.firestore().settings({ timestampsInSnapshots: true })
